@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+
+  "name": "Tab Group Ex",
+  "description": "Tab grouping extension",
+  "version": "0.1.0",
+
+  "options_ui": {
+    "page": "options.html"
+  },
+
+  "action": {
+    "default_icon": {
+      "16": "images/icon_16.png",
+      "32": "images/icon_32.png",
+      "48": "images/icon_48.png",
+      "128": "images/icon_128.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "images/icon_16.png",
+    "32": "images/icon_32.png",
+    "48": "images/icon_48.png",
+    "128": "images/icon_128.png"
+  },
+  "content_scripts": [
+      {
+          "matches": ["<all_urls>"],
+          "js": ["js/vendor.js", "js/content_script.js"]
+      }
+  ],
+
+  "background": {
+    "service_worker": "js/background.js"
+  },
+
+  "permissions": [
+    "storage",
+    "tabGroups",
+    "tabs"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
