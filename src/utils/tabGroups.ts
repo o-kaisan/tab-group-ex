@@ -4,6 +4,11 @@
  *
  * TODO: 型をanyじゃなくてちゃんと指定する
  */
+
+/*
+ * アクティブなウィンドのタブを取得する
+ * ※タブが取得できなかった場合は空の配列を返す。
+ */
 async function getTabs (targetTabConditions: any) {
     console.log("タブを取得します。")
     // TODO タブを取得できた場合とできない場合で処理を分ける。
@@ -16,6 +21,7 @@ async function getTabs (targetTabConditions: any) {
 
 /*
  * タブ配列をタブIDのリストを返却
+ * ※タブが取得できなかった場合は空の配列を返す。
  */
 function getTabIdList(targetTabList: any) {
     // TODO 配列からIDを抽出してリストにする
@@ -36,9 +42,9 @@ function getTabIdList(targetTabList: any) {
  */
 async function groupTabs(tabIdList: number[]) {
     console.log("タブをグループ化")
-    // TODO 例外処理
-    const groupId = await chrome.tabs.group({tabIds: tabIdList});
-    // TODO テスト
+    if (tabIdList.length > 0){
+        const groupId = await chrome.tabs.group({tabIds: tabIdList});
+    }
     console.log("タブをグループ化完了")
 }
 
@@ -73,10 +79,9 @@ export function groupAllActivateTabs() {
  * グループ化を解除
  */
 async function ungroupTabs(tabIdList: number[]) {
-    console.log("タブグループを解除")
-    // TODO 例外処理
-    const groupId = await chrome.tabs.ungroup(tabIdList);
-    console.log("タブグループを解除")
+    if (tabIdList.length > 0){
+        const groupId = await chrome.tabs.ungroup(tabIdList);
+    }
 }
 
 /*
