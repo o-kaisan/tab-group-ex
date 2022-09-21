@@ -10,13 +10,8 @@
  * ※タブが取得できなかった場合は空の配列を返す。
  */
 async function getTabs (targetTabConditions: any) {
-    console.log("タブを取得します。")
-    // TODO タブを取得できた場合とできない場合で処理を分ける。
     const tabs = await chrome.tabs.query(targetTabConditions);
-    console.log("表示中のタブ数：" + tabs.length);
-    console.log("タブを取得しました。")
     return tabs
-    // TODO テスト
 };
 
 /*
@@ -24,15 +19,10 @@ async function getTabs (targetTabConditions: any) {
  * ※タブが取得できなかった場合は空の配列を返す。
  */
 function getTabIdList(targetTabList: any) {
-    // TODO 配列からIDを抽出してリストにする
-    console.log("タブのIDを取得")
     const tabIdList = Array();
     targetTabList.forEach((tab: any) => {
         tabIdList.push(tab.id);
     });
-    console.log("タブのID")
-    console.log(tabIdList)
-    console.log("タブのIDを取得完了")
     return tabIdList
 }
 
@@ -72,7 +62,6 @@ export function groupAllActivateTabs() {
     });
     // TODO グループの名前を決めたい
     // TODO グループの色をつけたい
-    // TODO テスト
 }
 
 /*
@@ -88,8 +77,6 @@ async function ungroupTabs(tabIdList: number[]) {
  * 全てのグループ化を解除
  */
 export function ungroupAllTabs() {
-    // TODO 関数の書き方あってる、、、？
-    // TODO グループ化を解除できるようにしたい
     console.log("グループ化解除開始")
     const targetTabConditions: any = {
         currentWindow: true,
@@ -106,9 +93,5 @@ export function ungroupAllTabs() {
     }).catch((error) => {
         console.log(error)
     });
-    // フローイメージ
-    // TODO 全てのグループを取得
-    // TODO 全てのグループからグループIDを取得する
-    // TODO グループ化解除
 }
 
