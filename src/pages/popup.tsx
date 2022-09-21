@@ -98,5 +98,5 @@ ReactDOM.render(
   <React.StrictMode>
     <PopupMenu />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root") || document.createElement('div')
 );

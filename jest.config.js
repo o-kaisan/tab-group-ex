@@ -3,7 +3,8 @@ module.exports = {
         "src"
     ],
     "transform": {
-        "\\.tsx?$": "ts-jest",
+        // "\\.tsx?$": "ts-jest",
+        "\\.tsx?$": "babel-jest",
         "^.+\\.ts$": "ts-jest"
     },
 };
