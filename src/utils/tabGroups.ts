@@ -30,9 +30,13 @@ function getTabIdList(targetTabList: any) {
  * タブをグループ化
  * 引数で受け取ったタブを配列ごとにグループ化する
  */
-async function groupTabs(tabIdList: number[]) {
+async function groupTabs(tabIdList: number[], title: string) {
     if (tabIdList.length > 0){
         const groupId: number = await chrome.tabs.group({tabIds: tabIdList});
+        chrome.tabGroups.update(groupId, {
+            collapsed: true,
+            title: title
+        });
     }
 }
 
@@ -49,7 +53,8 @@ export function groupAllActivateTabs() {
     // TODO プロミス地獄解消
     getTabs(targetTabConditions).then((tabs) => {
         const tabIdList: number[] = getTabIdList(tabs);
-        groupTabs(tabIdList).then(() => {
+        const title: string = "Group"
+        groupTabs(tabIdList, title).then(() => {
         }).catch((error) =>{
             console.log(error)
         });
