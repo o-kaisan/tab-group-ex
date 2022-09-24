@@ -1,8 +1,5 @@
 /*
- * タブ一覧を取得
- * 指定した条件のタブを一覧で取得する
- *
- * TODO: 型をanyじゃなくてちゃんと指定する
+ * タブのグループ化関連のユーティリティ
  */
 
 /*
@@ -90,5 +87,25 @@ export function ungroupAllTabs() {
     }).catch((error) => {
         console.log(error)
     });
+}
+
+/*
+ * アクティブなウィドウのタブグループ一覧を取得
+ */
+export async function getAllTabGroupList() {
+    const targetTabGroupConditions: chrome.tabGroups.QueryInfo = {
+        windowId: chrome.windows.WINDOW_ID_CURRENT
+    }
+    const ret:chrome.tabGroups.TabGroup[] = await getTabGroupList(targetTabGroupConditions)
+    return ret
+}
+
+/*
+ * タブグループ一覧を取得
+ * タググループが存在しない場合は空のリストを返す
+ */
+ async function getTabGroupList(targetTabGroupConditions: chrome.tabGroups.QueryInfo) {
+    const tabGroupList: chrome.tabGroups.TabGroup[] = await chrome.tabGroups.query(targetTabGroupConditions);
+    return tabGroupList
 }
 
