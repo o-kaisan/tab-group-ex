@@ -60,10 +60,6 @@ export default function PopupMenu() {
     updatedTabGroupList();
   }, []);
 
-  useEffect(() => {
-
-  }, [data])
-
   const runGroupAllActiveTabs = () => {
     /*
      * アクティブなウィンドウのタブを全てグループ化
@@ -147,7 +143,7 @@ export default function PopupMenu() {
               {isSavedTabGroup(tabGroup.id) ? <FavoriteIcon />: <FavoriteBorderIcon />}
             </IconButton>
           </ListItem>
-))}
+          ))}
         </List>
       )
     }
@@ -169,7 +165,7 @@ export default function PopupMenu() {
             <ListItemIcon>
               <LayersIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>タブを全てグループ化</ListItemText>
+            <ListItemText>タブをグループ化</ListItemText>
             <Typography variant="body2" color="text.secondary">
               ⌘X
             </Typography>
@@ -180,7 +176,7 @@ export default function PopupMenu() {
             <ListItemIcon>
               <LayersClearIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>タブのグループ化を解除</ListItemText>
+            <ListItemText>タブグループを解除</ListItemText>
             <Typography variant="body2" color="text.secondary">
               ⌘C
             </Typography>
