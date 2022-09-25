@@ -47,7 +47,6 @@ export function groupAllActivateTabs() {
         url: ['http://*/*', 'https://*/*'],
         groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
     };
-    // TODO プロミス地獄解消
     getTabs(targetTabConditions).then((tabs) => {
         const tabIdList: number[] = getTabIdList(tabs);
         const title: string = "Group"
@@ -109,3 +108,13 @@ export async function getAllTabGroupList() {
     return tabGroupList
 }
 
+
+/*
+ *　タブグループを展開/集約を切り替える
+ */
+export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boolean) {
+    const updateProperties: chrome.tabGroups.UpdateProperties  = {
+        collapsed: collapsed,
+    }
+    await chrome.tabGroups.update(tabGroupId, updateProperties);
+}

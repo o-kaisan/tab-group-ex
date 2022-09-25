@@ -16,16 +16,29 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {getAllTabGroupList, groupAllActivateTabs, ungroupAllTabs} from "../utils/tabGroups"
-import { Collapse, ListItemButton, ListSubheader } from "@mui/material";
+import {getAllTabGroupList, groupAllActivateTabs, toggleTabGroupCollapsed, ungroupAllTabs} from "../utils/tabGroups"
+import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader, Tooltip } from "@mui/material";
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ReportIcon from '@mui/icons-material/Report';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
+export interface SavedTabGroup {
+  // タブグループのId
+  // もしかすると保存するのにタブグループIDだけで足りないかも
+  // 容量が大きすぎる場合は、機能を消すかも
+  // タブグループのID
+  id: number
+  // タブグループのタイトル
+  tabGroupTitle: string
+  // タブグループに保存されているタブ
+  tabList: chrome.tabs.Tab[]
+}
 
 /*
  * 拡張機能のメニュー
  */
 export default function PopupMenu() {
-  // TODO: タブグループの一覧表示
   // TODO: タブグループの保存
   // TODO: タブグループの削除
   // TODO: タブグループ選択後に一括表示
@@ -34,29 +47,22 @@ export default function PopupMenu() {
   // TODO: 指定したルールで自動でタブをグループ化
   // TODO: アクティブなタブのグループのみグループ化解除
 
-  // FIXME: 再レンダリングが終わってからリストが開けるようにする
-  // FIXME: そもそもグループがないときはリストを開けないようにしたい
-  //         →しばらくDisabledにするとか？
+  // BUG: グループ化解除してからしばらくはタブグループ一覧リストが展開できてしまう
 
   // グループタブ一覧の状態管理
   const [open, setOpen] = React.useState(true);
   // タブグループの一覧
   const [data, setData] = useState<chrome.tabGroups.TabGroup[] | undefined>();
+  // 保存したタブグループ一覧
+  const [savedTabGroups, setSavedTabGroups] = useState<SavedTabGroup[]>();
 
   useEffect(() => {
     updatedTabGroupList();
   }, []);
 
-  useEffect(() =>{
+  useEffect(() => {
 
-  }, [open])
-
-  const changedOpen = () => {
-    /*
-     * グループタブ一覧コンポーネントが更新された場合の挙動を管理
-     */
-    // 2秒くらいdisabledにしたらいいとかないかな？
-  }
+  }, [data])
 
   const runGroupAllActiveTabs = () => {
     /*
@@ -82,10 +88,10 @@ export default function PopupMenu() {
      */
     updatedTabGroupList().then(() => {
       if (data != undefined && data.length > 0) {
-        setOpen(!open)
+        setOpen(!open);
       }
     }).catch((error) => {
-      console.log(error)
+      console.log(error);
     })
   }
 
@@ -93,40 +99,55 @@ export default function PopupMenu() {
     getAllTabGroupList().then((tabGroupList) => {
         setData(tabGroupList)
       }).catch((error) => {
-        console.log(error)
+        console.log(error);
       })
     }
 
-  const updateCollapsedTabGroup = (tabGroupId: number) => {
-    /*
-     * タブグループの展開/集約を切り替える
-     */
+  const updateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean) => {
+    if (data != undefined){
+          setData(() =>
+            data.map(tabGroup => tabGroup.id === tabGroupId ? {...tabGroup, collapsed: !collapsed} : tabGroup))
+      }
 
+    toggleTabGroupCollapsed(tabGroupId, !collapsed);
   }
 
-  const SubList = () => {
+  const isSavedTabGroup = (tabGroupId: number) => {
+    var ret = false
+    savedTabGroups?.map(tabGroup => tabGroup.id === tabGroupId ? ret = true : ret)
+    return ret
+  }
+
+  const ActiveTabGroupList = () => {
       if (data == undefined) {
         return(
-          <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-          <ReportIcon>
-            <RocketLaunchIcon />
-          </ReportIcon>
-          <ListItemText>No Groups...</ListItemText>
-          </ListItemButton>
-          </List>
+          <ListItem>
+            <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+            <ReportIcon>
+              <RocketLaunchIcon />
+            </ReportIcon>
+            <ListItemText>No Groups...</ListItemText>
+            </ListItemButton>
+            </List>
+          </ListItem>
         );
       }
       return (
         <List component="div" disablePadding>
           {data.map((tabGroup) => (
-            <ListItemButton sx={{ pl: 4 }}>
+          <ListItem>
+            <ListItemButton sx={{ pl: 4 }} onClick={() => updateTabGroupCollapsed(tabGroup.id, tabGroup.collapsed)}>
             <ListItemIcon>
               <RocketLaunchIcon />
             </ListItemIcon>
             <ListItemText>{tabGroup.title}</ListItemText>
             </ListItemButton>
-          ))}
+            <IconButton>
+              {isSavedTabGroup(tabGroup.id) ? <FavoriteIcon />: <FavoriteBorderIcon />}
+            </IconButton>
+          </ListItem>
+))}
         </List>
       )
     }
@@ -143,34 +164,40 @@ export default function PopupMenu() {
           </ListSubheader>
         }
       >
-        <ListItemButton onClick={runGroupAllActiveTabs}>
-          <ListItemIcon>
-            <LayersIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>タブを全てグループ化</ListItemText>
-          <Typography variant="body2" color="text.secondary">
-            ⌘X
-          </Typography>
-        </ListItemButton>
-        <ListItemButton onClick={runUnGroupTabs}>
-          <ListItemIcon>
-            <LayersClearIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>タブのグループ化を解除</ListItemText>
-          <Typography variant="body2" color="text.secondary">
-            ⌘C
-          </Typography>
-        </ListItemButton>
+        <ListItem>
+          <ListItemButton onClick={runGroupAllActiveTabs}>
+            <ListItemIcon>
+              <LayersIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>タブを全てグループ化</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+              ⌘X
+            </Typography>
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton onClick={runUnGroupTabs}>
+            <ListItemIcon>
+              <LayersClearIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>タブのグループ化を解除</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+              ⌘C
+            </Typography>
+          </ListItemButton>
+        </ListItem>
         <Divider />
-        <ListItemButton onClick={runShowTabGroupList}>
-          <ListItemIcon>
-            <WebStoriesIcon fontSize="small"/>
-          </ListItemIcon>
-          <ListItemText>タブグループ一覧</ListItemText>
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
+        <ListItem>
+          <ListItemButton onClick={runShowTabGroupList}>
+            <ListItemIcon>
+              <WebStoriesIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>タブグループ一覧</ListItemText>
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <SubList />
+          <ActiveTabGroupList />
         </Collapse>
       </List>
     </Paper>
