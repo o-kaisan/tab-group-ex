@@ -43,12 +43,15 @@ function getTabIdList(targetTabList: any) {
  * タブをグループ化
  * 引数で受け取ったタブを配列ごとにグループ化する
  */
-async function groupTabs(tabIdList: number[]) {
+async function groupTabs(tabIdList: number[], title: string="") {
     if (tabIdList.length > 0){
         const groupId: number = await chrome.tabs.group({tabIds: tabIdList});
+        if (title == "") {
+            title = groupId.toString()
+        }
         chrome.tabGroups.update(groupId, {
             collapsed: true,
-            title: groupId.toString()
+            title: title
         });
     }
 }
@@ -137,14 +140,6 @@ async function getTabUrls(tabGroupId:number) {
     return urls
 }
 
-function getTabGroupFromStorage(storageTitle: string) {
-    /*
-    * ローカルストレージから保存したタブグループを取得する
-    */
-    return chrome.storage.local.get([storageTitle], (result) => {
-        console.log(result)
-      })
-}
 export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
    /*
     * タブグループを保存する
@@ -189,7 +184,16 @@ export async function getAllSavedTabGroup() {
 
 }
 
-export function restoreTabGroup(tabgroupTitle: string | undefined, urlList: string[]) {
+async function restoreTab(url: string) {
+    const createProperties: chrome.tabs.CreateProperties = {
+        active: false,
+        url: url
+    }
+    const tab = await chrome.tabs.create(createProperties)
+    return tab.id
+}
+
+export async function restoreTabGroup(tabgroupTitle: string | undefined, urlList: string[]) {
    /*
     *　指定したタブグループを復元する
     */
@@ -197,4 +201,16 @@ export function restoreTabGroup(tabgroupTitle: string | undefined, urlList: stri
     // 新しく開いたタブのIDをリスト化する
     // もともと設定されているグループの名前でグループ化する
     // 新しくタブグループを作成するとsavedTabGroupのidが変わるからupdateすること
+
+    const tabIdList = Array()
+    const result = await Promise.all(urlList.map(async (url) => {
+        const tabId = restoreTab(url)
+        return tabId
+    }));
+    result.map((tabId) => {
+        if (tabId !== undefined){
+            tabIdList.push(tabId)
+        }
+    })
+    await groupTabs(tabIdList, tabgroupTitle)
 }

@@ -165,6 +165,14 @@ export default function PopupMenu() {
       setOpenSavedTabGroup(!openSavedTabGroup);
     }
 
+    const runRestoreTabGroup = (tabGroupTitle:string | undefined, urlList: string[]) => {
+      restoreTabGroup(tabGroupTitle, urlList).then(() => {
+        groupAllActivateTabs().then(() => {
+          updatedTabGroupList()
+        }).catch((error)=>console.log(error))
+      }).catch((error)=>console.log(error))
+    }
+
     const SavedTabGroupList = () => {
       if (savedTabGroup == undefined) {
         return(
@@ -184,7 +192,7 @@ export default function PopupMenu() {
         <List component="div" disablePadding>
           {savedTabGroup.map((tabGroup) => (
           <ListItem>
-            <ListItemButton sx={{ pl: 4 }}>
+            <ListItemButton sx={{ pl: 4 }} onClick={() => {runRestoreTabGroup(tabGroup.title, tabGroup.urlList)}}>
             <ListItemIcon>
               <RocketLaunchIcon />
             </ListItemIcon>
