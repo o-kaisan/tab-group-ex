@@ -59,24 +59,25 @@ export default function PopupMenu() {
     /*
      * アクティブなウィンドウのタブを全てグループ化
      */
-    setOpen(false)
-    groupAllActivateTabs();
-    updatedTabGroupList();
+    groupAllActivateTabs().then(() => {
+        updatedTabGroupList()
+    }).catch((error)=>console.log(error))
   }
 
   const runUnGroupTabs = () => {
     /*
      * アクティブなウィンドウのタブグループを全て解除
      */
-    setOpen(false)
-    ungroupAllTabs();
-    updatedTabGroupList();
+    ungroupAllTabs().then(() => {
+        updatedTabGroupList()
+    });
   }
 
   const runShowActiveTabGroupList = () => {
     /*
      * タブグループを一覧表示
      */
+    // TODO: タブの色をグループの色に対応したものにできたらいいな
     updatedTabGroupList().then(() => {
       if (data != undefined && data.length > 0) {
         setOpen(!open);

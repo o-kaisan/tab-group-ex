@@ -56,23 +56,16 @@ async function groupTabs(tabIdList: number[]) {
 /*
  * タブを全てグループ化
  */
-export function groupAllActivateTabs() {
+export async function groupAllActivateTabs() {
     const targetTabConditions: chrome.tabs.QueryInfo = {
         currentWindow: true,
         pinned: false,
         url: ['http://*/*', 'https://*/*'],
         groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
     };
-    getTabs(targetTabConditions).then((tabs) => {
-        const tabIdList: number[] = getTabIdList(tabs);
-        const title: string = "Group"
-        groupTabs(tabIdList, title).then(() => {
-        }).catch((error) =>{
-            console.log(error)
-        });
-    }).catch((error) => {
-        console.log(error)
-    });
+    const tabs = await getTabs(targetTabConditions)
+    const tabIdList: number[] = getTabIdList(tabs);
+    await groupTabs(tabIdList)
 }
 
 /*
@@ -87,21 +80,15 @@ async function ungroupTabs(tabIdList: number[]) {
 /*
  * 全てのグループ化を解除
  */
-export function ungroupAllTabs() {
+export async function ungroupAllTabs() {
     const targetTabConditions: chrome.tabs.QueryInfo = {
         currentWindow: true,
         pinned: false,
         url: ['http://*/*', 'https://*/*'],
     };
-    getTabs(targetTabConditions).then((tabs) => {
-        const tabIdList: number[] = getTabIdList(tabs);
-        ungroupTabs(tabIdList).then(() => {
-        }).catch((error) =>{
-            console.log(error)
-        });
-    }).catch((error) => {
-        console.log(error)
-    });
+    const tabs = await getTabs(targetTabConditions)
+    const tabIdList: number[] = getTabIdList(tabs);
+    await ungroupTabs(tabIdList)
 }
 
 /*
