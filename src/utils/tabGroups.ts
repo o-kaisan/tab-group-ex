@@ -2,8 +2,24 @@
  * タブのグループ化関連のユーティリティ
  */
 
+export interface SavedTabGroupInfo {
+    // タブグループのId
+    // もしかすると保存するのにタブグループIDだけで足りないかも
+
+    // ※ 保存時のグループIDとタブグループのタイトルでユニークにしているが被る可能性は0ではない。
+    // ストレージ保存用のタイプ
+    type: string
+    // 保存時のグループID
+    id: number
+    // タブグループのタイトル
+    title: string | undefined
+    // タブグループに保存されているタブ
+    urlList: string[]
+  }
+
+
 /*
- * アクティブなウィンドのタブを取得する
+ * 指定した条件でタブを取得する
  * ※タブが取得できなかった場合は空の配列を返す。
  */
 async function getTabs (targetTabConditions: chrome.tabs.QueryInfo) {
@@ -27,12 +43,12 @@ function getTabIdList(targetTabList: any) {
  * タブをグループ化
  * 引数で受け取ったタブを配列ごとにグループ化する
  */
-async function groupTabs(tabIdList: number[], title: string) {
+async function groupTabs(tabIdList: number[]) {
     if (tabIdList.length > 0){
         const groupId: number = await chrome.tabs.group({tabIds: tabIdList});
         chrome.tabGroups.update(groupId, {
             collapsed: true,
-            title: title
+            title: groupId.toString()
         });
     }
 }
@@ -117,4 +133,81 @@ export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boo
         collapsed: collapsed,
     }
     await chrome.tabGroups.update(tabGroupId, updateProperties);
+}
+
+
+async function getTabUrls(tabGroupId:number) {
+   /*
+    * タブグループからタブのURL一覧を取得ｓるう
+    */
+    const targetTabGroupConditions = {
+        groupId: tabGroupId
+    }
+    var urls = Array()
+    const tabs = await getTabs(targetTabGroupConditions)
+    tabs.map((tab) => {urls.push(tab.url)})
+    console.log(urls)
+    return urls
+}
+
+function getTabGroupFromStorage(storageTitle: string) {
+    /*
+    * ローカルストレージから保存したタブグループを取得する
+    */
+    return chrome.storage.local.get([storageTitle], (result) => {
+        console.log(result)
+      })
+}
+export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
+   /*
+    * タブグループを保存する
+    */
+    const urls = await getTabUrls(tabGroupId)
+    if (urls.length == 0){
+        return
+    }
+    const saveTabGroupInfo: SavedTabGroupInfo = {
+    type: "TGEX",
+    id: tabGroupId,
+    title: tabGroupTitle,
+    urlList: urls,
+    }
+
+    // タブグループがundifinedだったらストレージに保存せずに返却
+    if (tabGroupTitle == undefined) return
+    const storageTitle: string = "TG_" + tabGroupTitle + tabGroupId
+    await chrome.storage.local.set({[storageTitle]: saveTabGroupInfo})
+}
+
+export async function deleteTabGroup(tabgroupTitle: string, tabGroupId:number) {
+   /*
+    * タブグループをストレージから削除する
+    */
+    const targetTabGroup: string = "TG_" + tabgroupTitle + tabGroupId
+    await chrome.storage.local.remove(targetTabGroup)
+}
+
+export async function getAllSavedTabGroup() {
+    /*
+     * ローカルストレージから保存されたタブグループを取得する
+     */
+    const storageData = await chrome.storage.local.get(null);
+    const ret: SavedTabGroupInfo[] = Array()
+    Object.keys(storageData).forEach(key => {
+        if (storageData[key].type == "TGEX") {
+            ret.push(storageData[key])
+        }
+    })
+    return ret
+
+}
+
+export function restoreTabGroup(tabgroupTitle: string | undefined, urlList: string[]) {
+   /*
+    *　指定したタブグループを復元する
+    */
+    // 一通りタブを開く　chrome.tabs.create
+    // 新しく開いたタブのIDをリスト化する
+    // もともと設定されているグループの名前でグループ化する
+    // 新しくタブグループを作成するとsavedTabGroupのidが変わるからupdateすること
 }

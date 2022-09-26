@@ -16,24 +16,13 @@ import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {getAllTabGroupList, groupAllActivateTabs, toggleTabGroupCollapsed, ungroupAllTabs} from "../utils/tabGroups"
-import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader, Tooltip } from "@mui/material";
+import {getAllTabGroupList, saveTabGroup, groupAllActivateTabs, toggleTabGroupCollapsed, ungroupAllTabs, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ReportIcon from '@mui/icons-material/Report';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
-export interface SavedTabGroup {
-  // タブグループのId
-  // もしかすると保存するのにタブグループIDだけで足りないかも
-  // 容量が大きすぎる場合は、機能を消すかも
-  // タブグループのID
-  id: number
-  // タブグループのタイトル
-  tabGroupTitle: string
-  // タブグループに保存されているタブ
-  tabList: chrome.tabs.Tab[]
-}
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import FolderIcon from '@mui/icons-material/Folder';
 
 /*
  * 拡張機能のメニュー
@@ -49,15 +38,21 @@ export default function PopupMenu() {
 
   // BUG: グループ化解除してからしばらくはタブグループ一覧リストが展開できてしまう
 
-  // グループタブ一覧の状態管理
-  const [open, setOpen] = React.useState(true);
+  // タブグループ一覧の状態管理
+  const [open, setOpen] = React.useState(false);
+  // 保存タブグループ一覧の状態管理
+  const [openSavedTabGroup, setOpenSavedTabGroup] = React.useState(false);
   // タブグループの一覧
   const [data, setData] = useState<chrome.tabGroups.TabGroup[] | undefined>();
-  // 保存したタブグループ一覧
-  const [savedTabGroups, setSavedTabGroups] = useState<SavedTabGroup[]>();
+  // 保存されたタブグループの一覧
+  const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[] | undefined>()
 
   useEffect(() => {
     updatedTabGroupList();
+  }, []);
+
+  useEffect(() => {
+    getSavedTabGroupList();
   }, []);
 
   const runGroupAllActiveTabs = () => {
@@ -78,7 +73,7 @@ export default function PopupMenu() {
     updatedTabGroupList();
   }
 
-  const runShowTabGroupList = () => {
+  const runShowActiveTabGroupList = () => {
     /*
      * タブグループを一覧表示
      */
@@ -104,14 +99,13 @@ export default function PopupMenu() {
           setData(() =>
             data.map(tabGroup => tabGroup.id === tabGroupId ? {...tabGroup, collapsed: !collapsed} : tabGroup))
       }
-
     toggleTabGroupCollapsed(tabGroupId, !collapsed);
   }
 
-  const isSavedTabGroup = (tabGroupId: number) => {
-    var ret = false
-    savedTabGroups?.map(tabGroup => tabGroup.id === tabGroupId ? ret = true : ret)
-    return ret
+  const runSaveTabGroup = (tabGroupId:number, tabGroupTitle: string | undefined) => {
+    if (tabGroupTitle == undefined) return
+    saveTabGroup(tabGroupId, tabGroupTitle).then(() => getSavedTabGroupList())
+
   }
 
   const ActiveTabGroupList = () => {
@@ -119,12 +113,12 @@ export default function PopupMenu() {
         return(
           <ListItem>
             <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-            <ReportIcon>
-              <RocketLaunchIcon />
-            </ReportIcon>
-            <ListItemText>No Groups...</ListItemText>
-            </ListItemButton>
+              <ListItemButton sx={{ pl: 4 }}>
+                <ReportIcon>
+                  <RocketLaunchIcon />
+                </ReportIcon>
+                <ListItemText>No Groups Saved...</ListItemText>
+              </ListItemButton>
             </List>
           </ListItem>
         );
@@ -139,9 +133,65 @@ export default function PopupMenu() {
             </ListItemIcon>
             <ListItemText>{tabGroup.title}</ListItemText>
             </ListItemButton>
-            <IconButton>
-              {isSavedTabGroup(tabGroup.id) ? <FavoriteIcon />: <FavoriteBorderIcon />}
-            </IconButton>
+                <IconButton onClick={() => runSaveTabGroup(tabGroup.id, tabGroup.title)}>
+                   <SaveAltIcon />
+                </IconButton>
+          </ListItem>
+          ))}
+        </List>
+      )
+    }
+
+    const getSavedTabGroupList = () => {
+      /*
+       * savedTabGroupを取得して更新する
+       */
+      getAllSavedTabGroup().then((savedTabGroupList) => {
+        console.log("get savedtabgroup")
+        setSavedTabGroup(savedTabGroupList)
+      })
+    }
+
+    const runDeleteTabGroup = (tabGroupTitle: string | undefined, tabGroupId: number) => {
+        if (tabGroupTitle == undefined) return
+        deleteTabGroup(tabGroupTitle, tabGroupId).then(() => getSavedTabGroupList())
+      }
+
+    const runShowSavedTabGroupList = () => {
+      /*
+       * 保存タブグループを一覧表示
+       */
+      setOpenSavedTabGroup(!openSavedTabGroup);
+    }
+
+    const SavedTabGroupList = () => {
+      if (savedTabGroup == undefined) {
+        return(
+          <ListItem>
+            <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ReportIcon>
+                <RocketLaunchIcon />
+              </ReportIcon>
+              <ListItemText>No Groups...</ListItemText>
+            </ListItemButton>
+            </List>
+          </ListItem>
+        );
+      }
+      return (
+        <List component="div" disablePadding>
+          {savedTabGroup.map((tabGroup) => (
+          <ListItem>
+            <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <RocketLaunchIcon />
+            </ListItemIcon>
+            <ListItemText>{tabGroup.title}</ListItemText>
+            </ListItemButton>
+                <IconButton onClick={() => runDeleteTabGroup(tabGroup.title, tabGroup.id)}>
+                   <DeleteForeverIcon />
+                </IconButton>
           </ListItem>
           ))}
         </List>
@@ -184,7 +234,20 @@ export default function PopupMenu() {
         </ListItem>
         <Divider />
         <ListItem>
-          <ListItemButton onClick={runShowTabGroupList}>
+          <ListItemButton onClick={runShowSavedTabGroupList}>
+            <ListItemIcon>
+              <FolderIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>保存タブグループ一覧</ListItemText>
+            {openSavedTabGroup ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openSavedTabGroup} timeout="auto" unmountOnExit>
+          <SavedTabGroupList />
+        </Collapse>
+        <Divider />
+        <ListItem>
+          <ListItemButton onClick={runShowActiveTabGroupList}>
             <ListItemIcon>
               <WebStoriesIcon fontSize="small"/>
             </ListItemIcon>
