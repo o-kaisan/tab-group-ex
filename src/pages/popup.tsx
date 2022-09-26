@@ -23,6 +23,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FolderIcon from '@mui/icons-material/Folder';
+import OptionMenus from "../components/OptionMenus"
 
 /*
  * 拡張機能のメニュー
@@ -39,7 +40,7 @@ export default function PopupMenu() {
   // BUG: グループ化解除してからしばらくはタブグループ一覧リストが展開できてしまう
 
   // タブグループ一覧の状態管理
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   // 保存タブグループ一覧の状態管理
   const [openSavedTabGroup, setOpenSavedTabGroup] = React.useState(false);
   // タブグループの一覧
@@ -109,6 +110,7 @@ export default function PopupMenu() {
 
   }
 
+
   const ActiveTabGroupList = () => {
       if (data == undefined) {
         return(
@@ -129,14 +131,12 @@ export default function PopupMenu() {
           {data.map((tabGroup) => (
           <ListItem>
             <ListItemButton sx={{ pl: 4 }} onClick={() => updateTabGroupCollapsed(tabGroup.id, tabGroup.collapsed)}>
-            <ListItemIcon>
-              <RocketLaunchIcon />
-            </ListItemIcon>
             <ListItemText>{tabGroup.title}</ListItemText>
             </ListItemButton>
                 <IconButton onClick={() => runSaveTabGroup(tabGroup.id, tabGroup.title)}>
                    <SaveAltIcon />
                 </IconButton>
+            <OptionMenus />
           </ListItem>
           ))}
         </List>
@@ -167,10 +167,8 @@ export default function PopupMenu() {
 
     const runRestoreTabGroup = (tabGroupTitle:string | undefined, urlList: string[]) => {
       restoreTabGroup(tabGroupTitle, urlList).then(() => {
-        groupAllActivateTabs().then(() => {
           updatedTabGroupList()
         }).catch((error)=>console.log(error))
-      }).catch((error)=>console.log(error))
     }
 
     const SavedTabGroupList = () => {
