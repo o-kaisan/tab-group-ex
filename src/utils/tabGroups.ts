@@ -72,27 +72,24 @@ export async function groupAllActivateTabs() {
 }
 
 /*
- * グループ化を解除
+ * 指定したグループ化を解除
  */
-async function ungroupTabs(tabIdList: number[]) {
-    if (tabIdList.length > 0){
-        const groupId = await chrome.tabs.ungroup(tabIdList);
-    }
+export async function ungroupTabs(tabGroupId: number) {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        pinned: false,
+        groupId: tabGroupId
+    };
+    const tabs = await getTabs(targetTabConditions)
+    const tabIdList: number[] = getTabIdList(tabs);
+
+    if (tabIdList.length == 0) return
+    await chrome.tabs.ungroup(tabIdList);
 }
 
 /*
  * 全てのグループ化を解除
  */
-export async function ungroupAllTabs() {
-    const targetTabConditions: chrome.tabs.QueryInfo = {
-        currentWindow: true,
-        pinned: false,
-        url: ['http://*/*', 'https://*/*'],
-    };
-    const tabs = await getTabs(targetTabConditions)
-    const tabIdList: number[] = getTabIdList(tabs);
-    await ungroupTabs(tabIdList)
-}
 
 /*
  * アクティブなウィドウのタブグループ一覧を取得
@@ -158,6 +155,7 @@ export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
     // タブグループがundifinedだったらストレージに保存せずに返却
     if (tabGroupTitle == undefined) return
     const storageTitle: string = "TG_" + tabGroupTitle + tabGroupId
+    console.log(saveTabGroupInfo)
     await chrome.storage.local.set({[storageTitle]: saveTabGroupInfo})
 }
 
@@ -213,4 +211,13 @@ export async function restoreTabGroup(tabgroupTitle: string | undefined, urlList
         }
     })
     await groupTabs(tabIdList, tabgroupTitle)
+}
+
+export async function closeTabGroup(tabGroupId: number) {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        groupId: tabGroupId
+    }
+    const tabs = await getTabs(targetTabConditions)
+    const tabsIds = await getTabIdList(tabs)
+    await chrome.tabs.remove(tabsIds)
 }

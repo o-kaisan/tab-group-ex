@@ -12,14 +12,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
 import LayersIcon from '@mui/icons-material/Layers';
-import LayersClearIcon from '@mui/icons-material/LayersClear';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {getAllTabGroupList, saveTabGroup, groupAllActivateTabs, toggleTabGroupCollapsed, ungroupAllTabs, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import {getAllTabGroupList, saveTabGroup, groupAllActivateTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
 import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import ReportIcon from '@mui/icons-material/Report';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -29,15 +26,10 @@ import OptionMenus from "../components/OptionMenus"
  * 拡張機能のメニュー
  */
 export default function PopupMenu() {
-  // TODO: タブグループの保存
-  // TODO: タブグループの削除
-  // TODO: タブグループ選択後に一括表示
   // TODO: タブグループの編集
   // TODO: ドメインごとにグループ化
   // TODO: 指定したルールで自動でタブをグループ化
   // TODO: アクティブなタブのグループのみグループ化解除
-
-  // BUG: グループ化解除してからしばらくはタブグループ一覧リストが展開できてしまう
 
   // タブグループ一覧の状態管理
   const [open, setOpen] = React.useState(true);
@@ -65,20 +57,11 @@ export default function PopupMenu() {
     }).catch((error)=>console.log(error))
   }
 
-  const runUnGroupTabs = () => {
-    /*
-     * アクティブなウィンドウのタブグループを全て解除
-     */
-    ungroupAllTabs().then(() => {
-        updatedTabGroupList()
-    });
-  }
 
   const runShowActiveTabGroupList = () => {
     /*
      * タブグループを一覧表示
      */
-    // TODO: タブの色をグループの色に対応したものにできたらいいな
     updatedTabGroupList().then(() => {
       if (data != undefined && data.length > 0) {
         setOpen(!open);
@@ -117,9 +100,6 @@ export default function PopupMenu() {
           <ListItem>
             <List component="div" disablePadding>
               <ListItemButton sx={{ pl: 4 }}>
-                <ReportIcon>
-                  <RocketLaunchIcon />
-                </ReportIcon>
                 <ListItemText>No Groups Saved...</ListItemText>
               </ListItemButton>
             </List>
@@ -136,7 +116,7 @@ export default function PopupMenu() {
                 <IconButton onClick={() => runSaveTabGroup(tabGroup.id, tabGroup.title)}>
                    <SaveAltIcon />
                 </IconButton>
-            <OptionMenus />
+            <OptionMenus tabGroupId={tabGroup.id} updatedTabGroupList={updatedTabGroupList} />
           </ListItem>
           ))}
         </List>
@@ -177,9 +157,6 @@ export default function PopupMenu() {
           <ListItem>
             <List component="div" disablePadding>
             <ListItemButton sx={{ pl: 4 }}>
-              <ReportIcon>
-                <RocketLaunchIcon />
-              </ReportIcon>
               <ListItemText>No Groups...</ListItemText>
             </ListItemButton>
             </List>
@@ -191,9 +168,6 @@ export default function PopupMenu() {
           {savedTabGroup.map((tabGroup) => (
           <ListItem>
             <ListItemButton sx={{ pl: 4 }} onClick={() => {runRestoreTabGroup(tabGroup.title, tabGroup.urlList)}}>
-            <ListItemIcon>
-              <RocketLaunchIcon />
-            </ListItemIcon>
             <ListItemText>{tabGroup.title}</ListItemText>
             </ListItemButton>
                 <IconButton onClick={() => runDeleteTabGroup(tabGroup.title, tabGroup.id)}>
@@ -225,17 +199,6 @@ export default function PopupMenu() {
             <ListItemText>タブをグループ化</ListItemText>
             <Typography variant="body2" color="text.secondary">
               ⌘X
-            </Typography>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={runUnGroupTabs}>
-            <ListItemIcon>
-              <LayersClearIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>タブグループを解除</ListItemText>
-            <Typography variant="body2" color="text.secondary">
-              ⌘C
             </Typography>
           </ListItemButton>
         </ListItem>

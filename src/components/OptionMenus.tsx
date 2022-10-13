@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
-import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LayersClearIcon from '@mui/icons-material/LayersClear';
 import { IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { closeTabGroup, ungroupTabs } from '../utils/tabGroups';
+
+export interface Props {
+  // タブグループID
+  tabGroupId: number,
+  // タブ一覧を更新するメソッド
+  updatedTabGroupList: any
+}
+
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -53,7 +58,7 @@ const StyledMenu = styled((props: MenuProps) => (
   },
 }));
 
-export default function OptionMenus() {
+export default function OptionMenus(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,6 +67,23 @@ export default function OptionMenus() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const runUnGroupTabs = (tabGroupId: number) => {
+    /*
+     * アクティブなウィンドウのタブグループを全て解除
+     */
+    handleClose();
+    ungroupTabs(tabGroupId).then(() => {
+        props.updatedTabGroupList()
+    });
+  }
+
+  const runRemoveTabGroups = (tabGroupId: number) => {
+      handleClose();
+      closeTabGroup(tabGroupId).then(() =>{
+        props.updatedTabGroupList()
+      });
+  }
 
   return (
     <div>
@@ -86,20 +108,15 @@ export default function OptionMenus() {
       >
         <MenuItem onClick={handleClose} disableRipple>
           <EditIcon />
-          Edit
+          Edit(未実装)
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          <FileCopyIcon />
-          Duplicate
+        <MenuItem onClick={() => {runRemoveTabGroups(props.tabGroupId)}} disableRipple>
+          <HighlightOffIcon />
+          Close
         </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
-          <ArchiveIcon />
-          Archive
-        </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          <MoreHorizIcon />
-          More
+        <MenuItem onClick={() => {runUnGroupTabs(props.tabGroupId)}} disableRipple>
+          <LayersClearIcon />
+          Ungroup
         </MenuItem>
       </StyledMenu>
     </div>
