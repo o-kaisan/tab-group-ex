@@ -16,7 +16,6 @@ export interface Props {
   updatedTabGroupList: any
 }
 
-
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
     elevation={0}
