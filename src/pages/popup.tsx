@@ -36,7 +36,7 @@ export default function PopupMenu() {
   // 保存タブグループ一覧の状態管理
   const [openSavedTabGroup, setOpenSavedTabGroup] = React.useState(false);
   // タブグループの一覧
-  const [data, setData] = useState<chrome.tabGroups.TabGroup[] | undefined>();
+  const [activeTabGroup, setActiveTabGroup] = useState<chrome.tabGroups.TabGroup[] | undefined>();
   // 保存されたタブグループの一覧
   const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[] | undefined>()
 
@@ -63,7 +63,7 @@ export default function PopupMenu() {
      * タブグループを一覧表示
      */
     updatedTabGroupList().then(() => {
-      if (data != undefined && data.length > 0) {
+      if (activeTabGroup != undefined && activeTabGroup.length > 0) {
         setOpen(!open);
       }
     }).catch((error) => {
@@ -73,16 +73,16 @@ export default function PopupMenu() {
 
   const updatedTabGroupList = async () => {
     getAllTabGroupList().then((tabGroupList) => {
-        setData(tabGroupList)
+        setActiveTabGroup(tabGroupList)
       }).catch((error) => {
         console.log(error);
       })
     }
 
   const updateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean) => {
-    if (data != undefined){
-          setData(() =>
-            data.map(tabGroup => tabGroup.id === tabGroupId ? {...tabGroup, collapsed: !collapsed} : tabGroup))
+    if (activeTabGroup != undefined){
+          setActiveTabGroup(() =>
+            activeTabGroup.map(tabGroup => tabGroup.id === tabGroupId ? {...tabGroup, collapsed: !collapsed} : tabGroup))
       }
     toggleTabGroupCollapsed(tabGroupId, !collapsed);
   }
@@ -95,7 +95,7 @@ export default function PopupMenu() {
 
 
   const ActiveTabGroupList = () => {
-      if (data == undefined) {
+      if (activeTabGroup == undefined) {
         return(
           <ListItem>
             <List component="div" disablePadding>
@@ -108,7 +108,7 @@ export default function PopupMenu() {
       }
       return (
         <List component="div" disablePadding>
-          {data.map((tabGroup) => (
+          {activeTabGroup.map((tabGroup) => (
           <ListItem>
             <ListItemButton sx={{ pl: 4 }} onClick={() => updateTabGroupCollapsed(tabGroup.id, tabGroup.collapsed)}>
             <ListItemText>{tabGroup.title}</ListItemText>
