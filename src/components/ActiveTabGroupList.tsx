@@ -5,6 +5,7 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import OptionMenus from "./OptionMenus"
 import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
 import {saveTabGroup, toggleTabGroupCollapsed, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import ActiveTabGroupItem from './TabGroupName';
 
 export interface Props {
     // タブグループの一覧のステート
@@ -18,19 +19,6 @@ export interface Props {
 }
 
 export default function ActiveTabGroupList(props: Props) {
-    // グループ名の編集モード
-    const [editMode, setEditMode] = React.useState(false);
-
-    const updateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean) => {
-        toggleTabGroupCollapsed(tabGroupId, !collapsed);
-        props.updatedTabGroupList()
-      }
-
-      const runSaveTabGroup = (tabGroupId:number, tabGroupTitle: string | undefined) => {
-        if (tabGroupTitle == undefined) return
-        saveTabGroup(tabGroupId, tabGroupTitle).then(() => props.getSavedTabGroupList())
-      }
-
     if (props.activeTabGroup == undefined) {
         return(
           <ListItem>
@@ -41,20 +29,18 @@ export default function ActiveTabGroupList(props: Props) {
             </List>
           </ListItem>
         );
-      }
-      return (
+    }
+    return (
         <List component="div" disablePadding>
           {props.activeTabGroup.map((tabGroup) => (
-          <ListItem>
-            <ListItemButton sx={{ pl: 4 }} onClick={() => updateTabGroupCollapsed(tabGroup.id, tabGroup.collapsed)}>
-            <ListItemText>{tabGroup.title}</ListItemText>
-            </ListItemButton>
-                <IconButton onClick={() => runSaveTabGroup(tabGroup.id, tabGroup.title)}>
-                   <SaveAltIcon />
-                </IconButton>
-            <OptionMenus tabGroupId={tabGroup.id} updatedTabGroupList={props.updatedTabGroupList} />
-          </ListItem>
-          ))}
+            <ActiveTabGroupItem
+                id={tabGroup.id}
+                collapsed={tabGroup.collapsed}
+                title={tabGroup.title}
+                getSavedTabGroupList={props.getSavedTabGroupList}
+                updatedTabGroupList={props.updatedTabGroupList}
+            />
+         ))}
         </List>
-      )
+    )
 }

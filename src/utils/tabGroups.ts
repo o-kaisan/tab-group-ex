@@ -113,7 +113,7 @@ export async function getAllTabGroupList() {
 
 
 /*
- *　タブグループを展開/集約を切り替える
+ *　タブグループを開/閉を切り替える
  */
 export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boolean) {
     const updateProperties: chrome.tabGroups.UpdateProperties  = {
@@ -220,4 +220,11 @@ export async function closeTabGroup(tabGroupId: number) {
     const tabs = await getTabs(targetTabConditions)
     const tabsIds = await getTabIdList(tabs)
     await chrome.tabs.remove(tabsIds)
+}
+
+export async function updateTabGroupName(tabGroupId: number, tabGroupTitle:string) {
+    const updateProperties: chrome.tabGroups.UpdateProperties  = {
+        title: tabGroupTitle,
+    }
+    await chrome.tabGroups.update(tabGroupId, updateProperties);
 }

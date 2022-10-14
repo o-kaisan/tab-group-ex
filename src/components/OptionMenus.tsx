@@ -14,6 +14,8 @@ export interface Props {
   tabGroupId: number,
   // タブ一覧を更新するメソッド
   updatedTabGroupList: any
+  // タブの編集モードを更新するメソッド
+  setEditMode: any
 }
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -67,6 +69,12 @@ export default function OptionMenus(props: Props) {
     setAnchorEl(null);
   };
 
+  const runEditGroupTabs = () => {
+    handleClose();
+    props.setEditMode(true);
+    props.updatedTabGroupList()
+  }
+
   const runUnGroupTabs = (tabGroupId: number) => {
     /*
      * アクティブなウィンドウのタブグループを全て解除
@@ -105,9 +113,9 @@ export default function OptionMenus(props: Props) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={runEditGroupTabs} disableRipple>
           <EditIcon />
-          Edit(未実装)
+          Edit
         </MenuItem>
         <MenuItem onClick={() => {runRemoveTabGroups(props.tabGroupId)}} disableRipple>
           <HighlightOffIcon />
