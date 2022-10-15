@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
@@ -56,28 +56,28 @@ export default function ActiveTabGroupItem(props: Props) {
         runUpdateTabGroupName(props.id, tabGroupTitle);
     }
     return (
-        <ListItem>
-            { editMode ?
-                <ListItem>
-                    <Input defaultValue={props.title} inputProps={{placeholder: "Tab Group Name", onChange: handleChange, onKeyDown: handleKeyDown}} />
-                    <IconButton onClick={() => runUpdateTabGroupName(props.id, tabGroupTitle)}>
-                        <CheckIcon />
-                    </IconButton>
-                    <IconButton onClick={() => cancelEditMode()}>
-                        <ClearIcon />
-                    </IconButton>
-                </ListItem>
-                :
-                <ListItem>
-                    <ListItemButton sx={{ pl: 4 }} onClick={() => runUpdateTabGroupCollapsed(props.id, props.collapsed)}>
-                        <ListItemText>{props.title}</ListItemText>
-                    </ListItemButton>
-                    <IconButton onClick={() => runSaveTabGroup(props.id, props.title)}>
-                        <SaveAltIcon />
-                    </IconButton>
-                    <OptionMenus tabGroupId={props.id} updatedTabGroupList={props.updatedTabGroupList} setEditMode={setEditMode}/>
-                </ListItem>
-            }
-        </ListItem>
+    <div>
+        { editMode ?
+            <ListItem>
+                <Input defaultValue={props.title} inputProps={{placeholder: "Tab Group Name", onChange: handleChange, onKeyDown: handleKeyDown}} />
+                <IconButton onClick={() => runUpdateTabGroupName(props.id, tabGroupTitle)}>
+                    <CheckIcon />
+                </IconButton>
+                <IconButton onClick={() => cancelEditMode()}>
+                    <ClearIcon />
+                </IconButton>
+            </ListItem>
+            :
+            <ListItem>
+                <ListItemButton sx={{ pl: 4 }} onClick={() => runUpdateTabGroupCollapsed(props.id, props.collapsed)}>
+                    <ListItemText>{props.title}</ListItemText>
+                </ListItemButton>
+                <IconButton onClick={() => runSaveTabGroup(props.id, props.title)}>
+                    <SaveAltIcon />
+                </IconButton>
+                <OptionMenus tabGroupId={props.id} updatedTabGroupList={props.updatedTabGroupList} setEditMode={setEditMode}/>
+            </ListItem>
+        }
+    </div>
     )
 }

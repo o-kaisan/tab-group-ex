@@ -22,7 +22,6 @@ export default function MainMenu() {
     // TODO: タブグループの編集
     // TODO: ドメインごとにグループ化
     // TODO: 指定したルールで自動でタブをグループ化
-    // TODO: アクティブなタブのグループのみグループ化解除
 
     // タブグループ一覧の状態管理
     const [open, setOpen] = React.useState(true);
@@ -67,6 +66,7 @@ export default function MainMenu() {
     const updatedTabGroupList = async () => {
       getAllTabGroupList().then((tabGroupList) => {
           setActiveTabGroup(tabGroupList)
+          console.log("updated")
         }).catch((error) => {
           console.log(error);
         })
@@ -92,14 +92,9 @@ export default function MainMenu() {
     return (
       <Paper sx={{ width: 320, maxWidth: '100%' }}>
         <List
-          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          sx={{ width: '100%', Width: 320, bgcolor: 'background.paper' }}
           component="nav"
           aria-labelledby="nested-list-subheader"
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Tab Group EX
-            </ListSubheader>
-          }
         >
           <ListItem>
             <ListItemButton onClick={runGroupAllActiveTabs}>

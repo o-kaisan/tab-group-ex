@@ -1,4 +1,5 @@
-import MainMenu from "../components/MainMenus";
+
+import BasicTabs from "../components/TabPanel";
 
 /**
  * タブグループ化(Chrome拡張機能)
@@ -6,12 +7,12 @@ import MainMenu from "../components/MainMenus";
  */
 
 import ReactDOM from "react-dom";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 
 export default function PopupMenu() {
   return (
-    <MainMenu />
+    <BasicTabs />
   );
 }
 
