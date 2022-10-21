@@ -6,11 +6,16 @@ import Box from '@mui/material/Box';
 import MainMenu from "../components/MainMenus";
 import SettingsList from "../components/SettingsList";
 import ControlTabGroup from "../components/ControlTabGroup";
+import { getSavedGroupMode } from '../utils/tabGroupSettings';
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+async function getGroupMode(){
+    return await getSavedGroupMode()
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -42,6 +47,13 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
+  const [groupMode, setGroupMode] = React.useState()
+
+  React.useEffect(()=>{
+      getGroupMode().then((value)=>{
+        setGroupMode(value)
+      })
+  },[])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -57,13 +69,19 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <MainMenu />
+        <MainMenu
+          groupMode={groupMode}
+          setGroupMode={setGroupMode}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ControlTabGroup />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <SettingsList />
+        <SettingsList
+          groupMode={groupMode}
+          setGroupMode={setGroupMode}
+        />
       </TabPanel>
     </Box>
   );

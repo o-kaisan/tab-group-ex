@@ -9,7 +9,12 @@ import BluetoothIcon from '@mui/icons-material/Bluetooth';
 import SelectTabGroupMode from "./SelectTabGroupMode"
 import SettingsIcon from '@mui/icons-material/Settings';
 
-export default function SettingsList() {
+export interface Props {
+  groupMode: any
+  setGroupMode: any
+}
+
+export default function SettingsList(props: Props) {
   const [checked, setChecked] = React.useState(['wifi']);
 
   const handleToggle = (value: string) => () => {
@@ -32,7 +37,10 @@ export default function SettingsList() {
     >
       <ListItem>
         <ListItemText id="list-label-Mode" primary="GroupMode" />
-        <SelectTabGroupMode />
+        <SelectTabGroupMode
+          groupMode={props.groupMode}
+          setGroupMode={props.setGroupMode}
+        />
       </ListItem>
       <ListItem>
         <ListItemText id="switch-list-label-bluetooth" primary="Bluetooth" />

@@ -18,7 +18,13 @@ import SavedTabGroupList from "./SavedTabGroupList";
 /*
  * 拡張機能のメニュー
  */
-export default function MainMenu() {
+export interface Props {
+  groupMode: any
+  setGroupMode: any
+}
+
+
+export default function MainMenu(props: Props) {
     // TODO: タブグループの編集
     // TODO: ドメインごとにグループ化
     // TODO: 指定したルールで自動でタブをグループ化
