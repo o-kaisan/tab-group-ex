@@ -15,7 +15,7 @@ export interface Props {
 }
 
 export default function SettingsList(props: Props) {
-  const [checked, setChecked] = React.useState(['wifi']);
+  const [checked, setChecked] = React.useState(['none-rule-grouping']);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
@@ -42,17 +42,19 @@ export default function SettingsList(props: Props) {
           setGroupMode={props.setGroupMode}
         />
       </ListItem>
-      <ListItem>
-        <ListItemText id="switch-list-label-bluetooth" primary="Bluetooth" />
-        <Switch
-          edge="end"
-          onChange={handleToggle('bluetooth')}
-          checked={checked.indexOf('bluetooth') !== -1}
-          inputProps={{
-            'aria-labelledby': 'switch-list-label-bluetooth',
-          }}
-        />
-      </ListItem>
+      { props.groupMode == "Custom" &&
+        <ListItem>
+          <ListItemText id="switch-list-label-none-rule-grouping" primary="ルールに含まれないものでグループ化(未実装)" />
+          <Switch
+            edge="end"
+            onChange={handleToggle('none-rule-grouping')}
+            checked={checked.indexOf('none-rule-grouping') !== -1}
+            inputProps={{
+              'aria-labelledby': 'switch-list-label-none-rule-grouping',
+            }}
+          />
+        </ListItem>
+      }
     </List>
   );
 }

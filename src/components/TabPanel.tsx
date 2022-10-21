@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import MainMenu from "../components/MainMenus";
 import SettingsList from "../components/SettingsList";
-import ControlTabGroup from "../components/ControlTabGroup";
 import { getSavedGroupMode } from '../utils/tabGroupSettings';
 
 interface TabPanelProps {
@@ -64,8 +63,7 @@ export default function BasicTabs() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Tab Group EX" {...a11yProps(0)} />
-          <Tab label="Control" {...a11yProps(1)} />
-          <Tab label="Settings" {...a11yProps(2)} />
+          <Tab label="Settings" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -75,9 +73,6 @@ export default function BasicTabs() {
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ControlTabGroup />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
         <SettingsList
           groupMode={groupMode}
           setGroupMode={setGroupMode}
