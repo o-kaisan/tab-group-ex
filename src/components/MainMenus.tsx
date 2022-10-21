@@ -66,7 +66,6 @@ export default function MainMenu() {
     const updatedTabGroupList = async () => {
       getAllTabGroupList().then((tabGroupList) => {
           setActiveTabGroup(tabGroupList)
-          console.log("updated")
         }).catch((error) => {
           console.log(error);
         })
@@ -77,7 +76,6 @@ export default function MainMenu() {
          * savedTabGroupを取得して更新する
          */
         getAllSavedTabGroup().then((savedTabGroupList) => {
-          console.log("get savedtabgroup")
           setSavedTabGroup(savedTabGroupList)
         })
       }

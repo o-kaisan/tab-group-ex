@@ -133,7 +133,6 @@ async function getTabUrls(tabGroupId:number) {
     var urls = Array()
     const tabs = await getTabs(targetTabGroupConditions)
     tabs.map((tab) => {urls.push(tab.url)})
-    console.log(urls)
     return urls
 }
 
@@ -155,7 +154,6 @@ export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
     // タブグループがundifinedだったらストレージに保存せずに返却
     if (tabGroupTitle == undefined) return
     const storageTitle: string = "TG_" + tabGroupTitle + tabGroupId
-    console.log(saveTabGroupInfo)
     await chrome.storage.local.set({[storageTitle]: saveTabGroupInfo})
 }
 
