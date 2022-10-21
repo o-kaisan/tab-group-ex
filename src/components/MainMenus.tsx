@@ -90,59 +90,57 @@ export default function MainMenu() {
       }
 
     return (
-      <Paper sx={{ width: 320, maxWidth: '100%' }}>
-        <List
-          sx={{ width: '100%', Width: 320, bgcolor: 'background.paper' }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-        >
-          <ListItem>
-            <ListItemButton onClick={runGroupAllActiveTabs}>
-              <ListItemIcon>
-                <LayersIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>タブをグループ化</ListItemText>
-              <Typography variant="body2" color="text.secondary">
-                ⌘X
-              </Typography>
-            </ListItemButton>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemButton onClick={runShowSavedTabGroupList}>
-              <ListItemIcon>
-                <FolderIcon fontSize="small"/>
-              </ListItemIcon>
-              <ListItemText>保存タブグループ一覧</ListItemText>
-              {openSavedTabGroup ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-          </ListItem>
-          <Collapse in={openSavedTabGroup} timeout="auto" unmountOnExit>
-            <SavedTabGroupList
-                savedTabGroup={savedTabGroup}
-                getSavedTabGroupList={getSavedTabGroupList}
-                updatedTabGroupList={updatedTabGroupList}
-            />
-          </Collapse>
-          <Divider />
-          <ListItem>
-            <ListItemButton onClick={runShowActiveTabGroupList}>
-              <ListItemIcon>
-                <WebStoriesIcon fontSize="small"/>
-              </ListItemIcon>
-              <ListItemText>タブグループ一覧</ListItemText>
-              {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-          </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <ActiveTabGroupList
-                activeTabGroup={activeTabGroup}
-                setActiveTabGroup={setActiveTabGroup}
-                getSavedTabGroupList={getSavedTabGroupList}
-                updatedTabGroupList={updatedTabGroupList}
-            />
-          </Collapse>
-        </List>
-      </Paper>
+      <List
+        sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+      >
+        <ListItem>
+          <ListItemButton onClick={runGroupAllActiveTabs}>
+            <ListItemIcon>
+              <LayersIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>タブをグループ化</ListItemText>
+            <Typography variant="body2" color="text.secondary">
+              ⌘X
+            </Typography>
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemButton onClick={runShowSavedTabGroupList}>
+            <ListItemIcon>
+              <FolderIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>保存タブグループ一覧</ListItemText>
+            {openSavedTabGroup ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openSavedTabGroup} timeout="auto" unmountOnExit>
+          <SavedTabGroupList
+              savedTabGroup={savedTabGroup}
+              getSavedTabGroupList={getSavedTabGroupList}
+              updatedTabGroupList={updatedTabGroupList}
+          />
+        </Collapse>
+        <Divider />
+        <ListItem>
+          <ListItemButton onClick={runShowActiveTabGroupList}>
+            <ListItemIcon>
+              <WebStoriesIcon fontSize="small"/>
+            </ListItemIcon>
+            <ListItemText>タブグループ一覧</ListItemText>
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <ActiveTabGroupList
+              activeTabGroup={activeTabGroup}
+              setActiveTabGroup={setActiveTabGroup}
+              getSavedTabGroupList={getSavedTabGroupList}
+              updatedTabGroupList={updatedTabGroupList}
+          />
+        </Collapse>
+      </List>
     );
 }

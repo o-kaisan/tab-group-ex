@@ -27,7 +27,7 @@ export default function SettingsList() {
 
   return (
     <List
-      sx={{ width: '100%', Width: 320, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
       subheader={<ListSubheader>Settings</ListSubheader>}
     >
       <ListItem>

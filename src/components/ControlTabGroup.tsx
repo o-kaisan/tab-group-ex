@@ -26,12 +26,12 @@ export default function CustomTabGroup() {
 
   return (
     <List
-      sx={{ width: '100%', Width: 320, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+          Edit Tabs
         </ListSubheader>
       }
     >
