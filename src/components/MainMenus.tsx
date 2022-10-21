@@ -28,6 +28,7 @@ export default function MainMenu(props: Props) {
     // TODO: タブグループの編集
     // TODO: ドメインごとにグループ化
     // TODO: 指定したルールで自動でタブをグループ化
+    // TODO: 直前の状態に戻す
 
     // タブグループ一覧の状態管理
     const [open, setOpen] = React.useState(true);

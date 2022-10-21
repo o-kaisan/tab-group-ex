@@ -42,7 +42,7 @@ export default function SettingsList(props: Props) {
           setGroupMode={props.setGroupMode}
         />
       </ListItem>
-      { props.groupMode == "Custom" &&
+      { props.groupMode == "dummy" &&
         <ListItem>
           <ListItemText id="switch-list-label-none-rule-grouping" primary="ルールに含まれないものでグループ化(未実装)" />
           <Switch
