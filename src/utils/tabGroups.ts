@@ -45,7 +45,7 @@ async function getNoneGroupedTabs() {
         groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
     };
     const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
-    return tabs    
+    return tabs
 }
 
 /*
@@ -70,9 +70,9 @@ async function getTabGroupIdByTitle(title: string) {
         if( tabgroup.title === title) {
             tabGroupId = tabgroup.id
         }
-    }) 
+    })
     return tabGroupId
-} 
+}
 
 
 /*
@@ -100,25 +100,26 @@ async function updateTabGroups(tabIdList: number[], title: string) {
     if (tabIdList.length == 0){
         return
     }
-    const groupId: number | undefined = await getTabGroupIdByTitle(title);
-    
+    let groupId: number | undefined = await getTabGroupIdByTitle(title);
+
+    console.log(groupId)
     // 指定したグループ名がなければ新規作成
     if (groupId === undefined){
-        await createTabGroups(tabIdList);
+        groupId = await createTabGroups(tabIdList, title);
+        return
     };
     // グループが既に存在していれば追加する
     await chrome.tabs.group({groupId: groupId, tabIds: tabIdList});
-    return groupId;    
+    return
 
-} 
+}
 
 
 /*
  *　設定に従ってタブをグループ化
- */ 
+ */
 export async function groupActiveTabs(groupMode: string) {
     if (groupMode === DOMAIN_MODE) {
-        console.log("group Domain")
         await groupActiveTabsByDomain()
     }
 
@@ -129,7 +130,6 @@ export async function groupActiveTabs(groupMode: string) {
     }
 
     if (groupMode === DEFAULT_MODE) {
-        console.log("group Default")
         await groupAllActiveTabs()
     }
 }
@@ -137,7 +137,7 @@ export async function groupActiveTabs(groupMode: string) {
  * カスタムルールに従ってタブをグループ化
  */
 async function groupActiveTabsByCustom(groupRule: string){
-    console.log("run cutom group function")
+    console.log("run custom group function")
 }
 
 /*
@@ -148,17 +148,24 @@ async function groupActiveTabsByDomain(){
     const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs();
     // ドメインを取得
     const domainMap: {[key: string]: number[]} = {};
+    const domains = Array();
     for (let i: number = 0; i < tabs.length; i++ ){
         const domain = url.getDomainNameIgnoreSubDomain(<string>tabs[i].url)
-        if (domain === "") {
+        if (domain === undefined) {
             continue;
         }
         if (domainMap[domain] === undefined) {
             domainMap[domain] = Array();
+            domains.push(domain)
         }
         domainMap[domain].push(<number>tabs[i].id);
     }
     // ドメイン分グループ化を繰り返す
+    domains.map(async (domain) => {
+        const groupIds: number[] = domainMap[domain]
+        await updateTabGroups(groupIds, domain);
+    })
+
 }
 
 /*
