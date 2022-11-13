@@ -1,6 +1,13 @@
 /*
  * タブのグループ化関連のユーティリティ
  */
+import * as url from "../utils/url";
+
+
+const DEFAULT_MODE = "Default"
+const DOMAIN_MODE = "Domain"
+const CUSTOM_MODE = "Custom"
+
 
 export interface SavedTabGroupInfo {
     // タブグループのId
@@ -28,6 +35,20 @@ async function getTabs (targetTabConditions: chrome.tabs.QueryInfo) {
 };
 
 /*
+ * グループ化されていないタブを取得する
+ */
+async function getNoneGroupedTabs() {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        pinned: false,
+        url: ['http://*/*', 'https://*/*'],
+        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
+    };
+    const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
+    return tabs    
+}
+
+/*
  * タブ配列をタブIDのリストを返却
  * ※タブが取得できなかった場合は空の配列を返す。
  */
@@ -40,35 +61,113 @@ function getTabIdList(targetTabList: any) {
 }
 
 /*
- * タブをグループ化
- * 引数で受け取ったタブを配列ごとにグループ化する
+ * タブグループ名にヒットしたタブグループのIDを返す
  */
-async function groupTabs(tabIdList: number[], title: string="") {
-    if (tabIdList.length > 0){
-        const groupId: number = await chrome.tabs.group({tabIds: tabIdList});
-        if (title == "") {
-            title = groupId.toString()
+async function getTabGroupIdByTitle(title: string) {
+    const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
+    let tabGroupId = undefined
+    tabgroups.map((tabgroup)=> {
+        if( tabgroup.title === title) {
+            tabGroupId = tabgroup.id
         }
-        chrome.tabGroups.update(groupId, {
-            collapsed: true,
-            title: title
-        });
+    }) 
+    return tabGroupId
+} 
+
+
+/*
+ * 新しくタブをグループ化する
+ */
+async function createTabGroups(tabIdList: number[], title: string="") {
+    if (tabIdList.length == 0){
+        return
     }
+    const groupId = await chrome.tabs.group({tabIds: tabIdList});
+    if (title === ""){
+        title = groupId.toString()
+    }
+    chrome.tabGroups.update(groupId, {
+        collapsed: false,
+        title: title
+    });
+    return groupId
+}
+
+/*
+ * タブグループを更新する
+ */
+async function updateTabGroups(tabIdList: number[], title: string) {
+    if (tabIdList.length == 0){
+        return
+    }
+    const groupId: number | undefined = await getTabGroupIdByTitle(title);
+    
+    // 指定したグループ名がなければ新規作成
+    if (groupId === undefined){
+        await createTabGroups(tabIdList);
+    };
+    // グループが既に存在していれば追加する
+    await chrome.tabs.group({groupId: groupId, tabIds: tabIdList});
+    return groupId;    
+
+} 
+
+
+/*
+ *　設定に従ってタブをグループ化
+ */ 
+export async function groupActiveTabs(groupMode: string) {
+    if (groupMode === DOMAIN_MODE) {
+        console.log("group Domain")
+        await groupActiveTabsByDomain()
+    }
+
+    if (groupMode === CUSTOM_MODE) {
+        console.log("group Custom")
+        const groupRule: string = "dummy"
+        await groupActiveTabsByCustom(groupRule)
+    }
+
+    if (groupMode === DEFAULT_MODE) {
+        console.log("group Default")
+        await groupAllActiveTabs()
+    }
+}
+/*
+ * カスタムルールに従ってタブをグループ化
+ */
+async function groupActiveTabsByCustom(groupRule: string){
+    console.log("run cutom group function")
+}
+
+/*
+ * タブをドメインごとにグループ化
+ */
+async function groupActiveTabsByDomain(){
+    // タブを取得
+    const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs();
+    // ドメインを取得
+    const domainMap: {[key: string]: number[]} = {};
+    for (let i: number = 0; i < tabs.length; i++ ){
+        const domain = url.getDomainNameIgnoreSubDomain(<string>tabs[i].url)
+        if (domain === "") {
+            continue;
+        }
+        if (domainMap[domain] === undefined) {
+            domainMap[domain] = Array();
+        }
+        domainMap[domain].push(<number>tabs[i].id);
+    }
+    // ドメイン分グループ化を繰り返す
 }
 
 /*
  * タブを全てグループ化
  */
-export async function groupAllActivateTabs() {
-    const targetTabConditions: chrome.tabs.QueryInfo = {
-        currentWindow: true,
-        pinned: false,
-        url: ['http://*/*', 'https://*/*'],
-        groupId: chrome.tabGroups.TAB_GROUP_ID_NONE
-    };
-    const tabs = await getTabs(targetTabConditions)
+async function groupAllActiveTabs() {
+    const tabs = await getNoneGroupedTabs();
     const tabIdList: number[] = getTabIdList(tabs);
-    await groupTabs(tabIdList)
+    await createTabGroups(tabIdList)
 }
 
 /*
@@ -86,10 +185,6 @@ export async function ungroupTabs(tabGroupId: number) {
     if (tabIdList.length == 0) return
     await chrome.tabs.ungroup(tabIdList);
 }
-
-/*
- * 全てのグループ化を解除
- */
 
 /*
  * アクティブなウィドウのタブグループ一覧を取得
@@ -172,7 +267,7 @@ export async function getAllSavedTabGroup() {
     const storageData = await chrome.storage.local.get(null);
     const ret: SavedTabGroupInfo[] = Array()
     Object.keys(storageData).forEach(key => {
-        if (storageData[key].type == "TGEX") {
+        if (storageData[key].type === "TGEX") {
             ret.push(storageData[key])
         }
     })
@@ -208,7 +303,7 @@ export async function restoreTabGroup(tabgroupTitle: string | undefined, urlList
             tabIdList.push(tabId)
         }
     })
-    await groupTabs(tabIdList, tabgroupTitle)
+    await createTabGroups(tabIdList, tabgroupTitle)
 }
 
 export async function closeTabGroup(tabGroupId: number) {

@@ -9,7 +9,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {getAllTabGroupList, saveTabGroup, groupAllActivateTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import {getAllTabGroupList, saveTabGroup, groupActiveTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
 import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder';
 import ActiveTabGroupList from "../components/ActiveTabGroupList";
@@ -47,12 +47,13 @@ export default function MainMenu(props: Props) {
       getSavedTabGroupList();
     }, []);
 
-    const runGroupAllActiveTabs = () => {
+
+    const runGroupActiveTabs = () => {
       /*
-       * アクティブなウィンドウのタブを全てグループ化
+       * タブをグループ化
        */
-      groupAllActivateTabs().then(() => {
-          updatedTabGroupList()
+      groupActiveTabs(props.groupMode).then(() => {
+        updatedTabGroupList()
       }).catch((error)=>console.log(error))
     }
 
@@ -101,7 +102,7 @@ export default function MainMenu(props: Props) {
         aria-labelledby="nested-list-subheader"
       >
         <ListItem>
-          <ListItemButton onClick={runGroupAllActiveTabs}>
+          <ListItemButton onClick={runGroupActiveTabs}>
             <ListItemIcon>
               <LayersIcon fontSize="small" />
             </ListItemIcon>
