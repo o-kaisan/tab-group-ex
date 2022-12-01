@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import MainMenu from "../components/MainMenus";
 import SettingsList from "../components/SettingsList";
-import { getSavedGroupMode } from '../utils/tabGroupSettings';
+import { getSavedGroupMode, getSavedIgnoreRule, getSavedGroupRule} from '../utils/tabGroupSettings';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -13,8 +13,21 @@ interface TabPanelProps {
   value: number;
 }
 
+export interface GroupRule {
+  id : string;
+  domain: string;
+}
+
 async function getGroupMode(){
     return await getSavedGroupMode()
+}
+
+async function getIgnoreRule(){
+    return await getSavedIgnoreRule()
+}
+
+async function getGroupRule(){
+    return await getSavedGroupRule()
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -47,7 +60,21 @@ function a11yProps(index: number) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const [groupMode, setGroupMode] = React.useState()
+  // カスタムルール
+  const [groupRule, setGroupRule] = React.useState<GroupRule[]>([]);
+  // ルール外をグループ化する設定
+  const [ignoreRule, setIgnoreRule] = React.useState();
 
+  React.useEffect(()=> {
+    getGroupRule().then((value)=>{
+      setGroupRule(value)
+    })
+}, [])
+  React.useEffect(()=> {
+      getIgnoreRule().then((value)=>{
+        setIgnoreRule(value)
+      })
+  },[])
   React.useEffect(()=>{
       getGroupMode().then((value)=>{
         setGroupMode(value)
@@ -69,13 +96,18 @@ export default function BasicTabs() {
       <TabPanel value={value} index={0}>
         <MainMenu
           groupMode={groupMode}
-          setGroupMode={setGroupMode}
+          ignoreRule={ignoreRule}
+          groupRule={groupRule}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <SettingsList
           groupMode={groupMode}
           setGroupMode={setGroupMode}
+          ignoreRule={ignoreRule}
+          setIgnoreRule={setIgnoreRule}
+          groupRule={groupRule}
+          setGroupRule={setGroupRule}
         />
       </TabPanel>
     </Box>

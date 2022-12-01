@@ -20,7 +20,8 @@ import SavedTabGroupList from "./SavedTabGroupList";
  */
 export interface Props {
   groupMode: any
-  setGroupMode: any
+  ignoreRule: any
+  groupRule: any
 }
 
 
@@ -39,6 +40,7 @@ export default function MainMenu(props: Props) {
     // 保存されたタブグループの一覧
     const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[] | undefined>();
 
+
     useEffect(() => {
       updatedTabGroupList();
     }, []);
@@ -52,7 +54,7 @@ export default function MainMenu(props: Props) {
       /*
        * タブをグループ化
        */
-      groupActiveTabs(props.groupMode).then(() => {
+      groupActiveTabs(props.groupMode, props.groupRule, props.ignoreRule).then(() => {
         updatedTabGroupList()
       }).catch((error)=>console.log(error))
     }

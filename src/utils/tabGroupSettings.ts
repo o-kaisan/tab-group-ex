@@ -16,3 +16,26 @@ export async function getSavedGroupMode() {
     }
     return ret
 }
+
+
+export async function saveIgnoreRule(ignoreRule: boolean) {
+    await chrome.storage.local.set({"ignoreRule": ignoreRule})
+}
+
+export async function getSavedIgnoreRule() {
+    const ignoreRule = await chrome.storage.local.get("ignoreRule")
+    let ret = ignoreRule.ignoreRule
+    if (ret == undefined) {
+        ret = false
+    }
+    return ret
+}
+
+export async function getSavedGroupRule() {
+    const groupRule = await chrome.storage.local.get("groupRule")
+    let ret = groupRule.groupRule
+    if (ret == undefined) {
+        ret = []
+    }
+    return ret
+}

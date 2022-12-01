@@ -102,7 +102,6 @@ async function updateTabGroups(tabIdList: number[], title: string) {
     }
     let groupId: number | undefined = await getTabGroupIdByTitle(title);
 
-    console.log(groupId)
     // 指定したグループ名がなければ新規作成
     if (groupId === undefined){
         groupId = await createTabGroups(tabIdList, title);
@@ -118,15 +117,17 @@ async function updateTabGroups(tabIdList: number[], title: string) {
 /*
  *　設定に従ってタブをグループ化
  */
-export async function groupActiveTabs(groupMode: string) {
+export async function groupActiveTabs(groupMode: string, groupRule: string[] | undefined, ignoreRule: boolean) {
     if (groupMode === DOMAIN_MODE) {
         await groupActiveTabsByDomain()
     }
 
     if (groupMode === CUSTOM_MODE) {
         console.log("group Custom")
-        const groupRule: string = "dummy"
-        await groupActiveTabsByCustom(groupRule)
+        if (groupRule === undefined){
+            return
+        }
+        await groupActiveTabsByCustom(groupRule, ignoreRule)
     }
 
     if (groupMode === DEFAULT_MODE) {
@@ -136,8 +137,41 @@ export async function groupActiveTabs(groupMode: string) {
 /*
  * カスタムルールに従ってタブをグループ化
  */
-async function groupActiveTabsByCustom(groupRule: string){
+async function groupActiveTabsByCustom(groupRules: string[], ignoreRule: boolean){
     console.log("run custom group function")
+    // タブを取得
+    // ルールにしたがってグループ化
+    const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs();
+    const domainMap: {[key: string]: number[]} = {};
+    const domains = Array();
+    if (groupRules.length > 0) {
+            groupRules.map((domain) => {
+                for (let i: number = 0; i < tabs.length; i++ ){
+                    const tab_domain = url.getDomainNameIgnoreSubDomain(<string>tabs[i].url)
+                    if (tab_domain === undefined) {
+                        continue;
+                    }
+                    if (domain !== tab_domain) {
+                        continue;
+                    }
+                    if (domainMap[domain] === undefined) {
+                        domainMap[domain] = Array();
+                        domains.push(domain)
+                    }
+                    domainMap[domain].push(<number>tabs[i].id);
+                }
+            })
+        // ドメイン分グループ化を繰り返す
+        domains.map(async (domain) => {
+            const groupIds: number[] = domainMap[domain]
+            await updateTabGroups(groupIds, domain);
+        })
+    }
+
+    // ルール外のタブをグループ化
+    if (ignoreRule) {
+        await groupAllActiveTabs();
+    }
 }
 
 /*
@@ -165,7 +199,6 @@ async function groupActiveTabsByDomain(){
         const groupIds: number[] = domainMap[domain]
         await updateTabGroups(groupIds, domain);
     })
-
 }
 
 /*
