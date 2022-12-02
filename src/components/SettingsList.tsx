@@ -8,12 +8,12 @@ import Switch from '@mui/material/Switch';
 import BluetoothIcon from '@mui/icons-material/Bluetooth';
 import SelectTabGroupMode from "./SelectTabGroupMode"
 import SettingsIcon from '@mui/icons-material/Settings';
-import { getSavedIgnoreRule, saveIgnoreRule } from '../utils/tabGroupSettings';
+import { getSavedIgnoreRule, saveGroupRule, saveIgnoreRule } from '../utils/tabGroupSettings';
 import { check } from 'prettier';
 import Divider from '@mui/material/Divider';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Input } from "@mui/material";
+import { formHelperTextClasses, Input } from "@mui/material";
 import Button from '@mui/material/Button';
 import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';
@@ -47,24 +47,27 @@ export default function SettingsList(props: Props) {
   }
 
   // グループ化するドメインのルールを削除する
-  const handleDeleteDomain = (id: string) => {
-    const index = props.groupRule.findIndex((rule) => rule.id === id)
+  const handleDeleteDomain = async (id: string) => {
     const _groupRule = [...props.groupRule]
     const removeGroupRule = _groupRule.filter(rule=>rule.id!==id)
-    props.setGroupRule(removeGroupRule)
-
+    props.setGroupRule(removeGroupRule);
   }
 
-  const handleChangeDomain = (id: string) => {
-    // const index = props.groupRule.findIndex((rule) => rule.id === id)
-    // let _groupRule = [...props.groupRule]
-    // _groupRule[index]
+  const handleChangeDomain = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
+    const index = props.groupRule.findIndex((rule) => rule.id === id)
+    let _groupRule = [...props.groupRule]
+    _groupRule[index].domain = event.target.value;
+    props.setGroupRule(_groupRule);
+  }
+
+  const handleSaveGroupRule = async () => {
+    const _groupRule = [...props.groupRule];
+    await saveGroupRule(_groupRule);
   }
 
   return (
     <List
       sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
-      subheader={<ListSubheader>Settings</ListSubheader>}
     >
       <ListItem>
         <ListItemText id="list-label-Mode" primary="GroupMode" />
@@ -84,18 +87,19 @@ export default function SettingsList(props: Props) {
               checked={checked}
             />
           </ListItem>
-          <Divider /
+          <Divider />
           <ListSubheader>Group By Domain</ListSubheader>
           {props.groupRule.map((rule: GroupRule) => (
             <ListItem>
-              <Input defaultValue={rule.domain}></Input>
+              <Input defaultValue={rule.domain} onChange={(e) => handleChangeDomain(e, rule.id)}></Input>
               <IconButton onClick={(e) => handleDeleteDomain(rule.id)}>
                 <ClearIcon/>
               </IconButton>
             </ListItem>
           ))}
           <ListItem>
-            <Button variant="outlined" size="small" onClick={handleAddDomain}>Add Group Rule</Button>
+            <Button sx={{m:1}} variant="outlined" size="small"  onClick={handleAddDomain}>Add Group Rule</Button>
+            <Button sx={{m:1}} variant="outlined" size="small" color="success" onClick={handleSaveGroupRule}>Save</Button>
           </ListItem>
         </div>
       }

@@ -9,7 +9,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {getAllTabGroupList, saveTabGroup, groupActiveTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import {CUSTOM_MODE, getAllTabGroupList, saveTabGroup, groupActiveTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
 import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder';
 import ActiveTabGroupList from "../components/ActiveTabGroupList";
@@ -26,9 +26,6 @@ export interface Props {
 
 
 export default function MainMenu(props: Props) {
-    // TODO: タブグループの編集
-    // TODO: ドメインごとにグループ化
-    // TODO: 指定したルールで自動でタブをグループ化
     // TODO: 直前の状態に戻す
 
     // タブグループ一覧の状態管理

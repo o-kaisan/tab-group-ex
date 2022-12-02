@@ -11,8 +11,6 @@ export interface Props {
 }
 
 export default function SelectTabGroupMode(props: Props) {
-  // TODO; ストレージからとってくるように
-
   const handleChange = (event: SelectChangeEvent) => {
     saveGroupMode(event.target.value).then(()=>{
       props.setGroupMode(event.target.value);

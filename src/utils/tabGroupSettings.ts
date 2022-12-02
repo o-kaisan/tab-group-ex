@@ -1,3 +1,5 @@
+import { GroupRule } from "../components/TabPanel";
+
 /*
  * タブグループの設定を管理する
  */
@@ -22,11 +24,15 @@ export async function saveIgnoreRule(ignoreRule: boolean) {
     await chrome.storage.local.set({"ignoreRule": ignoreRule})
 }
 
+export async function saveGroupRule(groupRule: GroupRule[]) {
+    await chrome.storage.local.set({"groupRule": groupRule})
+}
+
 export async function getSavedIgnoreRule() {
     const ignoreRule = await chrome.storage.local.get("ignoreRule")
     let ret = ignoreRule.ignoreRule
     if (ret == undefined) {
-        ret = false
+        ret = []
     }
     return ret
 }

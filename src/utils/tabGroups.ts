@@ -1,12 +1,12 @@
 /*
  * タブのグループ化関連のユーティリティ
  */
+import { GroupRule } from "../components/TabPanel";
 import * as url from "../utils/url";
 
-
-const DEFAULT_MODE = "Default"
-const DOMAIN_MODE = "Domain"
-const CUSTOM_MODE = "Custom"
+export const DEFAULT_MODE = "Default"
+export const DOMAIN_MODE = "Domain"
+export const CUSTOM_MODE = "Custom"
 
 
 export interface SavedTabGroupInfo {
@@ -117,17 +117,21 @@ async function updateTabGroups(tabIdList: number[], title: string) {
 /*
  *　設定に従ってタブをグループ化
  */
-export async function groupActiveTabs(groupMode: string, groupRule: string[] | undefined, ignoreRule: boolean) {
+export async function groupActiveTabs(groupMode: string, groupRule: GroupRule[] | undefined, ignoreRule: boolean) {
     if (groupMode === DOMAIN_MODE) {
         await groupActiveTabsByDomain()
     }
 
     if (groupMode === CUSTOM_MODE) {
-        console.log("group Custom")
         if (groupRule === undefined){
             return
         }
-        await groupActiveTabsByCustom(groupRule, ignoreRule)
+
+        let groupRuleList: string[] = []
+        groupRule.map((rule: GroupRule) => {
+            groupRuleList.push(rule.domain)
+        })
+        await groupActiveTabsByCustom(groupRuleList, ignoreRule)
     }
 
     if (groupMode === DEFAULT_MODE) {
