@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -9,8 +8,8 @@ import LayersIcon from '@mui/icons-material/Layers';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
-import {CUSTOM_MODE, getAllTabGroupList, saveTabGroup, groupActiveTabs, toggleTabGroupCollapsed, SavedTabGroupInfo, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
-import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
+import {getAllTabGroupList, groupActiveTabs, SavedTabGroupInfo, getAllSavedTabGroup} from "../utils/tabGroups"
+import { Collapse, ListItem, ListItemButton} from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder';
 import ActiveTabGroupList from "../components/ActiveTabGroupList";
 import SavedTabGroupList from "./SavedTabGroupList";
@@ -57,7 +56,7 @@ export default function MainMenu(props: Props) {
     }
 
 
-    const runShowActiveTabGroupList = () => {
+    const showActiveTabGroupList = () => {
       /*
        * タブグループを一覧表示
        */
@@ -130,7 +129,7 @@ export default function MainMenu(props: Props) {
         </Collapse>
         <Divider />
         <ListItem>
-          <ListItemButton onClick={runShowActiveTabGroupList}>
+          <ListItemButton onClick={showActiveTabGroupList}>
             <ListItemIcon>
               <WebStoriesIcon fontSize="small"/>
             </ListItemIcon>

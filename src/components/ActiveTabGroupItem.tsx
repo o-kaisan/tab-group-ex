@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import List from '@mui/material/List';
+import React from "react";
 import ListItemText from '@mui/material/ListItemText';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import OptionMenus from "./OptionMenus"
-import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
-import {saveTabGroup, toggleTabGroupCollapsed, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup, updateTabGroupName} from "../utils/tabGroups"
+import {IconButton, ListItem, ListItemButton} from "@mui/material";
+import {saveTabGroup, toggleTabGroupCollapsed, updateTabGroupName} from "../utils/tabGroups"
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Input } from "@mui/material";

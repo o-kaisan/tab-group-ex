@@ -5,15 +5,11 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Switch from '@mui/material/Switch';
-import BluetoothIcon from '@mui/icons-material/Bluetooth';
 import SelectTabGroupMode from "./SelectTabGroupMode"
-import SettingsIcon from '@mui/icons-material/Settings';
-import { getSavedIgnoreRule, saveGroupRule, saveIgnoreRule } from '../utils/tabGroupSettings';
-import { check } from 'prettier';
+import { saveGroupRule, saveIgnoreRule } from '../utils/tabGroupSettings';
 import Divider from '@mui/material/Divider';
-import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import { formHelperTextClasses, Input } from "@mui/material";
+import { Input } from "@mui/material";
 import Button from '@mui/material/Button';
 import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';

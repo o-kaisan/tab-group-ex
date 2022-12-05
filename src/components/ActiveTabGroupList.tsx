@@ -1,10 +1,7 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import OptionMenus from "./OptionMenus"
-import { Collapse, IconButton, ListItem, ListItemButton, ListSubheader } from "@mui/material";
-import {saveTabGroup, toggleTabGroupCollapsed, getAllSavedTabGroup, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
+import {ListItem, ListItemButton} from "@mui/material";
 import ActiveTabGroupItem from './ActiveTabGroupItem';
 
 export interface Props {

@@ -11,9 +11,6 @@ export const CUSTOM_MODE = "Custom"
 
 export interface SavedTabGroupInfo {
     // タブグループのId
-    // もしかすると保存するのにタブグループIDだけで足りないかも
-
-    // ※ 保存時のグループIDとタブグループのタイトルでユニークにしているが被る可能性は0ではない。
     // ストレージ保存用のタイプ
     type: string
     // 保存時のグループID
