@@ -76,17 +76,21 @@ async function getTabGroupIdByTitle(title: string) {
  * 新しくタブをグループ化する
  */
 async function createTabGroups(tabIdList: number[], title: string="") {
-    if (tabIdList.length == 0){
+    if (tabIdList.length === 0){
         return
     }
     const groupId = await chrome.tabs.group({tabIds: tabIdList});
     if (title === ""){
         title = groupId.toString()
     }
-    chrome.tabGroups.update(groupId, {
-        collapsed: false,
-        title: title
-    });
+    try {
+        chrome.tabGroups.update(groupId, {
+            collapsed: false,
+            title: title
+        });
+    } catch (err) {
+        console.log("failed to update title :%d", err)
+    }
     return groupId
 }
 
@@ -94,7 +98,7 @@ async function createTabGroups(tabIdList: number[], title: string="") {
  * タブグループを更新する
  */
 async function updateTabGroups(tabIdList: number[], title: string) {
-    if (tabIdList.length == 0){
+    if (tabIdList.length === 0){
         return
     }
     let groupId: number | undefined = await getTabGroupIdByTitle(title);
@@ -139,7 +143,6 @@ export async function groupActiveTabs(groupMode: string, groupRule: GroupRule[] 
  * カスタムルールに従ってタブをグループ化
  */
 async function groupActiveTabsByCustom(groupRules: string[], ignoreRule: boolean){
-    console.log("run custom group function")
     // タブを取得
     // ルールにしたがってグループ化
     const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs();
@@ -152,6 +155,7 @@ async function groupActiveTabsByCustom(groupRules: string[], ignoreRule: boolean
                     if (tab_domain === undefined) {
                         continue;
                     }
+                    // タブがドメインルールに含まれてるか確認
                     if (domain !== tab_domain) {
                         continue;
                     }
@@ -163,15 +167,25 @@ async function groupActiveTabsByCustom(groupRules: string[], ignoreRule: boolean
                 }
             })
         // ドメイン分グループ化を繰り返す
-        domains.map(async (domain) => {
-            const groupIds: number[] = domainMap[domain]
-            await updateTabGroups(groupIds, domain);
-        })
+        await Promise.all(
+            domains.map(async (domain) => {
+                const groupIds: number[] = domainMap[domain]
+                try {
+                    await updateTabGroups(groupIds, domain);
+                } catch (err) {
+                    console.log("failed to group by custom rule :", err)
+                }
+            })
+        )
     }
 
     // ルール外のタブをグループ化
     if (ignoreRule) {
-        await groupAllActiveTabs();
+        try {
+            await groupAllActiveTabs();
+        } catch (err) {
+            console.log("failed to group non-rule tabs %d", err)
+        }
     }
 }
 
@@ -223,7 +237,7 @@ export async function ungroupTabs(tabGroupId: number) {
     const tabs = await getTabs(targetTabConditions)
     const tabIdList: number[] = getTabIdList(tabs);
 
-    if (tabIdList.length == 0) return
+    if (tabIdList.length === 0) return
     await chrome.tabs.ungroup(tabIdList);
 }
 
@@ -277,7 +291,7 @@ export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
     * タブグループを保存する
     */
     const urls = await getTabUrls(tabGroupId)
-    if (urls.length == 0){
+    if (urls.length === 0){
         return
     }
     const saveTabGroupInfo: SavedTabGroupInfo = {
