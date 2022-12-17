@@ -8,6 +8,7 @@ import SettingsList from "../components/SettingsList";
 import { getSavedGroupMode, getSavedIgnoreRule, getSavedGroupRule} from '../utils/tabGroupSettings';
 import {getAllTabGroupList, getAllSavedTabGroup, SavedTabGroupInfo} from "../utils/tabGroups"
 import SavedTabGroupList from "./SavedTabGroupList";
+import {v4 as uuidv4} from "uuid"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -64,7 +65,10 @@ export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const [groupMode, setGroupMode] = React.useState<string>()
   // カスタムルール
-  const [groupRule, setGroupRule] = React.useState<GroupRule[]>([]);
+  const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{
+      id: uuidv4(),
+      domain: "",
+    }]);
   // ルール外をグループ化する設定
   const [ignoreRule, setIgnoreRule] = React.useState<boolean>();
   // 保存されたタブグループの一覧

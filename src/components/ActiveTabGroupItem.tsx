@@ -8,7 +8,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Input } from "@mui/material";
 
-export interface Props {
+interface Props {
     // タブグループID
     id: number
     // タブグループの開閉

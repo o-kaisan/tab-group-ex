@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import {ListItem, ListItemButton, ListSubheader} from "@mui/material";
 import ActiveTabGroupItem from './ActiveTabGroupItem';
-export interface Props {
+interface Props {
     // タブグループの一覧のステート
     activeTabGroup: chrome.tabGroups.TabGroup[] | undefined
     // タブグループを保存するメソッド
@@ -23,7 +23,7 @@ export default function ActiveTabGroupList(props: Props) {
       );
   }
   return (
-    <List component="div" disablePadding>
+    <div>
         <ListSubheader>Active TabGroups</ListSubheader>
         {props.activeTabGroup.map((tabGroup) => (
           <ActiveTabGroupItem
@@ -34,6 +34,6 @@ export default function ActiveTabGroupList(props: Props) {
               updatedTabGroupList={props.updatedTabGroupList}
           />
         ))}
-    </List>
+    </div>
   )
 }

@@ -9,7 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { closeTabGroup, ungroupTabs } from '../utils/tabGroups';
 
-export interface Props {
+interface Props {
   // タブグループID
   tabGroupId: number,
   // タブ一覧を更新するメソッド

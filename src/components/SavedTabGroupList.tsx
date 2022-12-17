@@ -3,7 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {SavedTabGroupInfo, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
 import React from "react";
 
-export interface Props {
+interface Props {
     // タブグループID
     savedTabGroup: SavedTabGroupInfo[] | undefined
     // 保存されたタブグループを取得するメソッド

@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';
 
-export interface Props {
+interface Props {
   groupMode: string | undefined
   setGroupMode: React.Dispatch<React.SetStateAction<string | undefined>>
   ignoreRule: boolean | undefined
@@ -43,16 +43,13 @@ export default function SettingsList(props: Props) {
   }
 
   // グループ化するドメインのルールを削除する
-  const handleDeleteDomain = async (id: string) => {
-    console.log(id)
+  const handleDeleteDomain = (id: string) => {
     const _groupRule = [...props.groupRule]
-    console.log(_groupRule)
     const removeGroupRule = _groupRule.filter(rule=>rule.id!==id)
-    console.log(removeGroupRule)
-    await props.setGroupRule(removeGroupRule);
+    props.setGroupRule(removeGroupRule);
   }
 
-  const handleChangeDomain = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
+  const handleChangeDomain = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
     const index = props.groupRule.findIndex((rule) => rule.id === id)
     let _groupRule = [...props.groupRule]
     _groupRule[index].domain = event.target.value;
@@ -68,6 +65,7 @@ export default function SettingsList(props: Props) {
     <List
       sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
     >
+      <ListSubheader>Settings</ListSubheader>
       <ListItem>
         <ListItemText id="list-label-Mode" primary="GroupMode" />
         <SelectTabGroupMode
@@ -77,7 +75,6 @@ export default function SettingsList(props: Props) {
       </ListItem>
       { props.groupMode == "Custom" &&
         <div>
-          <Divider />
           <ListItem>
             <ListItemText id="switch-list-label-ignoreRule" primary="ルール以外をまとめてグループ化" />
             <Switch

@@ -17,7 +17,7 @@ import { GroupRule } from "./TabPanel";
 /*
  * 拡張機能のメニュー
  */
-export interface Props {
+interface Props {
   groupMode: string | undefined
   ignoreRule: boolean | undefined
   groupRule: GroupRule[] | undefined

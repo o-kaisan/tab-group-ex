@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { saveGroupMode } from '../utils/tabGroupSettings';
 
-export interface Props {
+interface Props {
   groupMode: string | undefined
   setGroupMode: React.Dispatch<React.SetStateAction<string | undefined>>
 }
