@@ -9,7 +9,7 @@ import SelectTabGroupMode from "./SelectTabGroupMode"
 import { saveGroupRule, saveIgnoreRule } from '../utils/tabGroupSettings';
 import Divider from '@mui/material/Divider';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Input } from "@mui/material";
+import TextField from '@material-ui/core/TextField';
 import Button from '@mui/material/Button';
 import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';
@@ -76,7 +76,7 @@ export default function SettingsList(props: Props) {
       { props.groupMode == "Custom" &&
         <div>
           <ListItem>
-            <ListItemText id="switch-list-label-ignoreRule" primary="ルール以外をまとめてグループ化" />
+            <ListItemText id="switch-list-label-ignoreRule" primary="ルール以外をグループ化" />
             <Switch
               edge="end"
               onChange={handleToggle}
@@ -84,10 +84,17 @@ export default function SettingsList(props: Props) {
             />
           </ListItem>
           <Divider />
-          <ListSubheader>Group By Domain</ListSubheader>
+          <ListSubheader>Group Rule</ListSubheader>
           {props.groupRule.map((rule: GroupRule) => (
             <ListItem key={rule.id}>
-              <Input defaultValue={rule.domain} onChange={(e) => handleChangeDomain(e, rule.id)}></Input>
+              <TextField
+                label="domain"
+                id="margin-dense"
+                defaultValue={rule.domain}
+                margin="dense"
+                size="small"
+                onChange={(e: any) => handleChangeDomain(e, rule.id)}
+              />
               <IconButton onClick={() => handleDeleteDomain(rule.id)}>
                 <ClearIcon/>
               </IconButton>
