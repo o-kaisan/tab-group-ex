@@ -15,12 +15,12 @@ import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';
 
 export interface Props {
-  groupMode: any
-  setGroupMode: any
-  ignoreRule: any
-  setIgnoreRule: any
+  groupMode: string | undefined
+  setGroupMode: React.Dispatch<React.SetStateAction<string | undefined>>
+  ignoreRule: boolean | undefined
+  setIgnoreRule: React.Dispatch<React.SetStateAction<boolean | undefined>>
   groupRule: GroupRule[]
-  setGroupRule: any
+  setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }
 
 export default function SettingsList(props: Props) {
@@ -36,17 +36,20 @@ export default function SettingsList(props: Props) {
   const handleAddDomain = () => {
     let _groupRule = [...props.groupRule]
     _groupRule.push({
-      id: uuidv4(),
       domain: "",
+      id: uuidv4(),
     })
     props.setGroupRule(_groupRule)
   }
 
   // グループ化するドメインのルールを削除する
   const handleDeleteDomain = async (id: string) => {
+    console.log(id)
     const _groupRule = [...props.groupRule]
+    console.log(_groupRule)
     const removeGroupRule = _groupRule.filter(rule=>rule.id!==id)
-    props.setGroupRule(removeGroupRule);
+    console.log(removeGroupRule)
+    await props.setGroupRule(removeGroupRule);
   }
 
   const handleChangeDomain = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
@@ -85,10 +88,11 @@ export default function SettingsList(props: Props) {
           </ListItem>
           <Divider />
           <ListSubheader>Group By Domain</ListSubheader>
+          {props.groupRule.map((rule)=>console.log(rule))}
           {props.groupRule.map((rule: GroupRule) => (
             <ListItem>
               <Input defaultValue={rule.domain} onChange={(e) => handleChangeDomain(e, rule.id)}></Input>
-              <IconButton onClick={(e) => handleDeleteDomain(rule.id)}>
+              <IconButton onClick={() => handleDeleteDomain(rule.id)}>
                 <ClearIcon/>
               </IconButton>
             </ListItem>

@@ -19,7 +19,7 @@ export interface SavedTabGroupInfo {
     title: string | undefined
     // タブグループに保存されているタブ
     urlList: string[]
-  }
+}
 
 
 /*
@@ -49,10 +49,12 @@ async function getNoneGroupedTabs() {
  * タブ配列をタブIDのリストを返却
  * ※タブが取得できなかった場合は空の配列を返す。
  */
-function getTabIdList(targetTabList: any) {
+function getTabIdList(targetTabList: chrome.tabs.Tab[]) {
     const tabIdList: number[] = Array();
-    targetTabList.forEach((tab: any) => {
-        tabIdList.push(tab.id);
+    targetTabList.map((tab: chrome.tabs.Tab) => {
+        if (tab.id !== undefined){
+            tabIdList.push(tab.id);
+        }
     });
     return tabIdList
 }
@@ -308,7 +310,7 @@ export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
 }
 
 export async function deleteTabGroup(tabgroupTitle: string, tabGroupId:number) {
-   /*
+    /*
     * タブグループをストレージから削除する
     */
     const targetTabGroup: string = "TG_" + tabgroupTitle + tabGroupId

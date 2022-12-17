@@ -16,9 +16,9 @@ export interface Props {
     // タブグループのタイトル
     title: string | undefined
     // getSavedTabGroupList
-    getSavedTabGroupList: any
+    getSavedTabGroupList: Function
     // updatedTabGroupListメソッド
-    updatedTabGroupList: any
+    updatedTabGroupList: Function
 }
 
 export default function ActiveTabGroupItem(props: Props) {

@@ -1,4 +1,4 @@
-import { IconButton, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { IconButton, List, ListItem, ListItemButton, ListItemText, ListSubheader } from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {SavedTabGroupInfo, restoreTabGroup, deleteTabGroup} from "../utils/tabGroups"
 import React from "react";
@@ -7,9 +7,9 @@ export interface Props {
     // タブグループID
     savedTabGroup: SavedTabGroupInfo[] | undefined
     // 保存されたタブグループを取得するメソッド
-    getSavedTabGroupList: any
+    getSavedTabGroupList: Function
     // タブグループを更新するメソッド
-    updatedTabGroupList: any
+    updatedTabGroupList: Function
 
 }
 
@@ -35,16 +35,19 @@ export default function SavedTabGroupList(props: Props) {
             </List>
           </ListItem>
         );
-     }
+    }
       return (
-        <List component="div" disablePadding>
+        <List
+            sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
+            component="div" disablePadding>
+          <ListSubheader>Saved TabGroups</ListSubheader>
           {props.savedTabGroup.map((tabGroup) => (
           <ListItem>
             <ListItemButton sx={{ pl: 4 }} onClick={() => {runRestoreTabGroup(tabGroup.title, tabGroup.urlList)}}>
             <ListItemText>{tabGroup.title}</ListItemText>
             </ListItemButton>
                 <IconButton onClick={() => runDeleteTabGroup(tabGroup.title, tabGroup.id)}>
-                   <DeleteForeverIcon />
+                  <DeleteForeverIcon />
                 </IconButton>
           </ListItem>
           ))}

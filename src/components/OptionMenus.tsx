@@ -13,9 +13,9 @@ export interface Props {
   // タブグループID
   tabGroupId: number,
   // タブ一覧を更新するメソッド
-  updatedTabGroupList: any
+  updatedTabGroupList: Function
   // タブの編集モードを更新するメソッド
-  setEditMode: any
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const StyledMenu = styled((props: MenuProps) => (
