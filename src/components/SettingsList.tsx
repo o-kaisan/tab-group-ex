@@ -85,9 +85,8 @@ export default function SettingsList(props: Props) {
           </ListItem>
           <Divider />
           <ListSubheader>Group By Domain</ListSubheader>
-          {props.groupRule.map((rule)=>console.log(rule))}
           {props.groupRule.map((rule: GroupRule) => (
-            <ListItem>
+            <ListItem key={rule.id}>
               <Input defaultValue={rule.domain} onChange={(e) => handleChangeDomain(e, rule.id)}></Input>
               <IconButton onClick={() => handleDeleteDomain(rule.id)}>
                 <ClearIcon/>
