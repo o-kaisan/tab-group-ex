@@ -258,7 +258,7 @@ export async function getAllTabGroupList() {
  * タブグループ一覧を取得
  * タググループが存在しない場合は空のリストを返す
  */
- async function getTabGroupList(targetTabGroupConditions: chrome.tabGroups.QueryInfo) {
+async function getTabGroupList(targetTabGroupConditions: chrome.tabGroups.QueryInfo) {
     const tabGroupList: chrome.tabGroups.TabGroup[] = await chrome.tabGroups.query(targetTabGroupConditions);
     return tabGroupList
 }
@@ -276,7 +276,7 @@ export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boo
 
 
 async function getTabUrls(tabGroupId:number) {
-   /*
+    /*
     * タブグループからタブのURL一覧を取得ｓるう
     */
     const targetTabGroupConditions = {
@@ -289,7 +289,7 @@ async function getTabUrls(tabGroupId:number) {
 }
 
 export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
-   /*
+    /*
     * タブグループを保存する
     */
     const urls = await getTabUrls(tabGroupId)
@@ -342,7 +342,7 @@ async function restoreTab(url: string) {
 }
 
 export async function restoreTabGroup(tabgroupTitle: string | undefined, urlList: string[]) {
-   /*
+    /*
     *　指定したタブグループを復元する
     */
     // 一通りタブを開く　chrome.tabs.create
