@@ -51,9 +51,6 @@ export default function MainMenu(props: Props) {
               <LayersIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>タブをグループ化</ListItemText>
-            <Typography variant="body2" color="text.secondary">
-              ⌘X(未実装)
-            </Typography>
           </ListItemButton>
         </ListItem>
         <Divider />
