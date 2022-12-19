@@ -33,7 +33,7 @@ export async function getSavedIgnoreRule() {
     const ignoreRule = await chrome.storage.local.get("ignoreRule")
     let ret = ignoreRule.ignoreRule
     if (ret == undefined) {
-        ret = []
+        ret = false
     }
     return ret
 }

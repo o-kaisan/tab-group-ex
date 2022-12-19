@@ -79,7 +79,7 @@ export default function BasicTabs() {
 
   useEffect(()=> {
     //
-    getAllTabGroupList().then((tabGroupList) => {
+    getAllTabGroupList().then((tabGroupList: chrome.tabGroups.TabGroup[]) => {
       setActiveTabGroup(tabGroupList)
     }).catch((error) => {
       console.log(error);
@@ -87,17 +87,17 @@ export default function BasicTabs() {
   }, [])
 
   useEffect(()=> {
-    getGroupRule().then((value)=>{
+    getGroupRule().then((value: GroupRule[])=>{
       setGroupRule(value)
     })
   }, [])
   useEffect(()=> {
-      getIgnoreRule().then((value)=>{
+      getIgnoreRule().then((value: boolean)=>{
         setIgnoreRule(value)
       })
   },[])
   useEffect(()=>{
-      getGroupMode().then((value)=>{
+      getGroupMode().then((value: string)=>{
         setGroupMode(value)
       })
   },[])
