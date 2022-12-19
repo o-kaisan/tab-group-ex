@@ -14,7 +14,7 @@ interface Props {
     // タブグループの開閉
     collapsed: boolean
     // タブグループのタイトル
-    title: string | undefined
+    title?: string
     // getSavedTabGroupList
     getSavedTabGroupList: Function
     // updatedTabGroupListメソッド
@@ -22,21 +22,20 @@ interface Props {
 }
 
 export default function ActiveTabGroupItem(props: Props) {
+    const _title = props.title || "none title";
     const [editMode, setEditMode] = React.useState(false);
-    const [tabGroupTitle, setTabGroupTitle] = React.useState(props.title)
+    const [tabGroupTitle, setTabGroupTitle] = React.useState(_title)
 
     const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean) => {
         toggleTabGroupCollapsed(tabGroupId, !collapsed);
         props.updatedTabGroupList()
     }
 
-    const runSaveTabGroup = (tabGroupId:number, tabGroupTitle: string | undefined) => {
-        if (tabGroupTitle == undefined) return
+    const runSaveTabGroup = (tabGroupId:number, tabGroupTitle: string) => {
         saveTabGroup(tabGroupId, tabGroupTitle).then(() => props.getSavedTabGroupList())
     }
 
-    const runUpdateTabGroupName = (tabGroupId: number, tabGroupTitle: string | undefined) => {
-        if (tabGroupTitle == undefined) return
+    const runUpdateTabGroupName = (tabGroupId: number, tabGroupTitle: string) => {
         updateTabGroupName(tabGroupId, tabGroupTitle).then(() => props.updatedTabGroupList())
         setEditMode(false)
     }
@@ -71,7 +70,7 @@ export default function ActiveTabGroupItem(props: Props) {
                 <ListItemButton sx={{ pl: 4 }} onClick={() => runUpdateTabGroupCollapsed(props.id, props.collapsed)}>
                     <ListItemText>{props.title}</ListItemText>
                 </ListItemButton>
-                <IconButton onClick={() => runSaveTabGroup(props.id, props.title)}>
+                <IconButton onClick={() => runSaveTabGroup(props.id, _title)}>
                     <SaveAltIcon />
                 </IconButton>
                 <OptionMenus tabGroupId={props.id} updatedTabGroupList={props.updatedTabGroupList} setEditMode={setEditMode}/>

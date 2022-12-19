@@ -3,10 +3,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { saveGroupMode } from '../utils/tabGroupSettings';
+import { CUSTOM_MODE, DEFAULT_MODE, DOMAIN_MODE } from '../utils/tabGroups';
 
 interface Props {
-  groupMode: string | undefined
-  setGroupMode: React.Dispatch<React.SetStateAction<string | undefined>>
+  groupMode: string
+  setGroupMode: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function SelectTabGroupMode(props: Props) {
@@ -26,9 +27,9 @@ export default function SelectTabGroupMode(props: Props) {
           onChange={handleChange}
           label="GroupMode"
         >
-          <MenuItem value={"Default"}>Default</MenuItem>
-          <MenuItem value={"Domain"}>Domain</MenuItem>
-          <MenuItem value={"Custom"}>Custom</MenuItem>
+          <MenuItem value={DEFAULT_MODE}>Default</MenuItem>
+          <MenuItem value={DOMAIN_MODE}>Domain</MenuItem>
+          <MenuItem value={CUSTOM_MODE}>Custom</MenuItem>
         </Select>
       </FormControl>
     </div>

@@ -9,6 +9,7 @@ import { getSavedGroupMode, getSavedIgnoreRule, getSavedGroupRule} from '../util
 import {getAllTabGroupList, getAllSavedTabGroup, SavedTabGroupInfo} from "../utils/tabGroups"
 import SavedTabGroupList from "./SavedTabGroupList";
 import {v4 as uuidv4} from "uuid"
+import { DEFAULT_MODE } from "../utils/tabGroups";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,18 +64,18 @@ function a11yProps(index: number) {
 export default function BasicTabs() {
   // TODO: 変数名を変更する -> 何を指すかわからない
   const [value, setValue] = React.useState(0);
-  const [groupMode, setGroupMode] = React.useState<string>()
+  const [groupMode, setGroupMode] = React.useState<string>(DEFAULT_MODE)
   // カスタムルール
   const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{
       id: uuidv4(),
       domain: "",
     }]);
   // ルール外をグループ化する設定
-  const [ignoreRule, setIgnoreRule] = React.useState<boolean>();
+  const [ignoreRule, setIgnoreRule] = React.useState<boolean>(false);
   // 保存されたタブグループの一覧
-  const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>();
+  const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([]);
   // タブグループの一覧
-  const [activeTabGroup, setActiveTabGroup] = useState<chrome.tabGroups.TabGroup[]>();
+  const [activeTabGroup, setActiveTabGroup] = useState<chrome.tabGroups.TabGroup[]>([]);
 
   useEffect(()=> {
     //

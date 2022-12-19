@@ -15,10 +15,10 @@ import {v4 as uuidv4} from "uuid"
 import { GroupRule } from './TabPanel';
 
 interface Props {
-  groupMode: string | undefined
-  setGroupMode: React.Dispatch<React.SetStateAction<string | undefined>>
-  ignoreRule: boolean | undefined
-  setIgnoreRule: React.Dispatch<React.SetStateAction<boolean | undefined>>
+  groupMode: string
+  setGroupMode: React.Dispatch<React.SetStateAction<string>>
+  ignoreRule: boolean
+  setIgnoreRule: React.Dispatch<React.SetStateAction<boolean>>
   groupRule: GroupRule[]
   setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }

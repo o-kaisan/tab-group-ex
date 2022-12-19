@@ -1,4 +1,5 @@
 import { GroupRule } from "../components/TabPanel";
+import { DEFAULT_MODE } from "./tabGroups";
 
 /*
  * タブグループの設定を管理する
@@ -14,7 +15,7 @@ export async function getSavedGroupMode() {
     const groupMode = await chrome.storage.local.get("groupMode")
     let ret = groupMode.groupMode
     if (ret == undefined) {
-        ret = "Default"
+        ret = DEFAULT_MODE
     }
     return ret
 }

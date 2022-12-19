@@ -18,13 +18,13 @@ import { GroupRule } from "./TabPanel";
  * 拡張機能のメニュー
  */
 interface Props {
-  groupMode: string | undefined
-  ignoreRule: boolean | undefined
-  groupRule: GroupRule[] | undefined
-  setSavedTabGroup:  | React.Dispatch<React.SetStateAction<SavedTabGroupInfo[] | undefined>>
+  groupMode: string
+  ignoreRule: boolean
+  groupRule: GroupRule[]
+  setSavedTabGroup:  | React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
   updatedTabGroupList: Function
   getSavedTabGroupList: Function
-  activeTabGroup: chrome.tabGroups.TabGroup[]|undefined
+  activeTabGroup: chrome.tabGroups.TabGroup[]
 }
 
 

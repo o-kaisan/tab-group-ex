@@ -16,7 +16,7 @@ export interface SavedTabGroupInfo {
     // 保存時のグループID
     id: number
     // タブグループのタイトル
-    title: string | undefined
+    title: string
     // タブグループに保存されているタブ
     urlList: string[]
 }

@@ -5,7 +5,7 @@ import React from "react";
 
 interface Props {
     // タブグループID
-    savedTabGroup: SavedTabGroupInfo[] | undefined
+    savedTabGroup: SavedTabGroupInfo[]
     // 保存されたタブグループを取得するメソッド
     getSavedTabGroupList: Function
     // タブグループを更新するメソッド
@@ -14,27 +14,14 @@ interface Props {
 }
 
 export default function SavedTabGroupList(props: Props) {
-    const runDeleteTabGroup = (tabGroupTitle: string | undefined, tabGroupId: number) => {
-        if (tabGroupTitle == undefined) return
+    const runDeleteTabGroup = (tabGroupTitle: string, tabGroupId: number) => {
         deleteTabGroup(tabGroupTitle, tabGroupId).then(() => props.getSavedTabGroupList())
     }
 
-    const runRestoreTabGroup = (tabGroupTitle:string | undefined, urlList: string[]) => {
+    const runRestoreTabGroup = (tabGroupTitle:string, urlList: string[]) => {
         restoreTabGroup(tabGroupTitle, urlList).then(() => {
             props.updatedTabGroupList()
           }).catch((error)=>console.log(error))
-    }
-
-    if (props.savedTabGroup == undefined) {
-        return(
-          <ListItem>
-            <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemText>No Groups...</ListItemText>
-            </ListItemButton>
-            </List>
-          </ListItem>
-        );
     }
       return (
         <List
