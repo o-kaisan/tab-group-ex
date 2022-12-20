@@ -1,6 +1,7 @@
 /*
  * タブのグループ化関連のユーティリティ
  */
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 import { GroupRule } from "../components/TabPanel";
 import * as url from "../utils/url";
 
@@ -265,7 +266,7 @@ async function getTabGroupList(targetTabGroupConditions: chrome.tabGroups.QueryI
 
 
 /*
- *　タブグループを開/閉を切り替える
+ * タブグループを開/閉を切り替える
  */
 export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boolean) {
     const updateProperties: chrome.tabGroups.UpdateProperties  = {
@@ -288,6 +289,35 @@ async function getTabUrls(tabGroupId:number) {
     return urls
 }
 
+function isExistTabGroupTitle(tabGroupTitle: string, savedTabGroup: SavedTabGroupInfo[]): boolean {
+    let ret = false
+    savedTabGroup.map((savedTabGroup: SavedTabGroupInfo) => {
+        if (tabGroupTitle === savedTabGroup.title){
+            ret = true
+        }
+    })
+    return ret
+}
+
+// 保存されたタブグループに同一のタイトルがないかを確認し、あれば末尾に(n)を追加する
+function duplicateRenameTabGroupTitle(tabGroupTitle: string, savedTabGroup: SavedTabGroupInfo[], count:number=1): string {
+    console.log(isExistTabGroupTitle(tabGroupTitle, savedTabGroup))
+    if (isExistTabGroupTitle(tabGroupTitle, savedTabGroup)) {
+        const regexp = /^(.+)\([0-9]+\)$/;
+        // タイトルについている"(数値)"を取り除く
+        const TabGroupTitleWithoutNumber: string = tabGroupTitle.replace(regexp, "$1")
+        // リネーム
+        console.log(tabGroupTitle)
+        const renamedTabGroupTitle: string = `${TabGroupTitleWithoutNumber}(${count})`
+        console.log(renamedTabGroupTitle)
+        return duplicateRenameTabGroupTitle(renamedTabGroupTitle, savedTabGroup, count+1)
+    }
+    else{
+        return tabGroupTitle
+    }
+
+}
+
 export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
     /*
     * タブグループを保存する
@@ -296,16 +326,22 @@ export async function saveTabGroup(tabGroupId:number, tabGroupTitle: string){
     if (urls.length === 0){
         return
     }
+
+    let savedTabGroups = await getAllSavedTabGroup()
+
+    // 同じ名前のグループ名があるかを確認し、同じ名前があればrename
+    let renamedTabGroupTitle = duplicateRenameTabGroupTitle(tabGroupTitle, savedTabGroups)
+
     const saveTabGroupInfo: SavedTabGroupInfo = {
     type: "TGEX",
     id: tabGroupId,
-    title: tabGroupTitle,
+    title: renamedTabGroupTitle,
     urlList: urls,
     }
 
     // タブグループがundifinedだったらストレージに保存せずに返却
     if (tabGroupTitle == undefined) return
-    const storageTitle: string = "TG_" + tabGroupTitle + tabGroupId
+    const storageTitle: string = "TG_" + renamedTabGroupTitle + tabGroupId
     await chrome.storage.local.set({[storageTitle]: saveTabGroupInfo})
 }
 
@@ -343,7 +379,7 @@ async function restoreTab(url: string) {
 
 export async function restoreTabGroup(tabgroupTitle: string | undefined, urlList: string[]) {
     /*
-    *　指定したタブグループを復元する
+    * 指定したタブグループを復元する
     */
     // 一通りタブを開く　chrome.tabs.create
     // 新しく開いたタブのIDをリスト化する
