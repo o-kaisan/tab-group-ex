@@ -213,10 +213,10 @@ async function groupActiveTabsByDomain(){
         domainMap[domain].push(<number>tabs[i].id);
     }
     // ドメイン分グループ化を繰り返す
-    domains.map(async (domain) => {
+    await Promise.all(domains.map(async (domain) => {
         const groupIds: number[] = domainMap[domain]
         await updateTabGroups(groupIds, domain);
-    })
+    }));
 }
 
 /*
