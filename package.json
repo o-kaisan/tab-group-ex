@@ -1,7 +1,7 @@
 {
-  "name": "tab-group-extension",
-  "version": "0.1.0",
-  "description": "tab-group-extension",
+  "name": "tab-group-ex",
+  "version": "1.0.0",
+  "description": "tab-group-ex",
   "main": "index.js",
   "scripts": {
     "watch": "webpack --config webpack/webpack.dev.js --watch",
