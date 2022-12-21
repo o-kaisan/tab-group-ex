@@ -1,5 +1,5 @@
 # Tab Group Ex
-タブをグループ化するChromeの拡張機能
+タブをグループ化を管理するchromeの拡張機能
 
 ## Features
 - タブのグループ化
