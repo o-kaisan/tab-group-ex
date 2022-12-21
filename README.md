@@ -1,6 +1,11 @@
 # Tab Group Ex
 タブをグループ化するChromeの拡張機能
 
+## Features
+- アクティブなウィンドウを全てグループ化
+- アクティブなウィンドウのグループ化を全て解除
+- タブグループを一覧表示
+
 ## Prerequisites
 
 * [node + npm](https://nodejs.org/) (Current Version)
