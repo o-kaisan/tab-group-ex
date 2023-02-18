@@ -2,8 +2,8 @@
   "manifest_version": 3,
 
   "name": "Tab Group Ex",
-  "description": "Tab grouping extension",
-  "version": "0.1.0",
+  "description": "Tab group extension",
+  "version": "1.0.0",
 
   "action": {
     "default_icon": {
@@ -26,7 +26,7 @@
       "suggested_key": {
         "default": "Ctrl+Shift+Z"
       },
-      "description": "test1"
+      "description": "open tab group ex"
     }
   },
 
@@ -35,9 +35,5 @@
     "storage",
     "tabGroups",
     "tabs"
-  ],
-
-  "host_permissions": [
-    "<all_urls>"
   ]
 }
