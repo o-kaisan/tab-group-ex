@@ -3,9 +3,6 @@
  */
 
 describe('tabGroups-test', () => {
-    test('groupAllActivateTabs', () => {
-    });
-    test('ungroupAllTabs', () => {
-    });
-
-});
+  test('groupAllActivateTabs', () => {})
+  test('ungroupAllTabs', () => {})
+})
