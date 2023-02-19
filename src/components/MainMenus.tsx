@@ -1,28 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Typography from '@mui/material/Typography'
 import LayersIcon from '@mui/icons-material/Layers'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
-import WebStoriesIcon from '@mui/icons-material/WebStories'
-import {
-  getAllTabGroupList,
-  groupActiveTabs,
-  type SavedTabGroupInfo,
-  getAllSavedTabGroup
-} from '../utils/tabGroups'
-import {
-  Collapse,
-  ListItem,
-  ListItemButton,
-  ListSubheader
-} from '@mui/material'
-import FolderIcon from '@mui/icons-material/Folder'
+import { groupActiveTabs } from '../utils/tabGroups'
+import type { SavedTabGroupInfo } from '../utils/tabGroups'
+import { ListItem, ListItemButton } from '@mui/material'
 import ActiveTabGroupList from '../components/ActiveTabGroupList'
-import { type GroupRule } from './TabPanel'
+import type { GroupRule } from './TabPanel'
 
 /*
  * 拡張機能のメニュー
@@ -32,25 +18,27 @@ interface Props {
   ignoreRule: boolean
   groupRule: GroupRule[]
   setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
+  // eslint-disable-next-line @typescript-eslint/ban-types
   updatedTabGroupList: Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
   getSavedTabGroupList: Function
   activeTabGroup: chrome.tabGroups.TabGroup[]
 }
 
-export default function MainMenu (props: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function MainMenu(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const runGroupActiveTabs = () => {
     /*
      * タブをグループ化
      */
-    groupActiveTabs(
-      props.groupMode,
-      props.groupRule,
-      props.ignoreRule
-    )
+    groupActiveTabs(props.groupMode, props.groupRule, props.ignoreRule)
       .then(() => {
         props.updatedTabGroupList()
       })
-      .catch((error) => { console.log(error) })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (

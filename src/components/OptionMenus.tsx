@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { styled, alpha } from '@mui/material/styles'
-import Menu, { type MenuProps } from '@mui/material/Menu'
+import Menu from '@mui/material/Menu'
+import type { MenuProps } from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EditIcon from '@mui/icons-material/Edit'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
@@ -13,6 +14,7 @@ interface Props {
   // タブグループID
   tabGroupId: number
   // タブ一覧を更新するメソッド
+  // eslint-disable-next-line @typescript-eslint/ban-types
   updatedTabGroupList: Function
   // タブの編集モードを更新するメソッド
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -61,35 +63,41 @@ const StyledMenu = styled((props: MenuProps) => (
   }
 }))
 
-export default function OptionMenus (props: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function OptionMenus(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleClose = () => {
     setAnchorEl(null)
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const runEditGroupTabs = () => {
     handleClose()
     props.setEditMode(true)
     props.updatedTabGroupList()
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const runUnGroupTabs = (tabGroupId: number) => {
     /*
      * アクティブなウィンドウのタブグループを全て解除
      */
     handleClose()
-    ungroupTabs(tabGroupId).then(() => {
+    void ungroupTabs(tabGroupId).then(() => {
       props.updatedTabGroupList()
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const runRemoveTabGroups = (tabGroupId: number) => {
     handleClose()
-    closeTabGroup(tabGroupId).then(() => {
+    void closeTabGroup(tabGroupId).then(() => {
       props.updatedTabGroupList()
     })
   }

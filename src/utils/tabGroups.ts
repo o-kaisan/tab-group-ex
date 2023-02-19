@@ -1,8 +1,7 @@
 /*
  * タブのグループ化関連のユーティリティ
  */
-import { LocalConvenienceStoreOutlined } from '@mui/icons-material'
-import { type GroupRule } from '../components/TabPanel'
+import type { GroupRule } from '../components/TabPanel'
 import * as url from '../utils/url'
 
 export const DEFAULT_MODE = 'Default'
@@ -25,7 +24,8 @@ export interface SavedTabGroupInfo {
  * 指定した条件でタブを取得する
  * ※タブが取得できなかった場合は空の配列を返す。
  */
-async function getTabs (targetTabConditions: chrome.tabs.QueryInfo) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getTabs(targetTabConditions: chrome.tabs.QueryInfo) {
   const tabs: chrome.tabs.Tab[] = await chrome.tabs.query(targetTabConditions)
   return tabs
 }
@@ -33,7 +33,8 @@ async function getTabs (targetTabConditions: chrome.tabs.QueryInfo) {
 /*
  * グループ化されていないタブを取得する
  */
-async function getNoneGroupedTabs () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getNoneGroupedTabs() {
   const targetTabConditions: chrome.tabs.QueryInfo = {
     currentWindow: true,
     pinned: false,
@@ -48,8 +49,10 @@ async function getNoneGroupedTabs () {
  * タブ配列をタブIDのリストを返却
  * ※タブが取得できなかった場合は空の配列を返す。
  */
-function getTabIdList (targetTabList: chrome.tabs.Tab[]) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getTabIdList(targetTabList: chrome.tabs.Tab[]) {
   const tabIdList: number[] = []
+  // eslint-disable-next-line array-callback-return
   targetTabList.map((tab: chrome.tabs.Tab) => {
     if (tab.id !== undefined) {
       tabIdList.push(tab.id)
@@ -61,9 +64,11 @@ function getTabIdList (targetTabList: chrome.tabs.Tab[]) {
 /*
  * タブグループ名にヒットしたタブグループのIDを返す
  */
-async function getTabGroupIdByTitle (title: string) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getTabGroupIdByTitle(title: string) {
   const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
   let tabGroupId
+  // eslint-disable-next-line array-callback-return
   tabgroups.map((tabgroup) => {
     if (tabgroup.title === title) {
       tabGroupId = tabgroup.id
@@ -75,7 +80,8 @@ async function getTabGroupIdByTitle (title: string) {
 /*
  * 新しくタブをグループ化する
  */
-async function createTabGroups (tabIdList: number[], title: string = '') {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function createTabGroups(tabIdList: number[], title: string = '') {
   if (tabIdList.length === 0) {
     return
   }
@@ -84,7 +90,7 @@ async function createTabGroups (tabIdList: number[], title: string = '') {
     title = groupId.toString()
   }
   try {
-    chrome.tabGroups.update(groupId, {
+    void chrome.tabGroups.update(groupId, {
       collapsed: false,
       title
     })
@@ -97,10 +103,12 @@ async function createTabGroups (tabIdList: number[], title: string = '') {
 /*
  * タブグループを更新する
  */
-async function updateTabGroups (tabIdList: number[], title: string) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function updateTabGroups(tabIdList: number[], title: string) {
   if (tabIdList.length === 0) {
     return
   }
+  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
   let groupId: number | undefined = await getTabGroupIdByTitle(title)
 
   // 指定したグループ名がなければ新規作成
@@ -113,9 +121,10 @@ async function updateTabGroups (tabIdList: number[], title: string) {
 }
 
 /*
- *　設定に従ってタブをグループ化
+ * 設定に従ってタブをグループ化
  */
-export async function groupActiveTabs (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function groupActiveTabs(
   groupMode: string,
   groupRule: GroupRule[] | undefined,
   ignoreRule: boolean
@@ -130,6 +139,7 @@ export async function groupActiveTabs (
     }
 
     const groupRuleList: string[] = []
+    // eslint-disable-next-line array-callback-return
     groupRule.map((rule: GroupRule) => {
       groupRuleList.push(rule.domain)
     })
@@ -143,7 +153,8 @@ export async function groupActiveTabs (
 /*
  * カスタムルールに従ってタブをグループ化
  */
-async function groupActiveTabsByCustom (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function groupActiveTabsByCustom(
   groupRules: string[],
   ignoreRule: boolean
 ) {
@@ -151,10 +162,12 @@ async function groupActiveTabsByCustom (
   // ルールにしたがってグループ化
   const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs()
   const domainMap: Record<string, number[]> = {}
-  const domains = []
+  const domains: string[] = []
   if (groupRules.length > 0) {
+    // eslint-disable-next-line array-callback-return
     groupRules.map((domain) => {
       for (let i: number = 0; i < tabs.length; i++) {
+        // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/consistent-type-assertions
         const tab_domain = url.getDomainNameIgnoreSubDomain(<string>tabs[i].url)
         if (tab_domain === undefined) {
           continue
@@ -167,6 +180,7 @@ async function groupActiveTabsByCustom (
           domainMap[domain] = []
           domains.push(domain)
         }
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         domainMap[domain].push(<number>tabs[i].id)
       }
     })
@@ -196,13 +210,15 @@ async function groupActiveTabsByCustom (
 /*
  * タブをドメインごとにグループ化
  */
-async function groupActiveTabsByDomain () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function groupActiveTabsByDomain() {
   // タブを取得
   const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs()
   // ドメインを取得
   const domainMap: Record<string, number[]> = {}
   const domains = []
   for (let i: number = 0; i < tabs.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const domain = url.getDomainNameIgnoreSubDomain(<string>tabs[i].url)
     if (domain === undefined) {
       continue
@@ -211,6 +227,7 @@ async function groupActiveTabsByDomain () {
       domainMap[domain] = []
       domains.push(domain)
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     domainMap[domain].push(<number>tabs[i].id)
   }
   // ドメイン分グループ化を繰り返す
@@ -225,7 +242,8 @@ async function groupActiveTabsByDomain () {
 /*
  * タブを全てグループ化
  */
-async function groupAllActiveTabs () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function groupAllActiveTabs() {
   const tabs = await getNoneGroupedTabs()
   const tabIdList: number[] = getTabIdList(tabs)
   await createTabGroups(tabIdList)
@@ -234,7 +252,8 @@ async function groupAllActiveTabs () {
 /*
  * 指定したグループ化を解除
  */
-export async function ungroupTabs (tabGroupId: number) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function ungroupTabs(tabGroupId: number) {
   const targetTabConditions: chrome.tabs.QueryInfo = {
     currentWindow: true,
     pinned: false,
@@ -250,7 +269,8 @@ export async function ungroupTabs (tabGroupId: number) {
 /*
  * アクティブなウィドウのタブグループ一覧を取得
  */
-export async function getAllTabGroupList () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getAllTabGroupList() {
   const targetTabGroupConditions: chrome.tabGroups.QueryInfo = {
     windowId: chrome.windows.WINDOW_ID_CURRENT
   }
@@ -264,7 +284,8 @@ export async function getAllTabGroupList () {
  * タブグループ一覧を取得
  * タググループが存在しない場合は空のリストを返す
  */
-async function getTabGroupList (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getTabGroupList(
   targetTabGroupConditions: chrome.tabGroups.QueryInfo
 ) {
   const tabGroupList: chrome.tabGroups.TabGroup[] =
@@ -275,7 +296,8 @@ async function getTabGroupList (
 /*
  * タブグループを開/閉を切り替える
  */
-export async function toggleTabGroupCollapsed (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function toggleTabGroupCollapsed(
   tabGroupId: number,
   collapsed: boolean
 ) {
@@ -285,26 +307,31 @@ export async function toggleTabGroupCollapsed (
   await chrome.tabGroups.update(tabGroupId, updateProperties)
 }
 
-async function getTabUrls (tabGroupId: number) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getTabUrls(tabGroupId: number) {
   /*
    * タブグループからタブのURL一覧を取得ｓるう
    */
   const targetTabGroupConditions = {
     groupId: tabGroupId
   }
-  const urls = []
+  const urls: string[] = []
   const tabs = await getTabs(targetTabGroupConditions)
+  // eslint-disable-next-line array-callback-return
   tabs.map((tab) => {
-    urls.push(tab.url)
+    if (tab.url !== undefined) {
+      urls.push(tab.url)
+    }
   })
   return urls
 }
 
-function isExistTabGroupTitle (
+function isExistTabGroupTitle(
   tabGroupTitle: string,
   savedTabGroup: SavedTabGroupInfo[]
 ): boolean {
   let ret = false
+  // eslint-disable-next-line array-callback-return
   savedTabGroup.map((savedTabGroup: SavedTabGroupInfo) => {
     if (tabGroupTitle === savedTabGroup.title) {
       ret = true
@@ -314,7 +341,7 @@ function isExistTabGroupTitle (
 }
 
 // 保存されたタブグループに同一のタイトルがないかを確認し、あれば末尾に(n)を追加する
-function duplicateRenameTabGroupTitle (
+function duplicateRenameTabGroupTitle(
   tabGroupTitle: string,
   savedTabGroup: SavedTabGroupInfo[],
   count: number = 1
@@ -341,7 +368,8 @@ function duplicateRenameTabGroupTitle (
   }
 }
 
-export async function saveTabGroup (tabGroupId: number, tabGroupTitle: string) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function saveTabGroup(tabGroupId: number, tabGroupTitle: string) {
   /*
    * タブグループを保存する
    */
@@ -366,23 +394,27 @@ export async function saveTabGroup (tabGroupId: number, tabGroupTitle: string) {
   }
 
   // タブグループがundifinedだったらストレージに保存せずに返却
-  if (tabGroupTitle == undefined) return
+  if (tabGroupTitle === undefined) return
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   const storageTitle: string = 'TG_' + renamedTabGroupTitle + tabGroupId
   await chrome.storage.local.set({ [storageTitle]: saveTabGroupInfo })
 }
 
-export async function deleteTabGroup (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function deleteTabGroup(
   tabgroupTitle: string,
   tabGroupId: number
 ) {
   /*
    * タブグループをストレージから削除する
    */
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   const targetTabGroup: string = 'TG_' + tabgroupTitle + tabGroupId
   await chrome.storage.local.remove(targetTabGroup)
 }
 
-export async function getAllSavedTabGroup () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getAllSavedTabGroup() {
   /*
    * ローカルストレージから保存されたタブグループを取得する
    */
@@ -396,7 +428,8 @@ export async function getAllSavedTabGroup () {
   return ret
 }
 
-async function restoreTab (url: string) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function restoreTab(url: string) {
   const createProperties: chrome.tabs.CreateProperties = {
     active: false,
     url
@@ -405,25 +438,27 @@ async function restoreTab (url: string) {
   return tab.id
 }
 
-export async function restoreTabGroup (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function restoreTabGroup(
   tabgroupTitle: string | undefined,
   urlList: string[]
 ) {
   /*
    * 指定したタブグループを復元する
    */
-  // 一通りタブを開く　chrome.tabs.create
+  // 一通りタブを開くchrome.tabs.create
   // 新しく開いたタブのIDをリスト化する
   // もともと設定されているグループの名前でグループ化する
   // 新しくタブグループを作成するとsavedTabGroupのidが変わるからupdateすること
 
-  const tabIdList = []
+  const tabIdList: number[] = []
   const result = await Promise.all(
     urlList.map(async (url) => {
       const tabId = restoreTab(url)
       return await tabId
     })
   )
+  // eslint-disable-next-line array-callback-return
   result.map((tabId) => {
     if (tabId !== undefined) {
       tabIdList.push(tabId)
@@ -432,16 +467,18 @@ export async function restoreTabGroup (
   await createTabGroups(tabIdList, tabgroupTitle)
 }
 
-export async function closeTabGroup (tabGroupId: number) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function closeTabGroup(tabGroupId: number) {
   const targetTabConditions: chrome.tabs.QueryInfo = {
     groupId: tabGroupId
   }
   const tabs = await getTabs(targetTabConditions)
-  const tabsIds = await getTabIdList(tabs)
+  const tabsIds = getTabIdList(tabs)
   await chrome.tabs.remove(tabsIds)
 }
 
-export async function updateTabGroupName (
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function updateTabGroupName(
   tabGroupId: number,
   tabGroupTitle: string
 ) {

@@ -13,9 +13,9 @@ import {
 import {
   getAllTabGroupList,
   getAllSavedTabGroup,
-  type SavedTabGroupInfo
-  , DEFAULT_MODE
+  DEFAULT_MODE
 } from '../utils/tabGroups'
+import type { SavedTabGroupInfo } from '../utils/tabGroups'
 import SavedTabGroupList from './SavedTabGroupList'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -30,19 +30,23 @@ export interface GroupRule {
   domain: string
 }
 
-async function getGroupMode () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getGroupMode() {
   return await getSavedGroupMode()
 }
 
-async function getIgnoreRule () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getIgnoreRule() {
   return await getSavedIgnoreRule()
 }
 
-async function getGroupRule () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+async function getGroupRule() {
   return await getSavedGroupRule()
 }
 
-function TabPanel (props: TabPanelProps) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
   return (
@@ -62,14 +66,16 @@ function TabPanel (props: TabPanelProps) {
   )
 }
 
-function a11yProps (index: number) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
 
-export default function BasicTabs () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function BasicTabs() {
   // TODO: 変数名を変更する -> 何を指すかわからない
   const [value, setValue] = React.useState(0)
   const [groupMode, setGroupMode] = React.useState<string>(DEFAULT_MODE)
@@ -88,7 +94,7 @@ export default function BasicTabs () {
   )
   // タブグループの一覧
   const [activeTabGroup, setActiveTabGroup] = useState<
-  chrome.tabGroups.TabGroup[]
+    chrome.tabGroups.TabGroup[]
   >([])
 
   useEffect(() => {
@@ -103,17 +109,17 @@ export default function BasicTabs () {
   }, [])
 
   useEffect(() => {
-    getGroupRule().then((value: GroupRule[]) => {
+    void getGroupRule().then((value: GroupRule[]) => {
       setGroupRule(value)
     })
   }, [])
   useEffect(() => {
-    getIgnoreRule().then((value: boolean) => {
+    void getIgnoreRule().then((value: boolean) => {
       setIgnoreRule(value)
     })
   }, [])
   useEffect(() => {
-    getGroupMode().then((value: string) => {
+    void getGroupMode().then((value: string) => {
       setGroupMode(value)
     })
   }, [])
@@ -122,19 +128,22 @@ export default function BasicTabs () {
     getSavedTabGroupList()
   }, [])
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const getSavedTabGroupList = () => {
     /*
      * savedTabGroupを取得して更新する
      */
-    getAllSavedTabGroup().then((savedTabGroupList) => {
+    void getAllSavedTabGroup().then((savedTabGroupList) => {
       setSavedTabGroup(savedTabGroupList)
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const updatedTabGroupList = async () => {
     getAllTabGroupList()
       .then((tabGroupList) => {

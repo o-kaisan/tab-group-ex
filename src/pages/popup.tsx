@@ -8,7 +8,8 @@ import BasicTabs from '../components/TabPanel'
 import ReactDOM from 'react-dom'
 import React from 'react'
 
-export default function PopupMenu () {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function PopupMenu() {
   return <BasicTabs />
 }
 
@@ -16,5 +17,6 @@ ReactDOM.render(
   <React.StrictMode>
     <PopupMenu />
   </React.StrictMode>,
-  (document.getElementById('root') != null) || document.createElement('div')
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
+  document.getElementById('root') || document.createElement('div')
 )
