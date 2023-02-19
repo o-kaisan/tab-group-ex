@@ -1,7 +1,8 @@
 import * as React from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import Select, { type SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
+import type { SelectChangeEvent } from '@mui/material/Select'
 import { saveGroupMode } from '../utils/tabGroupSettings'
 import { CUSTOM_MODE, DEFAULT_MODE, DOMAIN_MODE } from '../utils/tabGroups'
 
@@ -10,9 +11,11 @@ interface Props {
   setGroupMode: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function SelectTabGroupMode (props: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function SelectTabGroupMode(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleChange = (event: SelectChangeEvent) => {
-    saveGroupMode(event.target.value).then(() => {
+    void saveGroupMode(event.target.value).then(() => {
       props.setGroupMode(event.target.value)
     })
   }

@@ -12,7 +12,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import TextField from '@material-ui/core/TextField'
 import Button from '@mui/material/Button'
 import { v4 as uuidv4 } from 'uuid'
-import { type GroupRule } from './TabPanel'
+import type { GroupRule } from './TabPanel'
 
 interface Props {
   groupMode: string
@@ -23,16 +23,19 @@ interface Props {
   setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }
 
-export default function SettingsList (props: Props) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default function SettingsList(props: Props) {
   const [checked, setChecked] = React.useState(props.ignoreRule)
 
-  const handleToggle = async () => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const handleToggle = () => {
     setChecked(!checked)
     props.setIgnoreRule(!checked)
-    await saveIgnoreRule(!checked)
+    void saveIgnoreRule(!checked).then()
   }
 
   // グループ化するドメインのルールを追加する
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleAddDomain = () => {
     const _groupRule = [...props.groupRule]
     _groupRule.push({
@@ -43,12 +46,14 @@ export default function SettingsList (props: Props) {
   }
 
   // グループ化するドメインのルールを削除する
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleDeleteDomain = (id: string) => {
     const _groupRule = [...props.groupRule]
     const removeGroupRule = _groupRule.filter((rule) => rule.id !== id)
     props.setGroupRule(removeGroupRule)
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleChangeDomain = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     id: string
@@ -59,9 +64,10 @@ export default function SettingsList (props: Props) {
     props.setGroupRule(_groupRule)
   }
 
-  const handleSaveGroupRule = async () => {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const handleSaveGroupRule = () => {
     const _groupRule = [...props.groupRule]
-    await saveGroupRule(_groupRule)
+    void saveGroupRule(_groupRule).then()
   }
 
   return (
@@ -74,7 +80,7 @@ export default function SettingsList (props: Props) {
           setGroupMode={props.setGroupMode}
         />
       </ListItem>
-      {props.groupMode == 'Custom' && (
+      {props.groupMode === 'Custom' && (
         <div>
           <ListItem>
             <ListItemText
@@ -93,9 +99,15 @@ export default function SettingsList (props: Props) {
                 defaultValue={rule.domain}
                 margin="dense"
                 size="small"
-                onChange={(e: any) => { handleChangeDomain(e, rule.id) }}
+                onChange={(e: any) => {
+                  handleChangeDomain(e, rule.id)
+                }}
               />
-              <IconButton onClick={() => { handleDeleteDomain(rule.id) }}>
+              <IconButton
+                onClick={() => {
+                  handleDeleteDomain(rule.id)
+                }}
+              >
                 <ClearIcon />
               </IconButton>
             </ListItem>
