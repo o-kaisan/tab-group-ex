@@ -1,21 +1,20 @@
 import React from 'react'
+import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
-import ActiveTabGroupItem from './ActiveTabGroupItem'
+import ActiveTabGroupItem from '../../components/molecules/activeTabGroupItem/activeTabGroupItem'
+
 interface Props {
   // タブグループの一覧のステート
   activeTabGroup: chrome.tabGroups.TabGroup[]
   // タブグループを保存するメソッド
-  // eslint-disable-next-line @typescript-eslint/ban-types
   getSavedTabGroupList: Function
   // タブグループを更新するメソッド
-  // eslint-disable-next-line @typescript-eslint/ban-types
   updatedTabGroupList: Function
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function ActiveTabGroupList(props: Props) {
+export default function ActiveTabGroupList(props: Props): JSX.Element {
   return (
-    <div>
+    <List>
       <ListSubheader>Active TabGroups</ListSubheader>
       {props.activeTabGroup.map((tabGroup) => (
         <ActiveTabGroupItem
@@ -27,6 +26,6 @@ export default function ActiveTabGroupList(props: Props) {
           updatedTabGroupList={props.updatedTabGroupList}
         />
       ))}
-    </div>
+    </List>
   )
 }

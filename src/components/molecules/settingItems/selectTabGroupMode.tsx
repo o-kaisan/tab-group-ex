@@ -1,27 +1,28 @@
-import * as React from 'react'
+import React from 'react'
 import MenuItem from '@mui/material/MenuItem'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import type { SelectChangeEvent } from '@mui/material/Select'
-import { saveGroupMode } from '../utils/tabGroupSettings'
-import { CUSTOM_MODE, DEFAULT_MODE, DOMAIN_MODE } from '../utils/tabGroups'
+import { saveGroupMode } from '../../../common/utils/tabGroupSettings'
+import { GROUP_MODE } from '../../../common/const/groupMode'
 
 interface Props {
   groupMode: string
   setGroupMode: React.Dispatch<React.SetStateAction<string>>
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function SelectTabGroupMode(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleChange = (event: SelectChangeEvent) => {
+export default function SelectTabGroupMode(props: Props): JSX.Element {
+  const handleChange = (event: SelectChangeEvent): void => {
     void saveGroupMode(event.target.value).then(() => {
       props.setGroupMode(event.target.value)
     })
   }
 
   return (
-    <div>
+    <ListItem>
+      <ListItemText id="list-label-Mode" primary="GroupMode" />
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
         <Select
           labelId="demo-simple-select-standard-label"
@@ -30,11 +31,11 @@ export default function SelectTabGroupMode(props: Props) {
           onChange={handleChange}
           label="GroupMode"
         >
-          <MenuItem value={DEFAULT_MODE}>Default</MenuItem>
-          <MenuItem value={DOMAIN_MODE}>Domain</MenuItem>
-          <MenuItem value={CUSTOM_MODE}>Custom</MenuItem>
+          <MenuItem value={GROUP_MODE.DEFAULT}>Default</MenuItem>
+          <MenuItem value={GROUP_MODE.DOMAIN}>Domain</MenuItem>
+          <MenuItem value={GROUP_MODE.CUSTOM}>Custom</MenuItem>
         </Select>
       </FormControl>
-    </div>
+    </ListItem>
   )
 }
