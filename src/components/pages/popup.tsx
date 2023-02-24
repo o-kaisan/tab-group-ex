@@ -1,21 +1,10 @@
-import BasicTabs from '../components/TabPanel'
-
-/**
- * タブグループ化(Chrome拡張機能)
- * ポップアップメニュ
- */
-
 import ReactDOM from 'react-dom'
 import React from 'react'
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function PopupMenu() {
-  return <BasicTabs />
-}
+import TabNavigator from '../templates/tabNavigator'
 
 ReactDOM.render(
   <React.StrictMode>
-    <PopupMenu />
+    <TabNavigator />
   </React.StrictMode>,
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
   document.getElementById('root') || document.createElement('div')

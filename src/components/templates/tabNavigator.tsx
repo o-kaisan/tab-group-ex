@@ -1,70 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import MainMenu from '../components/MainMenus'
-import SettingsList from '../components/SettingsList'
+import { v4 as uuidv4 } from 'uuid'
+import ActiveTabGroupMenu from '../templates/activeTabGroupMenu'
+import Settings from '../templates/settings'
+import SavedTabGroupMenu from '../templates/savedTabGroupMenu'
 import {
   getSavedGroupMode,
   getSavedIgnoreRule,
   getSavedGroupRule
-} from '../utils/tabGroupSettings'
+} from '../../common/utils/tabGroupSettings'
 import {
   getAllTabGroupList,
-  getAllSavedTabGroup,
-  DEFAULT_MODE
-} from '../utils/tabGroups'
-import type { SavedTabGroupInfo } from '../utils/tabGroups'
-import SavedTabGroupList from './SavedTabGroupList'
-import { v4 as uuidv4 } from 'uuid'
-
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-export interface GroupRule {
-  id: string
-  domain: string
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-async function getGroupMode() {
-  return await getSavedGroupMode()
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-async function getIgnoreRule() {
-  return await getSavedIgnoreRule()
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-async function getGroupRule() {
-  return await getSavedGroupRule()
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 1 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
+  getAllSavedTabGroup
+} from '../../common/utils/tabGroups'
+import { GROUP_MODE } from '../../common/const/groupMode'
+import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
+import type { GroupRule } from '../../common/interface/groupRule'
+import TabPanel from '../atom/tabPanel'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {
@@ -74,17 +28,14 @@ function a11yProps(index: number) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function BasicTabs() {
-  // TODO: 変数名を変更する -> 何を指すかわからない
-  const [value, setValue] = React.useState(0)
-  const [groupMode, setGroupMode] = React.useState<string>(DEFAULT_MODE)
+export default function TabNavigator(): JSX.Element {
+  // 表示するタブを管理
+  const [tab, setTab] = React.useState(0)
+  // グループ化する設定
+  const [groupMode, setGroupMode] = React.useState<string>(GROUP_MODE.DEFAULT)
   // カスタムルール
   const [groupRule, setGroupRule] = React.useState<GroupRule[]>([
-    {
-      id: uuidv4(),
-      domain: ''
-    }
+    { id: uuidv4(), domain: '' }
   ])
   // ルール外をグループ化する設定
   const [ignoreRule, setIgnoreRule] = React.useState<boolean>(false)
@@ -97,8 +48,8 @@ export default function BasicTabs() {
     chrome.tabGroups.TabGroup[]
   >([])
 
+  // 画面表示時にウィンドウのタブグループを読み込む
   useEffect(() => {
-    //
     getAllTabGroupList()
       .then((tabGroupList: chrome.tabGroups.TabGroup[]) => {
         setActiveTabGroup(tabGroupList)
@@ -108,43 +59,46 @@ export default function BasicTabs() {
       })
   }, [])
 
+  // 画面表示時にグループ化ルールを読み込む
   useEffect(() => {
-    void getGroupRule().then((value: GroupRule[]) => {
+    void getSavedGroupRule().then((value: GroupRule[]) => {
       setGroupRule(value)
     })
   }, [])
+
+  // 画面表示時にグループ化ルール以外をグループ化するかの設定を読み込む
   useEffect(() => {
-    void getIgnoreRule().then((value: boolean) => {
+    void getSavedIgnoreRule().then((value: boolean) => {
       setIgnoreRule(value)
     })
   }, [])
+
+  // 画面表示時にグループ化設定を取得
   useEffect(() => {
-    void getGroupMode().then((value: string) => {
+    void getSavedGroupMode().then((value: string) => {
       setGroupMode(value)
     })
   }, [])
 
+  // 画面表示時にストレージに保存されたタブグループを読み込む
   useEffect(() => {
     getSavedTabGroupList()
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
+  // タブを切り替える
+  const handleChange = (_event: React.SyntheticEvent, newTab: number): void => {
+    setTab(newTab)
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const getSavedTabGroupList = () => {
-    /*
-     * savedTabGroupを取得して更新する
-     */
+  // ストレージに保存されたタブグループを取得
+  const getSavedTabGroupList = (): void => {
     void getAllSavedTabGroup().then((savedTabGroupList) => {
       setSavedTabGroup(savedTabGroupList)
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const updatedTabGroupList = async () => {
+  // タブグループを最新化
+  const updatedTabGroupList = (): void => {
     getAllTabGroupList()
       .then((tabGroupList) => {
         setActiveTabGroup(tabGroupList)
@@ -158,7 +112,7 @@ export default function BasicTabs() {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
-          value={value}
+          value={tab}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
@@ -167,8 +121,8 @@ export default function BasicTabs() {
           <Tab label="Settings" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <MainMenu
+      <TabPanel value={tab} index={0}>
+        <ActiveTabGroupMenu
           groupMode={groupMode}
           ignoreRule={ignoreRule}
           groupRule={groupRule}
@@ -178,15 +132,15 @@ export default function BasicTabs() {
           activeTabGroup={activeTabGroup}
         />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <SavedTabGroupList
+      <TabPanel value={tab} index={1}>
+        <SavedTabGroupMenu
           savedTabGroup={savedTabGroup}
           getSavedTabGroupList={getSavedTabGroupList}
           updatedTabGroupList={updatedTabGroupList}
         />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <SettingsList
+      <TabPanel value={tab} index={2}>
+        <Settings
           groupMode={groupMode}
           setGroupMode={setGroupMode}
           ignoreRule={ignoreRule}

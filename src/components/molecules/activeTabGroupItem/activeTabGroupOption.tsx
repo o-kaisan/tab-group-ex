@@ -8,13 +8,12 @@ import LayersClearIcon from '@mui/icons-material/LayersClear'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { closeTabGroup, ungroupTabs } from '../utils/tabGroups'
+import { closeTabGroup, ungroupTabs } from '../../../common/utils/tabGroups'
 
 interface Props {
   // タブグループID
   tabGroupId: number
   // タブ一覧を更新するメソッド
-  // eslint-disable-next-line @typescript-eslint/ban-types
   updatedTabGroupList: Function
   // タブの編集モードを更新するメソッド
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -63,28 +62,25 @@ const StyledMenu = styled((props: MenuProps) => (
   }
 }))
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function OptionMenus(props: Props) {
+export default function ActiveTabGroupOption(props: Props): JSX.Element {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget)
   }
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleClose = () => {
+
+  const handleClose = (): void => {
     setAnchorEl(null)
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const runEditGroupTabs = () => {
+  const runEditGroupTabs = (): void => {
     handleClose()
     props.setEditMode(true)
     props.updatedTabGroupList()
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const runUnGroupTabs = (tabGroupId: number) => {
+  const runUnGroupTabs = (tabGroupId: number): void => {
     /*
      * アクティブなウィンドウのタブグループを全て解除
      */
@@ -94,8 +90,7 @@ export default function OptionMenus(props: Props) {
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const runRemoveTabGroups = (tabGroupId: number) => {
+  const runRemoveTabGroups = (tabGroupId: number): void => {
     handleClose()
     void closeTabGroup(tabGroupId).then(() => {
       props.updatedTabGroupList()
