@@ -32,7 +32,9 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
     props.setEditMode(false)
   }
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setTabGroupTitle(event.target.value)
   }
 

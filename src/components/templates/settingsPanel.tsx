@@ -2,6 +2,7 @@ import React from 'react'
 import SettingList from '../organisms/settingList'
 import type { GroupRule } from '../../common/interface/groupRule'
 import TabPanel from '../atom/tabPanel'
+import { SettingsDescription } from '../molecules/settingItems/settingsDescription'
 
 interface Props {
   // 現在のタブ番号
@@ -33,6 +34,7 @@ export default function SettingsPanel(props: Props): JSX.Element {
         groupRule={props.groupRule}
         setGroupRule={props.setGroupRule}
       />
+      <SettingsDescription />
     </TabPanel>
   )
 }

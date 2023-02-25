@@ -161,6 +161,6 @@ export default function TabNavigator(): JSX.Element {
         groupRule={groupRule}
         setGroupRule={setGroupRule}
       />
-    </Box >
+    </Box>
   )
 }
