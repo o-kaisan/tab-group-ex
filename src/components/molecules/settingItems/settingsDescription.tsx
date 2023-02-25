@@ -41,7 +41,7 @@ export function SettingsDescription(): JSX.Element {
         <Typography className={classes.pos} color="textSecondary">
           ドメインごとにグループ化する
           <br />
-          ※サブドメインは無視する
+          ※サブドメイン含む
         </Typography>
 
         <Typography className={classes.title} gutterBottom>
@@ -50,7 +50,7 @@ export function SettingsDescription(): JSX.Element {
         <Typography className={classes.pos} color="textSecondary">
           「RULE」タブの内容に従ってグループ化する
           <br />
-          ※サブドメインは無視する
+          ※サブドメイン含む
         </Typography>
       </CardContent>
     </Card>
