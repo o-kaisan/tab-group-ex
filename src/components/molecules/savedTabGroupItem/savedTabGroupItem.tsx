@@ -1,15 +1,6 @@
 import React from 'react'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import {
-  restoreTabGroup,
-  deleteTabGroup
-} from '../../../common/utils/tabGroups'
-import {
-  IconButton,
-  ListItem,
-  ListItemButton,
-  ListItemText
-} from '@mui/material'
+import DisplaySavedTabGroupItem from './displaySavedTabGroupItem'
+import EditSavedTabGroupItem from './editSavedTabGroupItem'
 
 interface Props {
   // タブグループID
@@ -25,41 +16,27 @@ interface Props {
 }
 
 export default function SavedTabGroupItem(props: Props): JSX.Element {
-  const runDeleteTabGroup = (
-    tabGroupTitle: string,
-    tabGroupId: number
-  ): void => {
-    void deleteTabGroup(tabGroupTitle, tabGroupId).then(() =>
-      props.getSavedTabGroupList()
-    )
-  }
-
-  const runRestoreTabGroup = (
-    tabGroupTitle: string,
-    urlList: string[]
-  ): void => {
-    void restoreTabGroup(tabGroupTitle, urlList).then(() => {
-      props.updatedTabGroupList() // 処理が走っていない
-    })
-  }
+  const [editMode, setEditMode] = React.useState(false)
 
   return (
-    <ListItem>
-      <ListItemButton
-        sx={{ pl: 4 }}
-        onClick={() => {
-          runRestoreTabGroup(props.title, props.urlList)
-        }}
-      >
-        <ListItemText>{props.title}</ListItemText>
-      </ListItemButton>
-      <IconButton
-        onClick={() => {
-          runDeleteTabGroup(props.title, props.id)
-        }}
-      >
-        <DeleteForeverIcon />
-      </IconButton>
-    </ListItem>
+    <div>
+      {editMode ? (
+        <EditSavedTabGroupItem
+          id={props.id}
+          title={props.title}
+          setEditMode={setEditMode}
+          getSavedTabGroupList={props.getSavedTabGroupList}
+        />
+      ) : (
+        <DisplaySavedTabGroupItem
+          id={props.id}
+          title={props.title}
+          urlList={props.urlList}
+          setEditMode={setEditMode}
+          getSavedTabGroupList={props.getSavedTabGroupList}
+          updatedTabGroupList={props.updatedTabGroupList}
+        />
+      )}
+    </div>
   )
 }

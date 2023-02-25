@@ -1,3 +1,5 @@
+// TODO 全体的にリファクタリングしたい
+
 /*
  * タブのグループ化関連のユーティリティ
  */
@@ -386,6 +388,44 @@ export async function saveTabGroup(
   const storageTitle: string = `TG_${String(renamedTabGroupTitle)}${String(
     tabGroupId
   )}`
+  await chrome.storage.local.set({ [storageTitle]: saveTabGroupInfo })
+}
+
+// 指定したタブグループをストレージから取得する
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getTabGroupFromStorage(key: string) {
+  const ret = await chrome.storage.local.get(key)
+  return ret[key]
+}
+
+export async function updateSavedTabGroupName(
+  tabGroupId: number,
+  title: string,
+  renamedTitle: string
+): Promise<void> {
+  const targetTabGroup: string = `TG_${String(title)}${String(tabGroupId)}`
+
+  // 名前を変換するために保存前の情報を取得
+  const tabGroupObj = await getTabGroupFromStorage(targetTabGroup)
+
+  // 元の保存されたタブグループを削除
+  await deleteTabGroup(title, tabGroupId)
+
+  // 同じ名前のグループ名があるかを確認し、同じ名前があればrename
+  const savedTabGroups = await getAllSavedTabGroup()
+  const renamedTabGroupTitle = duplicateRenameTabGroupTitle(
+    renamedTitle,
+    savedTabGroups
+  )
+
+  // 新しく名前を変更してストレージに保存
+  const storageTitle: string = `TG_${String(renamedTitle)}${String(tabGroupId)}`
+  const saveTabGroupInfo: SavedTabGroupInfo = {
+    type: 'TGEX',
+    id: tabGroupId,
+    title: renamedTabGroupTitle,
+    urlList: tabGroupObj.urlList
+  }
   await chrome.storage.local.set({ [storageTitle]: saveTabGroupInfo })
 }
 

@@ -4,17 +4,12 @@ import Menu from '@mui/material/Menu'
 import type { MenuProps } from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EditIcon from '@mui/icons-material/Edit'
-import LayersClearIcon from '@mui/icons-material/LayersClear'
 import { IconButton } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { closeTabGroup, ungroupTabs } from '../../../common/utils/tabGroups'
 
 interface Props {
   // タブグループID
   tabGroupId: number
-  // タブ一覧を更新するメソッド
-  updatedTabGroupList: Function
   // タブの編集モードを更新するメソッド
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   // オプションの状態
@@ -66,7 +61,7 @@ const StyledMenu = styled((props: MenuProps) => (
   }
 }))
 
-export default function ActiveTabGroupOption(props: Props): JSX.Element {
+export default function SavedTabGroupOption(props: Props): JSX.Element {
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     props.setAnchorEl(event.currentTarget)
   }
@@ -78,23 +73,6 @@ export default function ActiveTabGroupOption(props: Props): JSX.Element {
   const runEditGroupTabs = (): void => {
     props.setEditMode(true)
     handleClose()
-  }
-
-  const runUnGroupTabs = (tabGroupId: number): void => {
-    /*
-     * アクティブなウィンドウのタブグループを全て解除
-     */
-    handleClose()
-    void ungroupTabs(tabGroupId).then(() => {
-      props.updatedTabGroupList()
-    })
-  }
-
-  const runRemoveTabGroups = (tabGroupId: number): void => {
-    handleClose()
-    void closeTabGroup(tabGroupId).then(() => {
-      props.updatedTabGroupList()
-    })
   }
 
   return (
@@ -121,24 +99,6 @@ export default function ActiveTabGroupOption(props: Props): JSX.Element {
         <MenuItem onClick={runEditGroupTabs} disableRipple>
           <EditIcon />
           Edit
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            runRemoveTabGroups(props.tabGroupId)
-          }}
-          disableRipple
-        >
-          <HighlightOffIcon />
-          Close
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            runUnGroupTabs(props.tabGroupId)
-          }}
-          disableRipple
-        >
-          <LayersClearIcon />
-          Ungroup
         </MenuItem>
       </StyledMenu>
     </div>

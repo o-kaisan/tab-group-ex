@@ -1,8 +1,8 @@
 import React from 'react'
 import { IconButton, ListItem, Input } from '@mui/material'
-import { updateTabGroupName } from '../../../common/utils/tabGroups'
 import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
+import { updateSavedTabGroupName } from '../../../common/utils/tabGroups'
 
 interface Props {
   // タブグループID
@@ -11,21 +11,30 @@ interface Props {
   title: string
   // 編集モード
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
-  // updatedTabGroupListメソッド
-  updatedTabGroupList: Function
+  // 保存されたタブグループの更新
+  getSavedTabGroupList: Function
 }
 
-export default function EditActiveTabGroup(props: Props): JSX.Element {
-  const [tabGroupTitle, setTabGroupTitle] = React.useState(props.title)
+export default function EditSavedTabGroupItem(props: Props): JSX.Element {
+  // 変更前の名前
+  const [title, setTitle] = React.useState(props.title)
+  // 変更後の名前
+  const [renamedTitle, setRenamedTitle] = React.useState(props.title)
 
-  const runUpdateTabGroupName = (
-    tabGroupId: number,
-    tabGroupTitle: string
+  const updateSavedTabGroupTitle = (
+    id: number,
+    title: string,
+    renamedTitle: string
   ): void => {
-    void updateTabGroupName(tabGroupId, tabGroupTitle).then(() => {
-      props.updatedTabGroupList()
+    // ストレージの更新
+    void updateSavedTabGroupName(id, title, renamedTitle).then(() => {
+      setTitle(renamedTitle)
+      props.getSavedTabGroupList()
       props.setEditMode(false)
     })
+
+    // titleを更新
+    setTitle(renamedTitle)
   }
 
   const cancelEditMode = (): void => {
@@ -35,7 +44,7 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setTabGroupTitle(event.target.value)
+    setRenamedTitle(event.target.value)
   }
 
   const handleKeyDown = (
@@ -43,22 +52,22 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
   ): void => {
     //  Enterキー押下時でもグループ名の更新処理が走る
     if (event.nativeEvent.isComposing || event.key !== 'Enter') return
-    runUpdateTabGroupName(props.id, tabGroupTitle)
+    updateSavedTabGroupTitle(props.id, title, renamedTitle)
   }
 
   return (
     <ListItem>
       <Input
-        defaultValue={tabGroupTitle}
+        defaultValue={props.title}
         inputProps={{
-          placeholder: 'Tab Group Name',
+          placeholder: 'Saved Tab Group Name',
           onChange: handleTextChange,
           onKeyDown: handleKeyDown
         }}
       />
       <IconButton
         onClick={() => {
-          runUpdateTabGroupName(props.id, tabGroupTitle)
+          updateSavedTabGroupTitle(props.id, title, renamedTitle)
         }}
       >
         <CheckIcon />
