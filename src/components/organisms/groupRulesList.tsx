@@ -11,7 +11,6 @@ import type { GroupRule } from '../../common/interface/groupRule'
 import { saveGroupRule } from '../../common/utils/tabGroupSettings'
 import NonRuleGrouping from '../molecules/settingItems/nonRuleGrouping'
 
-
 interface Props {
   // グループ化設定
   groupMode: string
@@ -104,7 +103,7 @@ export default function GroupRulesList(props: Props): JSX.Element {
           color="success"
           onClick={handleSaveGroupRule}
         >
-          Save
+          Save Group Rules
         </Button>
       </ListItem>
     </List>
