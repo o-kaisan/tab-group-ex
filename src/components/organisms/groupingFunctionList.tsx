@@ -24,12 +24,7 @@ interface Props {
 
 export default function GroupingFunctionList(props: Props): JSX.Element {
   return (
-    // TODO 画面サイズは別のところで
-    <List
-      sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-    >
+    <List>
       <ListSubheader>Grouping</ListSubheader>
       <GroupActiveTabs
         groupMode={props.groupMode}

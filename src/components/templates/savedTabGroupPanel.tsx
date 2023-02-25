@@ -1,8 +1,13 @@
 import React from 'react'
 import SavedTabGroupList from '../../components/organisms/savedTabGroupList'
 import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
+import TabPanel from '../atom/tabPanel'
 
 interface Props {
+  // 現在のタブ番号
+  tab: number
+  // 自身のタブ番号
+  index: number
   // タブグループID
   savedTabGroup: SavedTabGroupInfo[]
   // 保存されたタブグループを取得するメソッド
@@ -11,12 +16,14 @@ interface Props {
   updatedTabGroupList: Function
 }
 
-export default function SavedTabGroupMenu(props: Props): JSX.Element {
+export default function SavedTabGroupPanel(props: Props): JSX.Element {
   return (
-    <SavedTabGroupList
-      savedTabGroup={props.savedTabGroup}
-      getSavedTabGroupList={props.getSavedTabGroupList}
-      updatedTabGroupList={props.updatedTabGroupList}
-    />
+    <TabPanel value={props.tab} index={props.index}>
+      <SavedTabGroupList
+        savedTabGroup={props.savedTabGroup}
+        getSavedTabGroupList={props.getSavedTabGroupList}
+        updatedTabGroupList={props.updatedTabGroupList}
+      />
+    </TabPanel>
   )
 }

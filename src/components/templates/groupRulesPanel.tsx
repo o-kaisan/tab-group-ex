@@ -1,10 +1,13 @@
 import React from 'react'
-import List from '@mui/material/List'
-import ListSubheader from '@mui/material/ListSubheader'
-import SelectTabGroupMode from '../molecules/settingItems/selectTabGroupMode'
+import TabPanel from '../atom/tabPanel'
+import GroupRulesList from '../organisms/groupRulesList'
 import type { GroupRule } from '../../common/interface/groupRule'
 
 interface Props {
+  // 現在のタブ番号
+  tab: number
+  // 自身のタブ番号
+  index: number
   // グループ化設定
   groupMode: string
   // グループ化設定の更新処理
@@ -19,14 +22,17 @@ interface Props {
   setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }
 
-export default function SettingList(props: Props): JSX.Element {
+export default function GroupRulesPanel(props: Props): JSX.Element {
   return (
-    <List>
-      <ListSubheader>Settings</ListSubheader>
-      <SelectTabGroupMode
+    <TabPanel value={props.tab} index={props.index}>
+      <GroupRulesList
         groupMode={props.groupMode}
         setGroupMode={props.setGroupMode}
+        ignoreRule={props.ignoreRule}
+        setIgnoreRule={props.setIgnoreRule}
+        groupRule={props.groupRule}
+        setGroupRule={props.setGroupRule}
       />
-    </List>
+    </TabPanel>
   )
 }

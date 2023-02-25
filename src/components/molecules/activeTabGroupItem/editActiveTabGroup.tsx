@@ -32,12 +32,10 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
     props.setEditMode(false)
   }
 
-  // TODO メソッド名をわかりやすい名前に変える
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setTabGroupTitle(event.target.value)
   }
 
-  // TODO メソッド名をわかりやすい名前に変える
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
@@ -53,7 +51,7 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
         defaultValue={tabGroupTitle}
         inputProps={{
           placeholder: 'Tab Group Name',
-          onChange: handleChange,
+          onChange: handleTextChange,
           onKeyDown: handleKeyDown
         }}
       />

@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/interface/groupRule'
 import { saveGroupRule } from '../../common/utils/tabGroupSettings'
+import NonRuleGrouping from '../molecules/settingItems/nonRuleGrouping'
+
 
 interface Props {
   // グループ化設定
@@ -25,7 +27,7 @@ interface Props {
   setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }
 
-export default function GroupingRuleList(props: Props): JSX.Element {
+export default function GroupRulesList(props: Props): JSX.Element {
   // グループ化するドメインのルールを追加する
   const handleAddDomain = (): void => {
     const _groupRule = [...props.groupRule]
@@ -60,7 +62,11 @@ export default function GroupingRuleList(props: Props): JSX.Element {
 
   return (
     <List>
-      <ListSubheader>Grouping Rule For Custom</ListSubheader>
+      <ListSubheader>Group Rules For Custom</ListSubheader>
+      <NonRuleGrouping
+        ignoreRule={props.ignoreRule}
+        setIgnoreRule={props.setIgnoreRule}
+      />
       {props.groupRule.map((rule: GroupRule) => (
         <ListItem key={rule.id}>
           <TextField

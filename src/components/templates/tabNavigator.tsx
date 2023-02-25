@@ -3,9 +3,9 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { v4 as uuidv4 } from 'uuid'
-import ActiveTabGroupMenu from '../templates/activeTabGroupMenu'
-import Settings from '../templates/settings'
-import SavedTabGroupMenu from '../templates/savedTabGroupMenu'
+import ActiveTabGroupPanel from '../templates/activeTabGroupPanel'
+import SettingsPanel from '../templates/settingsPanel'
+import SavedTabGroupPanel from '../templates/savedTabGroupPanel'
 import {
   getSavedGroupMode,
   getSavedIgnoreRule,
@@ -18,7 +18,7 @@ import {
 import { GROUP_MODE } from '../../common/const/groupMode'
 import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
 import type { GroupRule } from '../../common/interface/groupRule'
-import TabPanel from '../atom/tabPanel'
+import GroupRulesPanel from './groupRulesPanel'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {
@@ -109,6 +109,7 @@ export default function TabNavigator(): JSX.Element {
   }
 
   return (
+    // TODO タブのサイズ
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
@@ -116,39 +117,50 @@ export default function TabNavigator(): JSX.Element {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Tab Group EX" {...a11yProps(0)} />
+          <Tab label="Groups" {...a11yProps(0)} />
           <Tab label="Saved" {...a11yProps(1)} />
-          <Tab label="Settings" {...a11yProps(2)} />
+          <Tab label="Rules" {...a11yProps(2)} />
+          <Tab label="Settings" {...a11yProps(3)} />
         </Tabs>
       </Box>
-      <TabPanel value={tab} index={0}>
-        <ActiveTabGroupMenu
-          groupMode={groupMode}
-          ignoreRule={ignoreRule}
-          groupRule={groupRule}
-          setSavedTabGroup={setSavedTabGroup}
-          updatedTabGroupList={updatedTabGroupList}
-          getSavedTabGroupList={getSavedTabGroupList}
-          activeTabGroup={activeTabGroup}
-        />
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <SavedTabGroupMenu
-          savedTabGroup={savedTabGroup}
-          getSavedTabGroupList={getSavedTabGroupList}
-          updatedTabGroupList={updatedTabGroupList}
-        />
-      </TabPanel>
-      <TabPanel value={tab} index={2}>
-        <Settings
-          groupMode={groupMode}
-          setGroupMode={setGroupMode}
-          ignoreRule={ignoreRule}
-          setIgnoreRule={setIgnoreRule}
-          groupRule={groupRule}
-          setGroupRule={setGroupRule}
-        />
-      </TabPanel>
-    </Box>
+      <ActiveTabGroupPanel
+        tab={tab}
+        index={0}
+        groupMode={groupMode}
+        ignoreRule={ignoreRule}
+        groupRule={groupRule}
+        setSavedTabGroup={setSavedTabGroup}
+        updatedTabGroupList={updatedTabGroupList}
+        getSavedTabGroupList={getSavedTabGroupList}
+        activeTabGroup={activeTabGroup}
+      />
+      <SavedTabGroupPanel
+        tab={tab}
+        index={1}
+        savedTabGroup={savedTabGroup}
+        getSavedTabGroupList={getSavedTabGroupList}
+        updatedTabGroupList={updatedTabGroupList}
+      />
+      <GroupRulesPanel
+        tab={tab}
+        index={2}
+        groupMode={groupMode}
+        setGroupMode={setGroupMode}
+        ignoreRule={ignoreRule}
+        setIgnoreRule={setIgnoreRule}
+        groupRule={groupRule}
+        setGroupRule={setGroupRule}
+      />
+      <SettingsPanel
+        tab={tab}
+        index={3}
+        groupMode={groupMode}
+        setGroupMode={setGroupMode}
+        ignoreRule={ignoreRule}
+        setIgnoreRule={setIgnoreRule}
+        groupRule={groupRule}
+        setGroupRule={setGroupRule}
+      />
+    </Box >
   )
 }
