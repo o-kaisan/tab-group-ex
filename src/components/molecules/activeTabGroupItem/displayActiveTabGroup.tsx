@@ -24,6 +24,24 @@ interface Props {
 }
 
 export default function DisplayActiveTabGroup(props: Props): JSX.Element {
+  // タブグループメニュを管理
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+
+  const handleTabGroupItemClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    isRight: boolean,
+    tabGroupId: number,
+    collapsed: boolean
+  ): void => {
+    e.preventDefault()
+    if (isRight) {
+      setAnchorEl(e.currentTarget)
+    } else {
+      runUpdateTabGroupCollapsed(tabGroupId, collapsed)
+    }
+  }
+
   const runUpdateTabGroupCollapsed = (
     tabGroupId: number,
     collapsed: boolean
@@ -42,8 +60,11 @@ export default function DisplayActiveTabGroup(props: Props): JSX.Element {
     <ListItem>
       <ListItemButton
         sx={{ pl: 4 }}
-        onClick={() => {
-          runUpdateTabGroupCollapsed(props.id, props.collapsed)
+        onClick={(e) => {
+          handleTabGroupItemClick(e, false, props.id, props.collapsed)
+        }}
+        onContextMenu={(e) => {
+          handleTabGroupItemClick(e, true, props.id, props.collapsed)
         }}
       >
         <ListItemText>{props.title}</ListItemText>
@@ -59,6 +80,9 @@ export default function DisplayActiveTabGroup(props: Props): JSX.Element {
         tabGroupId={props.id}
         updatedTabGroupList={props.updatedTabGroupList}
         setEditMode={props.setEditMode}
+        open={open}
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
       />
     </ListItem>
   )

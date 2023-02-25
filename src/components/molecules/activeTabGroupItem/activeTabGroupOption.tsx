@@ -17,6 +17,10 @@ interface Props {
   updatedTabGroupList: Function
   // タブの編集モードを更新するメソッド
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+  // オプションの状態
+  open: boolean
+  anchorEl: HTMLElement | null
+  setAnchorEl: Function
 }
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -63,15 +67,12 @@ const StyledMenu = styled((props: MenuProps) => (
 }))
 
 export default function ActiveTabGroupOption(props: Props): JSX.Element {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
-    setAnchorEl(event.currentTarget)
+    props.setAnchorEl(event.currentTarget)
   }
 
   const handleClose = (): void => {
-    setAnchorEl(null)
+    props.setAnchorEl(null)
   }
 
   const runEditGroupTabs = (): void => {
@@ -102,8 +103,8 @@ export default function ActiveTabGroupOption(props: Props): JSX.Element {
       <IconButton
         aria-label="more"
         id="demo-customized-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
+        aria-controls={props.open ? 'long-menu' : undefined}
+        aria-expanded={props.open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
       >
@@ -114,8 +115,8 @@ export default function ActiveTabGroupOption(props: Props): JSX.Element {
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button'
         }}
-        anchorEl={anchorEl}
-        open={open}
+        anchorEl={props.anchorEl}
+        open={props.open}
         onClose={handleClose}
       >
         <MenuItem onClick={runEditGroupTabs} disableRipple>
