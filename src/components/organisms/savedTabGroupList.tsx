@@ -14,11 +14,7 @@ interface Props {
 
 export default function SavedTabGroupList(props: Props): JSX.Element {
   return (
-    <List
-      sx={{ width: '100%', minWidth: 340, bgcolor: 'background.paper' }}
-      component="div"
-      disablePadding
-    >
+    <List>
       <ListSubheader>Saved TabGroups</ListSubheader>
       {props.savedTabGroup.map((tabGroup) => (
         <SavedTabGroupItem

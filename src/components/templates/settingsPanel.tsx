@@ -1,10 +1,13 @@
 import React from 'react'
-import GroupingRuleList from '../organisms/groupingRuleList'
 import SettingList from '../organisms/settingList'
-import { GROUP_MODE } from '../../common/const/groupMode'
 import type { GroupRule } from '../../common/interface/groupRule'
+import TabPanel from '../atom/tabPanel'
 
 interface Props {
+  // 現在のタブ番号
+  tab: number
+  // 自身のタブ番号
+  index: number
   // グループ化設定
   groupMode: string
   // グループ化設定の更新処理
@@ -19,9 +22,9 @@ interface Props {
   setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }
 
-export default function Settings(props: Props): JSX.Element {
+export default function SettingsPanel(props: Props): JSX.Element {
   return (
-    <div>
+    <TabPanel value={props.tab} index={props.index}>
       <SettingList
         groupMode={props.groupMode}
         setGroupMode={props.setGroupMode}
@@ -30,16 +33,6 @@ export default function Settings(props: Props): JSX.Element {
         groupRule={props.groupRule}
         setGroupRule={props.setGroupRule}
       />
-      {props.groupMode === GROUP_MODE.CUSTOM && (
-        <GroupingRuleList
-          groupMode={props.groupMode}
-          setGroupMode={props.setGroupMode}
-          ignoreRule={props.ignoreRule}
-          setIgnoreRule={props.setIgnoreRule}
-          groupRule={props.groupRule}
-          setGroupRule={props.setGroupRule}
-        />
-      )}
-    </div>
+    </TabPanel>
   )
 }

@@ -23,7 +23,7 @@ export default function NonRuleGrouping(props: Props): JSX.Element {
     <ListItem>
       <ListItemText
         id="switch-list-label-ignoreRule"
-        primary="ルール以外をグループ化"
+        primary="ルール対象外のタブでグループ化"
       />
       <Switch edge="end" onChange={handleToggle} checked={checked} />
     </ListItem>

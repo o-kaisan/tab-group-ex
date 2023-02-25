@@ -37,8 +37,7 @@ async function getNoneGroupedTabs(): Promise<chrome.tabs.Tab[]> {
  */
 function getTabIdList(targetTabList: chrome.tabs.Tab[]): number[] {
   const tabIdList: number[] = []
-  // eslint-disable-next-line array-callback-return
-  targetTabList.map((tab: chrome.tabs.Tab) => {
+  targetTabList.forEach((tab: chrome.tabs.Tab) => {
     if (tab.id !== undefined) {
       tabIdList.push(tab.id)
     }
@@ -97,7 +96,6 @@ async function updateTabGroups(
   if (tabIdList.length === 0) {
     return
   }
-  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
   let groupId: number | undefined = await getTabGroupIdByTitle(title)
 
   // 指定したグループ名がなければ新規作成
@@ -127,8 +125,7 @@ export async function groupActiveTabs(
     }
 
     const groupRuleList: string[] = []
-    // eslint-disable-next-line array-callback-return
-    groupRule.map((rule: GroupRule) => {
+    groupRule.forEach((rule: GroupRule) => {
       groupRuleList.push(rule.domain)
     })
     await groupActiveTabsByCustom(groupRuleList, ignoreRule)
@@ -140,6 +137,7 @@ export async function groupActiveTabs(
 }
 /*
  * カスタムルールに従ってタブをグループ化
+ * サブドメインも含むグループ化となる
  */
 async function groupActiveTabsByCustom(
   groupRules: string[],
