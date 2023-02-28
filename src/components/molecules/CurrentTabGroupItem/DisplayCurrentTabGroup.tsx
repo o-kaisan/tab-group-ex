@@ -1,89 +1,74 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
-import SaveAltIcon from '@mui/icons-material/SaveAlt'
-import { IconButton, ListItem, ListItemButton } from '@mui/material'
-import {
-  saveTabGroup,
-  toggleTabGroupCollapsed
-} from '../../../common/utils/tabGroups'
+import { ListItem, ListItemButton } from '@mui/material'
+import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 import CurrentTabGroupOption from './CurrentTabGroupOption'
+import { saveTabGroup } from '../../../common/libs/savedTabGroup'
+import SaveIcon from '../../atoms/Icons/SaveIcon'
 
 interface Props {
-  // タブグループID
-  id: number
-  // タブグループの開閉
-  collapsed: boolean
-  // タブグループのタイトル
-  title: string
-  // 編集モード
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
-  // getSavedTabGroupListメソッド
-  getSavedTabGroupList: Function
-  // updateCurrentTabGroupListメソッド
-  updateCurrentTabGroupList: Function
+    tabGroupId: number
+    collapsed: boolean
+    tabGroupTitle: string
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+    updateSavedTabGroupList: Function
+    updateCurrentTabGroupList: Function
 }
 
 export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
-  // タブグループメニュを管理
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+    // タブグループメニュを管理
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const open = Boolean(anchorEl)
 
-  const handleTabGroupItemClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    isRight: boolean,
-    tabGroupId: number,
-    collapsed: boolean
-  ): void => {
-    e.preventDefault()
-    if (isRight) {
-      setAnchorEl(e.currentTarget)
-    } else {
-      runUpdateTabGroupCollapsed(tabGroupId, collapsed)
+    const handleTabGroupItemClick = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        isRight: boolean,
+        tabGroupId: number,
+        collapsed: boolean
+    ): void => {
+        e.preventDefault()
+        if (isRight) {
+            setAnchorEl(e.currentTarget)
+        } else {
+            runUpdateTabGroupCollapsed(tabGroupId, collapsed)
+        }
     }
-  }
 
-  const runUpdateTabGroupCollapsed = (
-    tabGroupId: number,
-    collapsed: boolean
-  ): void => {
-    void toggleTabGroupCollapsed(tabGroupId, !collapsed)
-    props.updateCurrentTabGroupList()
-  }
+    const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
+        void saveTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
+    }
 
-  const runSaveTabGroup = (tabGroupId: number, tabGroupTitle: string): void => {
-    void saveTabGroup(tabGroupId, tabGroupTitle).then(() =>
-      props.getSavedTabGroupList()
+    const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean): void => {
+        void toggleTabGroupCollapsed(tabGroupId, !collapsed)
+        props.updateCurrentTabGroupList()
+    }
+
+    return (
+        <ListItem>
+            <ListItemButton
+                sx={{ pl: 4 }}
+                onClick={(e) => {
+                    handleTabGroupItemClick(e, false, props.tabGroupId, props.collapsed)
+                }}
+                onContextMenu={(e) => {
+                    handleTabGroupItemClick(e, true, props.tabGroupId, props.collapsed)
+                }}
+            >
+                <ListItemText>{props.tabGroupTitle}</ListItemText>
+            </ListItemButton>
+            <SaveIcon
+                onClick={() => {
+                    handleSaveIconClick(props.tabGroupTitle, props.tabGroupId)
+                }}
+            />
+            <CurrentTabGroupOption
+                tabGroupId={props.tabGroupId}
+                updateCurrentTabGroupList={props.updateCurrentTabGroupList}
+                setEditMode={props.setEditMode}
+                open={open}
+                anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+            />
+        </ListItem>
     )
-  }
-
-  return (
-    <ListItem>
-      <ListItemButton
-        sx={{ pl: 4 }}
-        onClick={(e) => {
-          handleTabGroupItemClick(e, false, props.id, props.collapsed)
-        }}
-        onContextMenu={(e) => {
-          handleTabGroupItemClick(e, true, props.id, props.collapsed)
-        }}
-      >
-        <ListItemText>{props.title}</ListItemText>
-      </ListItemButton>
-      <IconButton
-        onClick={() => {
-          runSaveTabGroup(props.id, props.title)
-        }}
-      >
-        <SaveAltIcon />
-      </IconButton>
-      <CurrentTabGroupOption
-        tabGroupId={props.id}
-        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-        setEditMode={props.setEditMode}
-        open={open}
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-      />
-    </ListItem>
-  )
 }
