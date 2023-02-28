@@ -3,10 +3,10 @@
 /*
  * タブのグループ化関連のユーティリティ
  */
-import type { GroupRule } from '../interface/groupRule'
+import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
 import { GROUP_MODE } from '../const/groupMode'
-import type { SavedTabGroupInfo } from '../interface/savedTabGroupInfo'
+import type { SavedTabGroupInfo } from '../types/savedTabGroupInfo'
 
 /*
  * 指定した条件でタブを取得する

@@ -4,8 +4,8 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import { ListItem, ListItemButton } from '@mui/material'
 import LayersIcon from '@mui/icons-material/Layers'
 import { groupActiveTabs } from '../../../common/utils/tabGroups'
-import type { GroupRule } from '../../../common/interface/groupRule'
-import type { SavedTabGroupInfo } from '../../../common/interface/savedTabGroupInfo'
+import type { GroupRule } from '../../../common/types/groupRule'
+import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 
 interface Props {
   // グループ化設定

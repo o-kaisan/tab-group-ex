@@ -1,9 +1,9 @@
 import React from 'react'
 import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
-import GroupActiveTabs from '../molecules/groupingFunctionItem/groupActiveTabs'
-import type { GroupRule } from '../../common/interface/groupRule'
-import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
+import GroupActiveTabs from '../molecules/GroupingFunctionItem/GroupActiveTabs'
+import type { GroupRule } from '../../common/types/groupRule'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
 interface Props {
   // グループ化設定

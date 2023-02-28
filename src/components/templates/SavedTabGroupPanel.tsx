@@ -1,7 +1,7 @@
 import React from 'react'
-import SavedTabGroupList from '../../components/organisms/savedTabGroupList'
-import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
-import TabPanel from '../atom/tabPanel'
+import SavedTabGroupList from '../../components/organisms/SavedTabGroupList'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
+import TabPanel from '../atom/TabPanel'
 
 interface Props {
   // 現在のタブ番号

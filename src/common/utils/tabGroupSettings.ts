@@ -1,4 +1,4 @@
-import type { GroupRule } from '../interface/groupRule'
+import type { GroupRule } from '../types/groupRule'
 import { GROUP_MODE } from '../const/groupMode'
 
 /*

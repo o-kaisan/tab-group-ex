@@ -7,9 +7,9 @@ import ClearIcon from '@mui/icons-material/Clear'
 import Button from '@mui/material/Button'
 import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
-import type { GroupRule } from '../../common/interface/groupRule'
+import type { GroupRule } from '../../common/types/groupRule'
 import { saveGroupRule } from '../../common/utils/tabGroupSettings'
-import NonRuleGrouping from '../molecules/settingItems/nonRuleGrouping'
+import NonRuleGrouping from '../molecules/SettingItems/NonRuleGrouping'
 
 interface Props {
   // グループ化設定

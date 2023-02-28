@@ -1,9 +1,9 @@
 import React from 'react'
-import ActiveTabGroupList from '../organisms/activeTabGroupList'
-import GroupingFunctionList from '../../components/organisms/groupingFunctionList'
-import type { GroupRule } from '../../common/interface/groupRule'
-import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
-import TabPanel from '../atom/tabPanel'
+import ActiveTabGroupList from '../organisms/ActiveTabGroupList'
+import GroupingFunctionList from '../../components/organisms/GroupingFunctionList'
+import type { GroupRule } from '../../common/types/groupRule'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
+import TabPanel from '../atom/TabPanel'
 
 /*
  * 拡張機能のメニュー

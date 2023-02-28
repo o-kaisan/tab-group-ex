@@ -1,33 +1,29 @@
 import React from 'react'
+import ListItemText from '@mui/material/ListItemText'
+import SaveAltIcon from '@mui/icons-material/SaveAlt'
+import { IconButton, ListItem, ListItemButton } from '@mui/material'
 import {
-  restoreTabGroup,
-  deleteTabGroup
+  saveTabGroup,
+  toggleTabGroupCollapsed
 } from '../../../common/utils/tabGroups'
-import {
-  IconButton,
-  ListItem,
-  ListItemButton,
-  ListItemText
-} from '@mui/material'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import SavedTabGroupOption from './savedTabGroupOption'
+import ActiveTabGroupOption from './ActiveTabGroupOption'
 
 interface Props {
   // タブグループID
   id: number
+  // タブグループの開閉
+  collapsed: boolean
   // タブグループのタイトル
   title: string
-  // タブグループのURLリスト
-  urlList: string[]
   // 編集モード
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
-  // 保存されたタブグループを取得するメソッド
+  // getSavedTabGroupListメソッド
   getSavedTabGroupList: Function
-  // タブグループを更新するメソッド
+  // updatedTabGroupListメソッド
   updatedTabGroupList: Function
 }
 
-export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
+export default function DisplayActiveTabGroup(props: Props): JSX.Element {
   // タブグループメニュを管理
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -35,33 +31,29 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
   const handleTabGroupItemClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     isRight: boolean,
-    title: string,
-    urlList: string[]
+    tabGroupId: number,
+    collapsed: boolean
   ): void => {
     e.preventDefault()
     if (isRight) {
       setAnchorEl(e.currentTarget)
     } else {
-      runRestoreTabGroup(title, urlList)
+      runUpdateTabGroupCollapsed(tabGroupId, collapsed)
     }
   }
 
-  const runDeleteTabGroup = (
-    tabGroupTitle: string,
-    tabGroupId: number
+  const runUpdateTabGroupCollapsed = (
+    tabGroupId: number,
+    collapsed: boolean
   ): void => {
-    void deleteTabGroup(tabGroupTitle, tabGroupId).then(() =>
-      props.getSavedTabGroupList()
-    )
+    void toggleTabGroupCollapsed(tabGroupId, !collapsed)
+    props.updatedTabGroupList()
   }
 
-  const runRestoreTabGroup = (
-    tabGroupTitle: string,
-    urlList: string[]
-  ): void => {
-    void restoreTabGroup(tabGroupTitle, urlList).then(() => {
-      props.updatedTabGroupList()
-    })
+  const runSaveTabGroup = (tabGroupId: number, tabGroupTitle: string): void => {
+    void saveTabGroup(tabGroupId, tabGroupTitle).then(() =>
+      props.getSavedTabGroupList()
+    )
   }
 
   return (
@@ -69,23 +61,24 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
       <ListItemButton
         sx={{ pl: 4 }}
         onClick={(e) => {
-          handleTabGroupItemClick(e, false, props.title, props.urlList)
+          handleTabGroupItemClick(e, false, props.id, props.collapsed)
         }}
         onContextMenu={(e) => {
-          handleTabGroupItemClick(e, true, props.title, props.urlList)
+          handleTabGroupItemClick(e, true, props.id, props.collapsed)
         }}
       >
         <ListItemText>{props.title}</ListItemText>
       </ListItemButton>
       <IconButton
         onClick={() => {
-          runDeleteTabGroup(props.title, props.id)
+          runSaveTabGroup(props.id, props.title)
         }}
       >
-        <DeleteForeverIcon />
+        <SaveAltIcon />
       </IconButton>
-      <SavedTabGroupOption
+      <ActiveTabGroupOption
         tabGroupId={props.id}
+        updatedTabGroupList={props.updatedTabGroupList}
         setEditMode={props.setEditMode}
         open={open}
         anchorEl={anchorEl}

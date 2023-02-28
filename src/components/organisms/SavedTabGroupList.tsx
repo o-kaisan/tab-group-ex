@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, ListSubheader } from '@mui/material'
-import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
-import SavedTabGroupItem from '../../components/molecules/savedTabGroupItem/savedTabGroupItem'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
+import SavedTabGroupItem from '../../components/molecules/SavedTabGroupItem/SavedTabGroupItem'
 
 interface Props {
   // タブグループID

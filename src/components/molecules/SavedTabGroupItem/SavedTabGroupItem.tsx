@@ -1,6 +1,6 @@
 import React from 'react'
-import DisplaySavedTabGroupItem from './displaySavedTabGroupItem'
-import EditSavedTabGroupItem from './editSavedTabGroupItem'
+import DisplaySavedTabGroupItem from './DisplaySavedTabGroupItem'
+import EditSavedTabGroupItem from './EditSavedTabGroupItem'
 
 interface Props {
   // タブグループID

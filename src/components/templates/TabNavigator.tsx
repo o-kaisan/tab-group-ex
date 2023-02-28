@@ -3,9 +3,9 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { v4 as uuidv4 } from 'uuid'
-import ActiveTabGroupPanel from '../templates/activeTabGroupPanel'
-import SettingsPanel from '../templates/settingsPanel'
-import SavedTabGroupPanel from '../templates/savedTabGroupPanel'
+import ActiveTabGroupPanel from '../templates/ActiveTabGroupPanel'
+import SettingsPanel from '../templates/SettingsPanel'
+import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import {
   getSavedGroupMode,
   getSavedIgnoreRule,
@@ -16,9 +16,9 @@ import {
   getAllSavedTabGroup
 } from '../../common/utils/tabGroups'
 import { GROUP_MODE } from '../../common/const/groupMode'
-import type { SavedTabGroupInfo } from '../../common/interface/savedTabGroupInfo'
-import type { GroupRule } from '../../common/interface/groupRule'
-import GroupRulesPanel from './groupRulesPanel'
+import type { SavedTabGroupInfo } from '../../common/types/SavedTabGroupInfo'
+import type { GroupRule } from '../../common/types/groupRule'
+import GroupRulesPanel from './GroupRulesPanel'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {

@@ -1,6 +1,6 @@
 import React from 'react'
-import EditActiveTabGroup from './editActiveTabGroup'
-import DisplayActiveTabGroup from './displayActiveTabGroup'
+import EditActiveTabGroup from './EditActiveTabGroup'
+import DisplayActiveTabGroup from './DisplayActiveTabGroup'
 
 interface Props {
   // タブグループID

@@ -1,7 +1,7 @@
 import React from 'react'
-import TabPanel from '../atom/tabPanel'
-import GroupRulesList from '../organisms/groupRulesList'
-import type { GroupRule } from '../../common/interface/groupRule'
+import TabPanel from '../atom/TabPanel'
+import GroupRulesList from '../organisms/GroupRulesList'
+import type { GroupRule } from '../../common/types/groupRule'
 
 interface Props {
   // 現在のタブ番号

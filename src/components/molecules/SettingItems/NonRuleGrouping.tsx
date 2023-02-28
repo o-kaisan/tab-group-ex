@@ -3,6 +3,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import Switch from '@mui/material/Switch'
 import { saveIgnoreRule } from '../../../common/utils/tabGroupSettings'
+
 interface Props {
   // 対象のドメイン以外のタブをグループ化するかの設定
   ignoreRule: boolean

@@ -1,7 +1,7 @@
 import React from 'react'
 import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
-import ActiveTabGroupItem from '../../components/molecules/activeTabGroupItem/activeTabGroupItem'
+import ActiveTabGroupItem from '../../components/molecules/ActiveTabGroupItem/ActiveTabGroupItem'
 
 interface Props {
   // タブグループの一覧のステート

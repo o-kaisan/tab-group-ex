@@ -1,8 +1,8 @@
 import React from 'react'
 import List from '@mui/material/List'
 import ListSubheader from '@mui/material/ListSubheader'
-import SelectTabGroupMode from '../molecules/settingItems/selectTabGroupMode'
-import type { GroupRule } from '../../common/interface/groupRule'
+import SelectTabGroupMode from '../molecules/SettingItems/SelectTabGroupMode'
+import type { GroupRule } from '../../common/types/groupRule'
 
 interface Props {
   // グループ化設定

@@ -1,8 +1,8 @@
 import React from 'react'
-import SettingList from '../organisms/settingList'
-import type { GroupRule } from '../../common/interface/groupRule'
-import TabPanel from '../atom/tabPanel'
-import { SettingsDescription } from '../molecules/settingItems/settingsDescription'
+import SettingList from '../organisms/SettingList'
+import type { GroupRule } from '../../common/types/groupRule'
+import TabPanel from '../atom/TabPanel'
+import { SettingsDescription } from '../molecules/SettingItems/SettingsDescription'
 
 interface Props {
   // 現在のタブ番号
