@@ -12,6 +12,7 @@ interface Props {
   updatedTabGroupList: Function
 }
 
+// TODO なにもないときにないことがわかるようにしたい
 export default function SavedTabGroupList(props: Props): JSX.Element {
   return (
     <List>

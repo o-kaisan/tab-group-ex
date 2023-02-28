@@ -1,5 +1,3 @@
-// TODO 全体的にリファクタリングしたい
-
 /*
  * タブのグループ化関連のユーティリティ
  */
@@ -112,13 +110,13 @@ async function updateTabGroups(
 /*
  * 設定に従ってタブをグループ化
  */
-export async function groupActiveTabs(
+export async function groupCurrentTabs(
   groupMode: string,
   groupRule: GroupRule[] | undefined,
   ignoreRule: boolean
 ): Promise<void> {
   if (groupMode === GROUP_MODE.DOMAIN) {
-    await groupActiveTabsByDomain()
+    await groupCurrentTabsByDomain()
   }
 
   if (groupMode === GROUP_MODE.CUSTOM) {
@@ -130,18 +128,18 @@ export async function groupActiveTabs(
     groupRule.forEach((rule: GroupRule) => {
       groupRuleList.push(rule.domain)
     })
-    await groupActiveTabsByCustom(groupRuleList, ignoreRule)
+    await groupCurrentTabsByCustom(groupRuleList, ignoreRule)
   }
 
   if (groupMode === GROUP_MODE.DEFAULT) {
-    await groupAllActiveTabs()
+    await groupAllCurrentTabs()
   }
 }
 /*
  * カスタムルールに従ってタブをグループ化
  * サブドメインも含むグループ化となる
  */
-async function groupActiveTabsByCustom(
+async function groupCurrentTabsByCustom(
   groupRules: string[],
   ignoreRule: boolean
 ): Promise<void> {
@@ -192,7 +190,7 @@ async function groupActiveTabsByCustom(
   // ルール外のタブをグループ化
   if (ignoreRule) {
     try {
-      await groupAllActiveTabs()
+      await groupAllCurrentTabs()
     } catch (err) {
       console.log('failed to group non-rule tabs %d', err)
     }
@@ -202,7 +200,7 @@ async function groupActiveTabsByCustom(
 /*
  * タブをドメインごとにグループ化
  */
-async function groupActiveTabsByDomain(): Promise<void> {
+async function groupCurrentTabsByDomain(): Promise<void> {
   // タブを取得
   const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs()
   // ドメインを取得
@@ -239,7 +237,7 @@ async function groupActiveTabsByDomain(): Promise<void> {
 /*
  * タブを全てグループ化
  */
-async function groupAllActiveTabs(): Promise<void> {
+async function groupAllCurrentTabs(): Promise<void> {
   const tabs = await getNoneGroupedTabs()
   const tabIdList: number[] = getTabIdList(tabs)
   await createTabGroups(tabIdList)

@@ -11,11 +11,11 @@ interface Props {
   title: string
   // 編集モード
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
-  // updatedTabGroupListメソッド
-  updatedTabGroupList: Function
+  // updateCurrentTabGroupListメソッド
+  updateCurrentTabGroupList: Function
 }
 
-export default function EditActiveTabGroup(props: Props): JSX.Element {
+export default function EditCurrentTabGroup(props: Props): JSX.Element {
   const [tabGroupTitle, setTabGroupTitle] = React.useState(props.title)
 
   const runUpdateTabGroupName = (
@@ -23,7 +23,7 @@ export default function EditActiveTabGroup(props: Props): JSX.Element {
     tabGroupTitle: string
   ): void => {
     void updateTabGroupName(tabGroupId, tabGroupTitle).then(() => {
-      props.updatedTabGroupList()
+      props.updateCurrentTabGroupList()
       props.setEditMode(false)
     })
   }

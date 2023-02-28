@@ -3,7 +3,7 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import { ListItem, ListItemButton } from '@mui/material'
 import LayersIcon from '@mui/icons-material/Layers'
-import { groupActiveTabs } from '../../../common/utils/tabGroups'
+import { groupCurrentTabs } from '../../../common/utils/tabGroups'
 import type { GroupRule } from '../../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 
@@ -17,21 +17,19 @@ interface Props {
   // タブグループの保存処理
   setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
   // タブグループの更新処理
-  updatedTabGroupList: Function
+  updateCurrentTabGroupList: Function
   // タブグループの取得処理
   getSavedTabGroupList: Function
-  // タブグループの一覧
-  activeTabGroup: chrome.tabGroups.TabGroup[]
 }
 
-export default function GroupActiveTabs(props: Props): JSX.Element {
+export default function GroupCurrentTabs(props: Props): JSX.Element {
   /*
    * タブをグループ化
    */
-  const runGroupActiveTabs = (): void => {
-    groupActiveTabs(props.groupMode, props.groupRule, props.ignoreRule)
+  const handleClick = (): void => {
+    groupCurrentTabs(props.groupMode, props.groupRule, props.ignoreRule)
       .then(() => {
-        props.updatedTabGroupList()
+        props.updateCurrentTabGroupList()
       })
       .catch((error) => {
         console.log(error)
@@ -39,7 +37,7 @@ export default function GroupActiveTabs(props: Props): JSX.Element {
   }
   return (
     <ListItem>
-      <ListItemButton onClick={runGroupActiveTabs}>
+      <ListItemButton onClick={handleClick}>
         <ListItemIcon>
           <LayersIcon fontSize="small" />
         </ListItemIcon>

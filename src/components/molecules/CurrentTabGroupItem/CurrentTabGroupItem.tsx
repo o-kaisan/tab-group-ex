@@ -1,6 +1,6 @@
 import React from 'react'
-import EditActiveTabGroup from './EditActiveTabGroup'
-import DisplayActiveTabGroup from './DisplayActiveTabGroup'
+import EditCurrentTabGroup from './EditCurrentTabGroup'
+import DisplayCurrentTabGroup from './DisplayCurrentTabGroup'
 
 interface Props {
   // タブグループID
@@ -11,11 +11,11 @@ interface Props {
   title?: string
   // getSavedTabGroupList
   getSavedTabGroupList: Function
-  // updatedTabGroupListメソッド
-  updatedTabGroupList: Function
+  // updateCurrentTabGroupListメソッド
+  updateCurrentTabGroupList: Function
 }
 
-export default function ActiveTabGroupItem(props: Props): JSX.Element {
+export default function CurrentTabGroupItem(props: Props): JSX.Element {
   const resolveTitle = (title: string | undefined): string => {
     if (title === undefined) {
       title = 'none title'
@@ -29,20 +29,20 @@ export default function ActiveTabGroupItem(props: Props): JSX.Element {
   return (
     <div>
       {editMode ? (
-        <EditActiveTabGroup
+        <EditCurrentTabGroup
           id={props.id}
           title={_title}
           setEditMode={setEditMode}
-          updatedTabGroupList={props.updatedTabGroupList}
+          updateCurrentTabGroupList={props.updateCurrentTabGroupList}
         />
       ) : (
-        <DisplayActiveTabGroup
+        <DisplayCurrentTabGroup
           id={props.id}
           collapsed={props.collapsed}
           title={_title}
           setEditMode={setEditMode}
           getSavedTabGroupList={props.getSavedTabGroupList}
-          updatedTabGroupList={props.updatedTabGroupList}
+          updateCurrentTabGroupList={props.updateCurrentTabGroupList}
         />
       )}
     </div>

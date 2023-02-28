@@ -14,7 +14,7 @@ interface Props {
   // タブグループID
   tabGroupId: number
   // タブ一覧を更新するメソッド
-  updatedTabGroupList: Function
+  updateCurrentTabGroupList: Function
   // タブの編集モードを更新するメソッド
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   // オプションの状態
@@ -66,7 +66,7 @@ const StyledMenu = styled((props: MenuProps) => (
   }
 }))
 
-export default function ActiveTabGroupOption(props: Props): JSX.Element {
+export default function CurrentTabGroupOption(props: Props): JSX.Element {
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     props.setAnchorEl(event.currentTarget)
   }
@@ -86,14 +86,14 @@ export default function ActiveTabGroupOption(props: Props): JSX.Element {
      */
     handleClose()
     void ungroupTabs(tabGroupId).then(() => {
-      props.updatedTabGroupList()
+      props.updateCurrentTabGroupList()
     })
   }
 
   const runRemoveTabGroups = (tabGroupId: number): void => {
     handleClose()
     void closeTabGroup(tabGroupId).then(() => {
-      props.updatedTabGroupList()
+      props.updateCurrentTabGroupList()
     })
   }
 

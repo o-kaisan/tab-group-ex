@@ -1,7 +1,7 @@
 import React from 'react'
 import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
-import GroupActiveTabs from '../molecules/GroupingFunctionItem/GroupActiveTabs'
+import GroupCurrentTabs from '../molecules/GroupingFunctionItem/GroupCurrentTabs'
 import type { GroupRule } from '../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
@@ -15,25 +15,22 @@ interface Props {
   // タブグループの保存処理
   setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
   // タブグループの更新処理
-  updatedTabGroupList: Function
+  updateCurrentTabGroupList: Function
   // タブグループの取得処理
   getSavedTabGroupList: Function
-  // タブグループの一覧
-  activeTabGroup: chrome.tabGroups.TabGroup[]
 }
 
 export default function GroupingFunctionList(props: Props): JSX.Element {
   return (
     <List>
       <ListSubheader>Grouping</ListSubheader>
-      <GroupActiveTabs
+      <GroupCurrentTabs
         groupMode={props.groupMode}
         ignoreRule={props.ignoreRule}
         groupRule={props.groupRule}
         setSavedTabGroup={props.setSavedTabGroup}
-        updatedTabGroupList={props.updatedTabGroupList}
+        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
         getSavedTabGroupList={props.getSavedTabGroupList}
-        activeTabGroup={props.activeTabGroup}
       />
     </List>
   )

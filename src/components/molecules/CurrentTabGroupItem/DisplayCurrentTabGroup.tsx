@@ -6,7 +6,7 @@ import {
   saveTabGroup,
   toggleTabGroupCollapsed
 } from '../../../common/utils/tabGroups'
-import ActiveTabGroupOption from './ActiveTabGroupOption'
+import CurrentTabGroupOption from './CurrentTabGroupOption'
 
 interface Props {
   // タブグループID
@@ -19,11 +19,11 @@ interface Props {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>
   // getSavedTabGroupListメソッド
   getSavedTabGroupList: Function
-  // updatedTabGroupListメソッド
-  updatedTabGroupList: Function
+  // updateCurrentTabGroupListメソッド
+  updateCurrentTabGroupList: Function
 }
 
-export default function DisplayActiveTabGroup(props: Props): JSX.Element {
+export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
   // タブグループメニュを管理
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -47,7 +47,7 @@ export default function DisplayActiveTabGroup(props: Props): JSX.Element {
     collapsed: boolean
   ): void => {
     void toggleTabGroupCollapsed(tabGroupId, !collapsed)
-    props.updatedTabGroupList()
+    props.updateCurrentTabGroupList()
   }
 
   const runSaveTabGroup = (tabGroupId: number, tabGroupTitle: string): void => {
@@ -76,9 +76,9 @@ export default function DisplayActiveTabGroup(props: Props): JSX.Element {
       >
         <SaveAltIcon />
       </IconButton>
-      <ActiveTabGroupOption
+      <CurrentTabGroupOption
         tabGroupId={props.id}
-        updatedTabGroupList={props.updatedTabGroupList}
+        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
         setEditMode={props.setEditMode}
         open={open}
         anchorEl={anchorEl}

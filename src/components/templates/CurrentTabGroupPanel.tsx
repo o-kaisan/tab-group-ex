@@ -1,5 +1,5 @@
 import React from 'react'
-import ActiveTabGroupList from '../organisms/ActiveTabGroupList'
+import CurrentTabGroupList from '../organisms/CurrentTabGroupList'
 import GroupingFunctionList from '../../components/organisms/GroupingFunctionList'
 import type { GroupRule } from '../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
@@ -22,14 +22,14 @@ interface Props {
   // タブグループの保存処理
   setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
   // タブグループの更新処理
-  updatedTabGroupList: Function
+  updateCurrentTabGroupList: Function
   // タブグループの取得処理
   getSavedTabGroupList: Function
   // タブグループの一覧
-  activeTabGroup: chrome.tabGroups.TabGroup[]
+  currentTabGroups: chrome.tabGroups.TabGroup[]
 }
 
-export default function ActiveTabGroupPanel(props: Props): JSX.Element {
+export default function CurrentTabGroupPanel(props: Props): JSX.Element {
   return (
     <TabPanel value={props.tab} index={props.index}>
       <GroupingFunctionList
@@ -37,14 +37,13 @@ export default function ActiveTabGroupPanel(props: Props): JSX.Element {
         ignoreRule={props.ignoreRule}
         groupRule={props.groupRule}
         setSavedTabGroup={props.setSavedTabGroup}
-        updatedTabGroupList={props.updatedTabGroupList}
+        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
         getSavedTabGroupList={props.getSavedTabGroupList}
-        activeTabGroup={props.activeTabGroup}
       />
-      <ActiveTabGroupList
-        activeTabGroup={props.activeTabGroup}
+      <CurrentTabGroupList
+        currentTabGroups={props.currentTabGroups}
         getSavedTabGroupList={props.getSavedTabGroupList}
-        updatedTabGroupList={props.updatedTabGroupList}
+        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
       />
     </TabPanel>
   )

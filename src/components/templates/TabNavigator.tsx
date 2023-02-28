@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { v4 as uuidv4 } from 'uuid'
-import ActiveTabGroupPanel from '../templates/ActiveTabGroupPanel'
+import CurrentTabGroupPanel from '../templates/CurrentTabGroupPanel'
 import SettingsPanel from '../templates/SettingsPanel'
 import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import {
@@ -16,7 +16,7 @@ import {
   getAllSavedTabGroup
 } from '../../common/utils/tabGroups'
 import { GROUP_MODE } from '../../common/const/groupMode'
-import type { SavedTabGroupInfo } from '../../common/types/SavedTabGroupInfo'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 import type { GroupRule } from '../../common/types/groupRule'
 import GroupRulesPanel from './GroupRulesPanel'
 
@@ -44,7 +44,7 @@ export default function TabNavigator(): JSX.Element {
     []
   )
   // タブグループの一覧
-  const [activeTabGroup, setActiveTabGroup] = useState<
+  const [currentTabGroups, setCurrentTabGroups] = useState<
     chrome.tabGroups.TabGroup[]
   >([])
 
@@ -52,7 +52,7 @@ export default function TabNavigator(): JSX.Element {
   useEffect(() => {
     getAllTabGroupList()
       .then((tabGroupList: chrome.tabGroups.TabGroup[]) => {
-        setActiveTabGroup(tabGroupList)
+        setCurrentTabGroups(tabGroupList)
       })
       .catch((error) => {
         console.log(error)
@@ -97,11 +97,13 @@ export default function TabNavigator(): JSX.Element {
     })
   }
 
+  // TODO updateとgetで表記ゆれしている → updateがよさそうな気がする
+  // TODO なんのタブグループリストかわからない
   // タブグループを最新化
-  const updatedTabGroupList = (): void => {
+  const updateCurrentTabGroupList = (): void => {
     getAllTabGroupList()
       .then((tabGroupList) => {
-        setActiveTabGroup(tabGroupList)
+        setCurrentTabGroups(tabGroupList)
       })
       .catch((error) => {
         console.log(error)
@@ -109,7 +111,6 @@ export default function TabNavigator(): JSX.Element {
   }
 
   return (
-    // TODO タブのサイズ
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
@@ -123,23 +124,23 @@ export default function TabNavigator(): JSX.Element {
           <Tab label="Settings" {...a11yProps(3)} />
         </Tabs>
       </Box>
-      <ActiveTabGroupPanel
+      <CurrentTabGroupPanel
         tab={tab}
         index={0}
         groupMode={groupMode}
         ignoreRule={ignoreRule}
         groupRule={groupRule}
         setSavedTabGroup={setSavedTabGroup}
-        updatedTabGroupList={updatedTabGroupList}
+        updateCurrentTabGroupList={updateCurrentTabGroupList}
         getSavedTabGroupList={getSavedTabGroupList}
-        activeTabGroup={activeTabGroup}
+        currentTabGroups={currentTabGroups}
       />
       <SavedTabGroupPanel
         tab={tab}
         index={1}
         savedTabGroup={savedTabGroup}
         getSavedTabGroupList={getSavedTabGroupList}
-        updatedTabGroupList={updatedTabGroupList}
+        updateCurrentTabGroupList={updateCurrentTabGroupList}
       />
       <GroupRulesPanel
         tab={tab}
