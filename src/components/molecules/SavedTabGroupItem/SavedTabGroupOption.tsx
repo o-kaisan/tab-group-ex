@@ -3,7 +3,6 @@ import MenuEditItem from '../../atoms/Menu/MenuItem/MenuEditItem'
 import OptionIcon from '../../atoms/Icons/OptionIcon'
 import { StyledMenu } from '../../atoms/Menu/StyledMenu/StyledMenu'
 
-
 interface Props {
     tabGroupId: number
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,10 +23,7 @@ export default function SavedTabGroupOption(props: Props): JSX.Element {
 
     return (
         <div>
-            <OptionIcon
-                open={props.open}
-                setAnchorEl={props.setAnchorEl}
-            />
+            <OptionIcon open={props.open} setAnchorEl={props.setAnchorEl} />
             <StyledMenu
                 id="demo-customized-menu"
                 MenuListProps={{

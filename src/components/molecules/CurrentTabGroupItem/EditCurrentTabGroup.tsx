@@ -44,8 +44,16 @@ export default function EditCurrentTabGroup(props: Props): JSX.Element {
                 onChange={handleTextChange}
                 onKeyDown={handleKeyDown}
             />
-            <ApplyIcon onClick={() => { handleApplyIconClick(props.tabGroupId, tabGroupTitle) }} />
-            <CancelIcon onClick={() => { handleCancelIconClick() }} />
+            <ApplyIcon
+                onClick={() => {
+                    handleApplyIconClick(props.tabGroupId, tabGroupTitle)
+                }}
+            />
+            <CancelIcon
+                onClick={() => {
+                    handleCancelIconClick()
+                }}
+            />
         </ListItem>
     )
 }

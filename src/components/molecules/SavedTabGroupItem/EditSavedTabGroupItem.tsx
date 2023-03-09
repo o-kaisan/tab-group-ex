@@ -62,6 +62,6 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
                     cancelEditMode()
                 }}
             />
-        </ListItem >
+        </ListItem>
     )
 }

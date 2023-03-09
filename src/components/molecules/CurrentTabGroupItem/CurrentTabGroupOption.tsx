@@ -44,10 +44,7 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
 
     return (
         <div>
-            <OptionIcon
-                open={props.open}
-                setAnchorEl={props.setAnchorEl}
-            />
+            <OptionIcon open={props.open} setAnchorEl={props.setAnchorEl} />
             <StyledMenu
                 id="demo-customized-menu"
                 MenuListProps={{
