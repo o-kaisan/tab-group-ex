@@ -1,4 +1,4 @@
 export interface GroupRule {
-  id: string
-  domain: string
+    id: string
+    domain: string
 }

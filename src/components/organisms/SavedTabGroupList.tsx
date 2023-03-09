@@ -2,31 +2,32 @@ import React from 'react'
 import { List, ListSubheader } from '@mui/material'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 import SavedTabGroupItem from '../../components/molecules/SavedTabGroupItem/SavedTabGroupItem'
+import NoListItem from '../molecules/NoListItem/NoListItem'
 
 interface Props {
-  // タブグループID
-  savedTabGroup: SavedTabGroupInfo[]
-  // 保存されたタブグループを取得するメソッド
-  getSavedTabGroupList: Function
-  // タブグループを更新するメソッド
-  updatedTabGroupList: Function
+    savedTabGroup: SavedTabGroupInfo[]
+    updateSavedTabGroupList: Function
+    updateCurrentTabGroupList: Function
 }
 
-// TODO なにもないときにないことがわかるようにしたい
 export default function SavedTabGroupList(props: Props): JSX.Element {
-  return (
-    <List>
-      <ListSubheader>Saved TabGroups</ListSubheader>
-      {props.savedTabGroup.map((tabGroup) => (
-        <SavedTabGroupItem
-          key={tabGroup.id}
-          id={tabGroup.id}
-          title={tabGroup.title}
-          urlList={tabGroup.urlList}
-          getSavedTabGroupList={props.getSavedTabGroupList}
-          updatedTabGroupList={props.updatedTabGroupList}
-        />
-      ))}
-    </List>
-  )
+    return (
+        <List>
+            <ListSubheader>Saved TabGroups</ListSubheader>
+            {props.savedTabGroup.length > 0 ? (
+                props.savedTabGroup.map((tabGroup) => (
+                    <SavedTabGroupItem
+                        key={tabGroup.tabGroupId}
+                        tabGroupId={tabGroup.tabGroupId}
+                        tabGroupTitle={tabGroup.title}
+                        urlList={tabGroup.urlList}
+                        updateSavedTabGroupList={props.updateSavedTabGroupList}
+                        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
+                    />
+                ))
+            ) : (
+                <NoListItem />
+            )}
+        </List>
+    )
 }

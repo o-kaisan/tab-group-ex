@@ -3,40 +3,35 @@ import DisplaySavedTabGroupItem from './DisplaySavedTabGroupItem'
 import EditSavedTabGroupItem from './EditSavedTabGroupItem'
 
 interface Props {
-  // タブグループID
-  id: number
-  // タブグループのタイトル
-  title: string
-  // タブグループのURLリスト
-  urlList: string[]
-  // 保存されたタブグループを取得するメソッド
-  getSavedTabGroupList: Function
-  // タブグループを更新するメソッド
-  updatedTabGroupList: Function
+    tabGroupId: number
+    tabGroupTitle: string
+    urlList: string[]
+    updateSavedTabGroupList: Function
+    updateCurrentTabGroupList: Function
 }
 
 export default function SavedTabGroupItem(props: Props): JSX.Element {
-  const [editMode, setEditMode] = React.useState(false)
+    const [editMode, setEditMode] = React.useState(false)
 
-  return (
-    <div>
-      {editMode ? (
-        <EditSavedTabGroupItem
-          id={props.id}
-          title={props.title}
-          setEditMode={setEditMode}
-          getSavedTabGroupList={props.getSavedTabGroupList}
-        />
-      ) : (
-        <DisplaySavedTabGroupItem
-          id={props.id}
-          title={props.title}
-          urlList={props.urlList}
-          setEditMode={setEditMode}
-          getSavedTabGroupList={props.getSavedTabGroupList}
-          updatedTabGroupList={props.updatedTabGroupList}
-        />
-      )}
-    </div>
-  )
+    return (
+        <div>
+            {editMode ? (
+                <EditSavedTabGroupItem
+                    tabGroupId={props.tabGroupId}
+                    tabGroupTitle={props.tabGroupTitle}
+                    setEditMode={setEditMode}
+                    updateSavedTabGroupList={props.updateSavedTabGroupList}
+                />
+            ) : (
+                <DisplaySavedTabGroupItem
+                    tabGroupId={props.tabGroupId}
+                    tabGroupTitle={props.tabGroupTitle}
+                    urlList={props.urlList}
+                    setEditMode={setEditMode}
+                    updateSavedTabGroupList={props.updateSavedTabGroupList}
+                    updateCurrentTabGroupList={props.updateCurrentTabGroupList}
+                />
+            )}
+        </div>
+    )
 }
