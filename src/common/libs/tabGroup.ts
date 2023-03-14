@@ -64,11 +64,11 @@ async function updateTabGroups(tabIdList: number[], title: string): Promise<void
  * 設定に従ってタブをグループ化
  */
 export async function groupCurrentTabs(groupMode: string, groupRule: GroupRule[] | undefined): Promise<void> {
-    if (groupMode === GROUP_MODE.DOMAIN) {
+    if (groupMode === GROUP_MODE.domain) {
         await groupCurrentTabsByDomain()
     }
 
-    if (groupMode === GROUP_MODE.CUSTOM) {
+    if (groupMode === GROUP_MODE.customDomain) {
         if (groupRule === undefined) {
             return
         }
@@ -80,7 +80,7 @@ export async function groupCurrentTabs(groupMode: string, groupRule: GroupRule[]
         await groupCurrentTabsByCustom(groupRuleList)
     }
 
-    if (groupMode === GROUP_MODE.DEFAULT) {
+    if (groupMode === GROUP_MODE.all) {
         await groupAllCurrentTabs()
     }
 }

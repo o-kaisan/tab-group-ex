@@ -27,7 +27,7 @@ export default function TabNavigator(): JSX.Element {
     // 表示するタブを管理
     const [panelTab, setPanelTab] = React.useState(0)
     // グループ化する設定
-    const [groupMode, setGroupMode] = React.useState<string>(GROUP_MODE.DEFAULT)
+    const [groupMode, setGroupMode] = React.useState<string>(GROUP_MODE.all)
     // カスタムルール
     const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{ id: uuidv4(), domain: '' }])
     // 保存されたタブグループの一覧

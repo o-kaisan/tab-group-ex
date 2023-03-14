@@ -31,9 +31,9 @@ export default function SelectTabGroupMode(props: Props): JSX.Element {
                     onChange={handleChange}
                     label="GroupMode"
                 >
-                    <MenuItem value={GROUP_MODE.DEFAULT}>Default</MenuItem>
-                    <MenuItem value={GROUP_MODE.DOMAIN}>Domain</MenuItem>
-                    <MenuItem value={GROUP_MODE.CUSTOM}>Custom</MenuItem>
+                    <MenuItem value={GROUP_MODE.all}>{GROUP_MODE.all}</MenuItem>
+                    <MenuItem value={GROUP_MODE.domain}>{GROUP_MODE.domain}</MenuItem>
+                    <MenuItem value={GROUP_MODE.customDomain}>{GROUP_MODE.customDomain}</MenuItem>
                 </Select>
             </FormControl>
         </ListItem>

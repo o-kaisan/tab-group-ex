@@ -1,5 +1,5 @@
 export const GROUP_MODE = {
-    DEFAULT: 'Default',
-    DOMAIN: 'Domain',
-    CUSTOM: 'Custom'
+    all: 'All',
+    domain: 'Domain',
+    customDomain: 'Custom Domain'
 }

@@ -14,7 +14,7 @@ export async function getSavedGroupMode(): Promise<string> {
     const groupModeKV = await chrome.storage.local.get('groupMode')
     let ret: string = groupModeKV.groupMode
     if (ret === undefined) {
-        ret = GROUP_MODE.DEFAULT
+        ret = GROUP_MODE.all
     }
     return ret
 }

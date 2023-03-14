@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/types/groupRule'
 import { saveGroupRule } from '../../common/libs/groupRule'
+import { GROUP_MODE } from '../../common/const/groupMode'
 
 interface Props {
     groupMode: string
@@ -49,7 +50,7 @@ export default function GroupRulesList(props: Props): JSX.Element {
 
     return (
         <List>
-            <ListSubheader>Group Rules For Custom</ListSubheader>
+            <ListSubheader>Group Rules For {GROUP_MODE.customDomain}</ListSubheader>
             {props.groupRule.map((rule: GroupRule) => (
                 <ListItem key={rule.id}>
                     <TextField
