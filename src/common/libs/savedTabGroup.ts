@@ -22,7 +22,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): P
         urlList: urls
     }
 
-    // タブグループがundifinedだったらストレージに保存せずに返却
+    // タブグループがundefinedだったらストレージに保存せずに返却
     if (tabGroupTitle === undefined) return
     const storageKey: string = resolveStorageKeyforTabGroup(renamedTabGroupTitle, tabGroupId)
     await chrome.storage.local.set({ [storageKey]: saveTabGroupInfo })
@@ -64,33 +64,6 @@ function duplicateRenameTabGroupTitle(
 export async function getTabGroupFromStorage(key: string): Promise<{ [key: string]: any }> {
     const savedTabGroup = await chrome.storage.local.get(key)
     return savedTabGroup
-}
-
-/*
- * 保存されたタブグループの名前を更新する
- */
-export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string): Promise<void> {
-    const targetTabGroup: string = resolveStorageKeyforTabGroup(title, tabGroupId)
-
-    // 名前を変換するために保存前の情報を取得
-    const tabGroupObj = await getTabGroupFromStorage(targetTabGroup)
-
-    // 元の保存されたタブグループを削除
-    await deleteTabGroup(title, tabGroupId)
-
-    // 同じ名前のグループ名があるかを確認し、同じ   名前があればrename
-    const savedTabGroups = await getAllSavedTabGroup()
-    const renamedTabGroupTitle = duplicateRenameTabGroupTitle(renamedTitle, savedTabGroups)
-
-    const tabGroupInfo: SavedTabGroupInfo = {
-        type: 'TGEX',
-        tabGroupId,
-        title: renamedTabGroupTitle,
-        urlList: tabGroupObj.urlList
-    }
-    // 新しく名前を変更してストレージに保存
-    const storageTitle: string = resolveStorageKeyforTabGroup(renamedTabGroupTitle, tabGroupId)
-    await chrome.storage.local.set({ [storageTitle]: tabGroupInfo })
 }
 
 /*
@@ -144,7 +117,7 @@ async function restoreTab(url: string): Promise<number | undefined> {
 }
 
 /*
- * タブグループをストレージから削除する // TODO なんかバグってる。消えない時がある
+ * タブグループをストレージから削除する
  */
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
     const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
@@ -157,4 +130,12 @@ export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number):
 function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number): string {
     const TabGroupKey: string = `TG_${tabGroupTitle}${String(tabGroupId)}`
     return TabGroupKey
+}
+
+/*
+ * 保存されたタブグループの名前を更新する
+ */
+export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string): Promise<void> {
+    await deleteTabGroup(title, tabGroupId)
+    await saveTabGroup(renamedTitle, tabGroupId)
 }
