@@ -7,7 +7,8 @@ import SettingsPanel from '../templates/SettingsPanel'
 import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
 import { v4 as uuidv4 } from 'uuid'
-import { getSavedGroupMode } from '../../common/libs/groupMode'
+import { getSavedGroupModeSetting } from '../../common/libs/groupMode'
+import { getAutoGroupingSetting } from '../../common/libs/autoGrouping'
 import { getSavedGroupRule } from '../../common/libs/groupRule'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
 import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
@@ -34,6 +35,8 @@ export default function TabNavigator(): JSX.Element {
     const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([])
     // タブグループの一覧
     const [currentTabGroups, setCurrentTabGroups] = useState<chrome.tabGroups.TabGroup[]>([])
+    // 自動タブグループ設定
+    const [autoGrouping, setAutoGrouping] = useState(false);
 
     // 画面表示時にウィンドウのタブグループを読み込む
     useEffect(() => {
@@ -55,7 +58,7 @@ export default function TabNavigator(): JSX.Element {
 
     // 画面表示時にグループ化設定を取得
     useEffect(() => {
-        void getSavedGroupMode().then((value: string) => {
+        void getSavedGroupModeSetting().then((value: string) => {
             setGroupMode(value)
         })
     }, [])
@@ -64,6 +67,14 @@ export default function TabNavigator(): JSX.Element {
     useEffect(() => {
         updateSavedTabGroupList()
     }, [])
+
+    // 画面表示時にストレージに保存された自動グルーピング設定を読み込む
+    useEffect(() => {
+        void getAutoGroupingSetting().then((value: boolean) => {
+            setAutoGrouping(value)
+        })
+    }, [])
+
 
     // タブを切り替える
     const handleChange = (_event: React.SyntheticEvent, newTab: number): void => {
@@ -130,6 +141,8 @@ export default function TabNavigator(): JSX.Element {
                 setGroupMode={setGroupMode}
                 groupRule={groupRule}
                 setGroupRule={setGroupRule}
+                autoGrouping={autoGrouping}
+                setAutoGrouping={setAutoGrouping}
             />
         </Box>
     )

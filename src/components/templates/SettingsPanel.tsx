@@ -10,6 +10,8 @@ interface Props {
     setGroupMode: React.Dispatch<React.SetStateAction<string>>
     groupRule: GroupRule[]
     setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
+    autoGrouping: boolean
+    setAutoGrouping: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function SettingsPanel(props: Props): JSX.Element {
@@ -20,6 +22,8 @@ export default function SettingsPanel(props: Props): JSX.Element {
                 setGroupMode={props.setGroupMode}
                 groupRule={props.groupRule}
                 setGroupRule={props.setGroupRule}
+                autoGrouping={props.autoGrouping}
+                setAutoGrouping={props.setAutoGrouping}
             />
         </TabPanel>
     )

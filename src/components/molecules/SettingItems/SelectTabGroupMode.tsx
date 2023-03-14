@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import type { SelectChangeEvent } from '@mui/material/Select'
-import { saveGroupMode } from '../../../common/libs/groupMode'
+import { saveGroupModeSetting } from '../../../common/libs/groupMode'
 import { GROUP_MODE } from '../../../common/const/groupMode'
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 
 export default function SelectTabGroupMode(props: Props): JSX.Element {
     const handleChange = (event: SelectChangeEvent): void => {
-        void saveGroupMode(event.target.value).then(() => {
+        void saveGroupModeSetting(event.target.value).then(() => {
             props.setGroupMode(event.target.value)
         })
     }

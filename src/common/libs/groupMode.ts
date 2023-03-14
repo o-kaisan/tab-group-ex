@@ -1,16 +1,16 @@
 import { GROUP_MODE } from '../const/groupMode'
 
 /*
- * タブグループの設定を管理する
+ * ローカルストレージにタブグループの設定を保存
  */
-export async function saveGroupMode(groupMode: string): Promise<void> {
-    /*
-     * タブグループの設定をストレージに保存
-     */
+export async function saveGroupModeSetting(groupMode: string): Promise<void> {
     await chrome.storage.local.set({ groupMode })
 }
 
-export async function getSavedGroupMode(): Promise<string> {
+/*
+ * ローカルストレージに保存されたタブグループの設定を取得する
+ */
+export async function getSavedGroupModeSetting(): Promise<string> {
     const groupModeKV = await chrome.storage.local.get('groupMode')
     let ret: string = groupModeKV.groupMode
     if (ret === undefined) {
