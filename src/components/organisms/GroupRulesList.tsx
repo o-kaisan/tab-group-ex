@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List'
 import ListSubheader from '@mui/material/ListSubheader'
@@ -8,48 +8,53 @@ import Button from '@mui/material/Button'
 import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/types/groupRule'
-import { saveGroupRule } from '../../common/libs/groupRule'
+import { getSavedGroupRule, saveGroupRule } from '../../common/libs/groupRule'
 import { GROUP_MODE } from '../../common/const/groupMode'
 
-interface Props {
-    groupRule: GroupRule[]
-    setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
-}
+export default function GroupRulesList(): JSX.Element {
+    // カスタムルール
+    const [groupRule, setGroupRule] = useState<GroupRule[]>([{ id: uuidv4(), domain: '' }])
 
-export default function GroupRulesList(props: Props): JSX.Element {
+    // 画面表示時にグループ化ルールを読み込む
+    useEffect(() => {
+        void getSavedGroupRule().then((value: GroupRule[]) => {
+            setGroupRule(value)
+        })
+    }, [])
+
     // グループ化するドメインのルールを追加する
     const handleAddDomain = (): void => {
-        const _groupRule = [...props.groupRule]
+        const _groupRule = [...groupRule]
         _groupRule.push({
             domain: '',
             id: uuidv4()
         })
-        props.setGroupRule(_groupRule)
+        setGroupRule(_groupRule)
     }
 
     // グループ化するドメインのルールを削除する
     const handleDeleteDomain = (id: string): void => {
-        const _groupRule = [...props.groupRule]
+        const _groupRule = [...groupRule]
         const removeGroupRule = _groupRule.filter((rule) => rule.id !== id)
-        props.setGroupRule(removeGroupRule)
+        setGroupRule(removeGroupRule)
     }
 
     const handleChangeDomain = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string): void => {
-        const index = props.groupRule.findIndex((rule) => rule.id === id)
-        const _groupRule = [...props.groupRule]
+        const index = groupRule.findIndex((rule) => rule.id === id)
+        const _groupRule = [...groupRule]
         _groupRule[index].domain = event.target.value
-        props.setGroupRule(_groupRule)
+        setGroupRule(_groupRule)
     }
 
     const handleSaveGroupRule = (): void => {
-        const _groupRule = [...props.groupRule]
+        const _groupRule = [...groupRule]
         void saveGroupRule(_groupRule).then()
     }
 
     return (
         <List>
             <ListSubheader>Group Rules For {GROUP_MODE.customDomain}</ListSubheader>
-            {props.groupRule.map((rule: GroupRule) => (
+            {groupRule.map((rule: GroupRule) => (
                 <ListItem key={rule.id}>
                     <TextField
                         label="domain"

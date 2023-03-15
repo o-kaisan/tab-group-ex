@@ -2,11 +2,9 @@ import React from 'react'
 import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
 import GroupCurrentTabs from '../molecules/GroupingFunctionItem/GroupCurrentTabs'
-import type { GroupRule } from '../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
 interface Props {
-    groupRule: GroupRule[]
     setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
     updateCurrentTabGroupList: Function
     updateSavedTabGroupList: Function
@@ -17,7 +15,6 @@ export default function GroupingFunctionList(props: Props): JSX.Element {
         <List>
             <ListSubheader>Grouping</ListSubheader>
             <GroupCurrentTabs
-                groupRule={props.groupRule}
                 setSavedTabGroup={props.setSavedTabGroup}
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 updateSavedTabGroupList={props.updateSavedTabGroupList}

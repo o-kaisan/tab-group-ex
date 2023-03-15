@@ -6,13 +6,10 @@ import CurrentTabGroupPanel from '../templates/CurrentTabGroupPanel'
 import SettingsPanel from '../templates/SettingsPanel'
 import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
-import { v4 as uuidv4 } from 'uuid'
 import { getAutoGroupingSetting } from '../../common/libs/autoGrouping'
-import { getSavedGroupRule } from '../../common/libs/groupRule'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
 import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
-import type { GroupRule } from '../../common/types/groupRule'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {
@@ -25,8 +22,6 @@ function a11yProps(index: number) {
 export default function TabNavigator(): JSX.Element {
     // 表示するタブを管理
     const [panelTab, setPanelTab] = React.useState(0)
-    // カスタムルール
-    const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{ id: uuidv4(), domain: '' }]) // TODO 利用する箇所で適切に状態管理する
     // 保存されたタブグループの一覧
     const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([]) // TODO 利用する箇所で適切に状態管理する
     // タブグループの一覧
@@ -43,13 +38,6 @@ export default function TabNavigator(): JSX.Element {
             .catch((error) => {
                 console.log(error)
             })
-    }, [])
-
-    // 画面表示時にグループ化ルールを読み込む
-    useEffect(() => {
-        void getSavedGroupRule().then((value: GroupRule[]) => {
-            setGroupRule(value)
-        })
     }, [])
 
     // 画面表示時にストレージに保存されたタブグループを読み込む
@@ -100,7 +88,6 @@ export default function TabNavigator(): JSX.Element {
             <CurrentTabGroupPanel
                 panelTab={panelTab}
                 index={0}
-                groupRule={groupRule}
                 setSavedTabGroup={setSavedTabGroup}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}
                 updateSavedTabGroupList={updateSavedTabGroupList}
@@ -116,14 +103,10 @@ export default function TabNavigator(): JSX.Element {
             <GroupRulesPanel
                 panelTab={panelTab}
                 index={2}
-                groupRule={groupRule}
-                setGroupRule={setGroupRule}
             />
             <SettingsPanel
                 panelTab={panelTab}
                 index={3}
-                groupRule={groupRule}
-                setGroupRule={setGroupRule}
                 autoGrouping={autoGrouping}
                 setAutoGrouping={setAutoGrouping}
             />
