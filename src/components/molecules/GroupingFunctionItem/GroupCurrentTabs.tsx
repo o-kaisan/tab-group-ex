@@ -6,9 +6,9 @@ import LayersIcon from '@mui/icons-material/Layers'
 import { groupCurrentTabs } from '../../../common/libs/tabGroup'
 import type { GroupRule } from '../../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
+import { getSavedGroupModeSetting } from '../../../common/libs/groupMode'
 
 interface Props {
-    groupMode: string
     groupRule: GroupRule[]
     setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
     updateCurrentTabGroupList: Function
@@ -20,13 +20,13 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
      * タブをグループ化
      */
     const handleClick = (): void => {
-        groupCurrentTabs(props.groupMode, props.groupRule)
-            .then(() => {
-                props.updateCurrentTabGroupList()
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        getSavedGroupModeSetting().then((groupMode) => {
+            groupCurrentTabs(groupMode, props.groupRule)
+                .then(() => {
+                    props.updateCurrentTabGroupList()
+                })
+                .catch((error) => { console.log(error) })
+        }).catch((error) => { console.log(error) })
     }
     return (
         <ListItem>

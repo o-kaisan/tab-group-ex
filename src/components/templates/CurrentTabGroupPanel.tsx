@@ -11,7 +11,6 @@ import TabPanel from '../atoms/TabPanel/TabPanel'
 interface Props {
     panelTab: number
     index: number
-    groupMode: string
     groupRule: GroupRule[]
     setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
     updateCurrentTabGroupList: Function
@@ -23,7 +22,6 @@ export default function CurrentTabGroupPanel(props: Props): JSX.Element {
     return (
         <TabPanel value={props.panelTab} index={props.index}>
             <GroupingFunctionList
-                groupMode={props.groupMode}
                 groupRule={props.groupRule}
                 setSavedTabGroup={props.setSavedTabGroup}
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}

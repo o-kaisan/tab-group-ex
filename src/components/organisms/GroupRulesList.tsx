@@ -12,8 +12,6 @@ import { saveGroupRule } from '../../common/libs/groupRule'
 import { GROUP_MODE } from '../../common/const/groupMode'
 
 interface Props {
-    groupMode: string
-    setGroupMode: React.Dispatch<React.SetStateAction<string>>
     groupRule: GroupRule[]
     setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
 }

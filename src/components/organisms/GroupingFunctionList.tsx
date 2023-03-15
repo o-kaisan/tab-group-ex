@@ -6,7 +6,6 @@ import type { GroupRule } from '../../common/types/groupRule'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
 interface Props {
-    groupMode: string
     groupRule: GroupRule[]
     setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
     updateCurrentTabGroupList: Function
@@ -18,7 +17,6 @@ export default function GroupingFunctionList(props: Props): JSX.Element {
         <List>
             <ListSubheader>Grouping</ListSubheader>
             <GroupCurrentTabs
-                groupMode={props.groupMode}
                 groupRule={props.groupRule}
                 setSavedTabGroup={props.setSavedTabGroup}
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}

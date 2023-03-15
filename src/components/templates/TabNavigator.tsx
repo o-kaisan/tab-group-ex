@@ -7,12 +7,10 @@ import SettingsPanel from '../templates/SettingsPanel'
 import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
 import { v4 as uuidv4 } from 'uuid'
-import { getSavedGroupModeSetting } from '../../common/libs/groupMode'
 import { getAutoGroupingSetting } from '../../common/libs/autoGrouping'
 import { getSavedGroupRule } from '../../common/libs/groupRule'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
 import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
-import { GROUP_MODE } from '../../common/const/groupMode'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 import type { GroupRule } from '../../common/types/groupRule'
 
@@ -27,16 +25,14 @@ function a11yProps(index: number) {
 export default function TabNavigator(): JSX.Element {
     // 表示するタブを管理
     const [panelTab, setPanelTab] = React.useState(0)
-    // グループ化する設定
-    const [groupMode, setGroupMode] = React.useState<string>(GROUP_MODE.all)
     // カスタムルール
-    const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{ id: uuidv4(), domain: '' }])
+    const [groupRule, setGroupRule] = React.useState<GroupRule[]>([{ id: uuidv4(), domain: '' }]) // TODO 利用する箇所で適切に状態管理する
     // 保存されたタブグループの一覧
-    const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([])
+    const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([]) // TODO 利用する箇所で適切に状態管理する
     // タブグループの一覧
-    const [currentTabGroups, setCurrentTabGroups] = useState<chrome.tabGroups.TabGroup[]>([])
+    const [currentTabGroups, setCurrentTabGroups] = useState<chrome.tabGroups.TabGroup[]>([]) // TODO 利用する箇所で適切に状態管理する
     // 自動タブグループ設定
-    const [autoGrouping, setAutoGrouping] = useState(false);
+    const [autoGrouping, setAutoGrouping] = useState(false); // TODO 利用する箇所で適切に状態管理する
 
     // 画面表示時にウィンドウのタブグループを読み込む
     useEffect(() => {
@@ -56,13 +52,6 @@ export default function TabNavigator(): JSX.Element {
         })
     }, [])
 
-    // 画面表示時にグループ化設定を取得
-    useEffect(() => {
-        void getSavedGroupModeSetting().then((value: string) => {
-            setGroupMode(value)
-        })
-    }, [])
-
     // 画面表示時にストレージに保存されたタブグループを読み込む
     useEffect(() => {
         updateSavedTabGroupList()
@@ -74,7 +63,6 @@ export default function TabNavigator(): JSX.Element {
             setAutoGrouping(value)
         })
     }, [])
-
 
     // タブを切り替える
     const handleChange = (_event: React.SyntheticEvent, newTab: number): void => {
@@ -112,7 +100,6 @@ export default function TabNavigator(): JSX.Element {
             <CurrentTabGroupPanel
                 panelTab={panelTab}
                 index={0}
-                groupMode={groupMode}
                 groupRule={groupRule}
                 setSavedTabGroup={setSavedTabGroup}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}
@@ -129,16 +116,12 @@ export default function TabNavigator(): JSX.Element {
             <GroupRulesPanel
                 panelTab={panelTab}
                 index={2}
-                groupMode={groupMode}
-                setGroupMode={setGroupMode}
                 groupRule={groupRule}
                 setGroupRule={setGroupRule}
             />
             <SettingsPanel
                 panelTab={panelTab}
                 index={3}
-                groupMode={groupMode}
-                setGroupMode={setGroupMode}
                 groupRule={groupRule}
                 setGroupRule={setGroupRule}
                 autoGrouping={autoGrouping}

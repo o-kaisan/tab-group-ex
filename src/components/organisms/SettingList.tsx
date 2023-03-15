@@ -6,8 +6,6 @@ import type { GroupRule } from '../../common/types/groupRule'
 import AutoGroupingSwitch from '../molecules/SettingItems/AutoGrouping'
 
 interface Props {
-    groupMode: string
-    setGroupMode: React.Dispatch<React.SetStateAction<string>>
     groupRule: GroupRule[]
     setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
     autoGrouping: boolean
@@ -18,7 +16,7 @@ export default function SettingList(props: Props): JSX.Element {
     return (
         <List>
             <ListSubheader>Settings</ListSubheader>
-            <SelectTabGroupMode groupMode={props.groupMode} setGroupMode={props.setGroupMode} />
+            <SelectTabGroupMode />
             <AutoGroupingSwitch autoGrouping={props.autoGrouping} setAutoGrouping={props.setAutoGrouping} />
         </List>
     )

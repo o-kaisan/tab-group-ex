@@ -6,8 +6,6 @@ import TabPanel from '../atoms/TabPanel/TabPanel'
 interface Props {
     panelTab: number
     index: number
-    groupMode: string
-    setGroupMode: React.Dispatch<React.SetStateAction<string>>
     groupRule: GroupRule[]
     setGroupRule: React.Dispatch<React.SetStateAction<GroupRule[]>>
     autoGrouping: boolean
@@ -18,8 +16,6 @@ export default function SettingsPanel(props: Props): JSX.Element {
     return (
         <TabPanel value={props.panelTab} index={props.index}>
             <SettingList
-                groupMode={props.groupMode}
-                setGroupMode={props.setGroupMode}
                 groupRule={props.groupRule}
                 setGroupRule={props.setGroupRule}
                 autoGrouping={props.autoGrouping}
