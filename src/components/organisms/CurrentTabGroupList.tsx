@@ -13,7 +13,7 @@ interface Props {
 export default function CurrentTabGroupList(props: Props): JSX.Element {
     return (
         <List>
-            <ListSubheader>Active TabGroups</ListSubheader>
+            <ListSubheader>Current TabGroups</ListSubheader>
             {props.currentTabGroups.length > 0 ? (
                 props.currentTabGroups.map((tabGroup) => (
                     <CurrentTabGroupItem
