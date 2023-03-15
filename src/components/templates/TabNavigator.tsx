@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
@@ -6,8 +6,6 @@ import CurrentTabGroupPanel from '../templates/CurrentTabGroupPanel'
 import SettingsPanel from '../templates/SettingsPanel'
 import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
-import { getAutoGroupingSetting } from '../../common/libs/autoGrouping'
-import { getAllTabGroupList } from '../../common/libs/tabGroup'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {
@@ -48,17 +46,6 @@ export default function TabNavigator(): JSX.Element {
         setPanelTab(newTab)
     }
 
-    // 現在のウィンドウにあるタブグループを取得し、表示を最新化する
-    const updateCurrentTabGroupList = (): void => {
-        getAllTabGroupList()
-            .then((tabGroupList) => {
-                setCurrentTabGroups(tabGroupList)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -72,13 +59,10 @@ export default function TabNavigator(): JSX.Element {
             <CurrentTabGroupPanel
                 panelTab={panelTab}
                 index={0}
-                updateCurrentTabGroupList={updateCurrentTabGroupList}
-                currentTabGroups={currentTabGroups}
             />
             <SavedTabGroupPanel
                 panelTab={panelTab}
                 index={1}
-                updateCurrentTabGroupList={updateCurrentTabGroupList}
             />
             <GroupRulesPanel
                 panelTab={panelTab}

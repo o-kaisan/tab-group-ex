@@ -5,7 +5,6 @@ import TabPanel from '../atoms/TabPanel/TabPanel'
 interface Props {
     panelTab: number
     index: number
-    updateCurrentTabGroupList: Function
 }
 
 export default function SavedTabGroupPanel(props: Props): JSX.Element {

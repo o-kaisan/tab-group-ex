@@ -10,6 +10,10 @@ interface Props {
 }
 
 export default function CurrentTabGroupList(props: Props): JSX.Element {
+
+    // TODO リストアしたときにタブグループを更新するように
+    // バックグラウンドで変更を確認するのがいいかも
+    // 一つ上で状態管理しているため、このパネルに来ても画面再描写されていないと思われる
     return (
         <List>
             <ListSubheader>Current TabGroups</ListSubheader>
