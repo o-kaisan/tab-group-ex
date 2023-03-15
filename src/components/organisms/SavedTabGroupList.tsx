@@ -1,28 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { List, ListSubheader } from '@mui/material'
-import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 import SavedTabGroupItem from '../../components/molecules/SavedTabGroupItem/SavedTabGroupItem'
 import NoListItem from '../molecules/NoListItem/NoListItem'
+import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
+import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
-interface Props {
-    savedTabGroup: SavedTabGroupInfo[]
-    updateSavedTabGroupList: Function
-    updateCurrentTabGroupList: Function
-}
+export default function SavedTabGroupList(): JSX.Element {
+    // 保存されたタブグループの一覧
+    const [savedTabGroup, setSavedTabGroup] = useState<SavedTabGroupInfo[]>([])
 
-export default function SavedTabGroupList(props: Props): JSX.Element {
+    // 画面表示時にストレージに保存されたタブグループを読み込む
+    useEffect(() => {
+        updateSavedTabGroupList()
+    }, [])
+
+    // ストレージに保存されたタブグループを取得し、表示を最新化する
+    const updateSavedTabGroupList = (): void => {
+        void getAllSavedTabGroup().then((savedTabGroupList) => {
+            setSavedTabGroup(savedTabGroupList)
+        })
+    }
+
     return (
         <List>
             <ListSubheader>Saved TabGroups</ListSubheader>
-            {props.savedTabGroup.length > 0 ? (
-                props.savedTabGroup.map((tabGroup) => (
+            {savedTabGroup.length > 0 ? (
+                savedTabGroup.map((tabGroup) => (
                     <SavedTabGroupItem
                         key={tabGroup.tabGroupId}
                         tabGroupId={tabGroup.tabGroupId}
                         tabGroupTitle={tabGroup.title}
                         urlList={tabGroup.urlList}
-                        updateSavedTabGroupList={props.updateSavedTabGroupList}
-                        updateCurrentTabGroupList={props.updateCurrentTabGroupList}
+                        updateSavedTabGroupList={updateSavedTabGroupList}
                     />
                 ))
             ) : (

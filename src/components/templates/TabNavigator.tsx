@@ -8,8 +8,6 @@ import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
 import { getAutoGroupingSetting } from '../../common/libs/autoGrouping'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
-import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
-import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function a11yProps(index: number) {
@@ -22,8 +20,6 @@ function a11yProps(index: number) {
 export default function TabNavigator(): JSX.Element {
     // 表示するタブを管理
     const [panelTab, setPanelTab] = React.useState(0)
-    // 保存されたタブグループの一覧
-    const [savedTabGroup, setSavedTabGroup] = React.useState<SavedTabGroupInfo[]>([]) // TODO 利用する箇所で適切に状態管理する
     // タブグループの一覧
     const [currentTabGroups, setCurrentTabGroups] = useState<chrome.tabGroups.TabGroup[]>([]) // TODO 利用する箇所で適切に状態管理する
     // 自動タブグループ設定
@@ -40,11 +36,6 @@ export default function TabNavigator(): JSX.Element {
             })
     }, [])
 
-    // 画面表示時にストレージに保存されたタブグループを読み込む
-    useEffect(() => {
-        updateSavedTabGroupList()
-    }, [])
-
     // 画面表示時にストレージに保存された自動グルーピング設定を読み込む
     useEffect(() => {
         void getAutoGroupingSetting().then((value: boolean) => {
@@ -55,13 +46,6 @@ export default function TabNavigator(): JSX.Element {
     // タブを切り替える
     const handleChange = (_event: React.SyntheticEvent, newTab: number): void => {
         setPanelTab(newTab)
-    }
-
-    // ストレージに保存されたタブグループを取得し、表示を最新化する
-    const updateSavedTabGroupList = (): void => {
-        void getAllSavedTabGroup().then((savedTabGroupList) => {
-            setSavedTabGroup(savedTabGroupList)
-        })
     }
 
     // 現在のウィンドウにあるタブグループを取得し、表示を最新化する
@@ -88,16 +72,12 @@ export default function TabNavigator(): JSX.Element {
             <CurrentTabGroupPanel
                 panelTab={panelTab}
                 index={0}
-                setSavedTabGroup={setSavedTabGroup}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}
-                updateSavedTabGroupList={updateSavedTabGroupList}
                 currentTabGroups={currentTabGroups}
             />
             <SavedTabGroupPanel
                 panelTab={panelTab}
                 index={1}
-                savedTabGroup={savedTabGroup}
-                updateSavedTabGroupList={updateSavedTabGroupList}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}
             />
             <GroupRulesPanel

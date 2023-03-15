@@ -11,7 +11,6 @@ interface Props {
     collapsed: boolean
     tabGroupTitle: string
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>
-    updateSavedTabGroupList: Function
     updateCurrentTabGroupList: Function
 }
 
@@ -35,7 +34,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     }
 
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
-        void saveTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
+        void saveTabGroup(tabGroupTitle, tabGroupId).then().catch((error) => { console.log(error) })
     }
 
     const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean): void => {

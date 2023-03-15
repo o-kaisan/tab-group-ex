@@ -6,7 +6,6 @@ import NoListItem from '../molecules/NoListItem/NoListItem'
 
 interface Props {
     currentTabGroups: chrome.tabGroups.TabGroup[]
-    updateSavedTabGroupList: Function
     updateCurrentTabGroupList: Function
 }
 
@@ -21,7 +20,6 @@ export default function CurrentTabGroupList(props: Props): JSX.Element {
                         tabGroupId={tabGroup.id}
                         collapsed={tabGroup.collapsed}
                         tabGroupTitle={tabGroup.title}
-                        updateSavedTabGroupList={props.updateSavedTabGroupList}
                         updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                     />
                 ))

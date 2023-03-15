@@ -4,14 +4,11 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import { ListItem, ListItemButton } from '@mui/material'
 import LayersIcon from '@mui/icons-material/Layers'
 import { groupCurrentTabs } from '../../../common/libs/tabGroup'
-import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 import { getSavedGroupModeSetting } from '../../../common/libs/groupMode'
 import { getSavedGroupRule } from '../../../common/libs/groupRule'
 
 interface Props {
-    setSavedTabGroup: React.Dispatch<React.SetStateAction<SavedTabGroupInfo[]>>
     updateCurrentTabGroupList: Function
-    updateSavedTabGroupList: Function
 }
 
 export default function GroupCurrentTabs(props: Props): JSX.Element {

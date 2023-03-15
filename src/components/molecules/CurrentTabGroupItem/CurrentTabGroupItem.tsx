@@ -6,7 +6,6 @@ interface Props {
     tabGroupId: number
     collapsed: boolean
     tabGroupTitle?: string
-    updateSavedTabGroupList: Function
     updateCurrentTabGroupList: Function
 }
 
@@ -36,7 +35,6 @@ export default function CurrentTabGroupItem(props: Props): JSX.Element {
                     collapsed={props.collapsed}
                     tabGroupTitle={_title}
                     setEditMode={setEditMode}
-                    updateSavedTabGroupList={props.updateSavedTabGroupList}
                     updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 />
             )}

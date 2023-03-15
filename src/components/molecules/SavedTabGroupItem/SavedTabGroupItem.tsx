@@ -7,7 +7,6 @@ interface Props {
     tabGroupTitle: string
     urlList: string[]
     updateSavedTabGroupList: Function
-    updateCurrentTabGroupList: Function
 }
 
 export default function SavedTabGroupItem(props: Props): JSX.Element {
@@ -29,7 +28,6 @@ export default function SavedTabGroupItem(props: Props): JSX.Element {
                     urlList={props.urlList}
                     setEditMode={setEditMode}
                     updateSavedTabGroupList={props.updateSavedTabGroupList}
-                    updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 />
             )}
         </div>

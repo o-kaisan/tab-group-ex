@@ -10,7 +10,6 @@ interface Props {
     urlList: string[]
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>
     updateSavedTabGroupList: Function
-    updateCurrentTabGroupList: Function
 }
 
 export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
@@ -28,9 +27,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
         if (isRight) {
             setAnchorEl(e.currentTarget)
         } else {
-            void restoreTabGroup(tabGroupTitle, urlList).then(() => {
-                props.updateCurrentTabGroupList()
-            })
+            void restoreTabGroup(tabGroupTitle, urlList).then().catch((error) => { console.log(error) })
         }
     }
 
