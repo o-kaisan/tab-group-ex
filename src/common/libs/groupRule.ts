@@ -10,7 +10,7 @@ export async function saveGroupRule(groupRule: GroupRule[]): Promise<void> {
 /*
  * ローカルストレージに保存されているグループルールを取得する
  */
-export async function getSavedGroupRule(): Promise<GroupRule[]> {
+export async function getGroupRule(): Promise<GroupRule[]> {
     const groupRuleKV = await chrome.storage.local.get('groupRule')
     let ret = groupRuleKV.groupRule
     if (ret === undefined) {

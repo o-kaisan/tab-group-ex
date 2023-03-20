@@ -28,18 +28,18 @@ export default function CurrentTabGroupPanel(props: Props): JSX.Element {
 
     // 現在のウィンドウにあるタブグループを取得し、表示を最新化する
     const updateCurrentTabGroupList = (): void => {
-        getAllTabGroupList().then((tabGroupList) => {
-            setCurrentTabGroups(tabGroupList)
-        }).catch((error) => {
-            console.log(error)
-        })
+        getAllTabGroupList()
+            .then((tabGroupList) => {
+                setCurrentTabGroups(tabGroupList)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (
         <TabPanel value={props.panelTab} index={props.index}>
-            <GroupingFunctionList
-                updateCurrentTabGroupList={updateCurrentTabGroupList}
-            />
+            <GroupingFunctionList updateCurrentTabGroupList={updateCurrentTabGroupList} />
             <CurrentTabGroupList
                 currentTabGroups={currentTabGroups}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}

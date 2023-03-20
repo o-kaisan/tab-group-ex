@@ -1,27 +1,22 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import type { SelectChangeEvent } from '@mui/material/Select'
-import { saveGroupModeSetting, getSavedGroupModeSetting } from '../../../common/libs/groupMode'
+import { saveGroupMode } from '../../../common/libs/groupMode'
 import { GROUP_MODE } from '../../../common/const/groupMode'
 
-export default function SelectTabGroupMode(): JSX.Element {
-    // グループ化する設定
-    const [groupMode, setGroupMode] = React.useState<string>(GROUP_MODE.all)
+interface Props {
+    groupMode: string
+    setGroupMode: React.Dispatch<React.SetStateAction<string>>
+}
 
-    // 画面表示時にグループ化設定を取得
-    useEffect(() => {
-        void getSavedGroupModeSetting().then((value: string) => {
-            setGroupMode(value)
-        })
-    }, [])
-
+export default function SelectTabGroupMode(props: Props): JSX.Element {
     const handleChange = (event: SelectChangeEvent): void => {
-        void saveGroupModeSetting(event.target.value).then(() => {
-            setGroupMode(event.target.value)
+        void saveGroupMode(event.target.value).then(() => {
+            props.setGroupMode(event.target.value)
         })
     }
 
@@ -32,7 +27,7 @@ export default function SelectTabGroupMode(): JSX.Element {
                 <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
-                    value={groupMode}
+                    value={props.groupMode}
                     onChange={handleChange}
                     label="GroupMode"
                 >

@@ -27,7 +27,11 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
         if (isRight) {
             setAnchorEl(e.currentTarget)
         } else {
-            void restoreTabGroup(tabGroupTitle, urlList).then().catch((error) => { console.log(error) })
+            void restoreTabGroup(tabGroupTitle, urlList) // TODO 現在のタブグループ一覧を更新できるようにしたい
+                .then()
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 

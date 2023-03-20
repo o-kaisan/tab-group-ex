@@ -11,9 +11,7 @@ export default function GroupingFunctionList(props: Props): JSX.Element {
     return (
         <List>
             <ListSubheader>Grouping</ListSubheader>
-            <GroupCurrentTabs
-                updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-            />
+            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} />
         </List>
     )
 }
