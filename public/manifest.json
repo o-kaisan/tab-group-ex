@@ -26,6 +26,9 @@
       "description": "open tab group ex"
     }
   },
+  "background": {
+    "service_worker": "js/background.js"
+  },
   "permissions": [
     "storage",
     "tabGroups",
