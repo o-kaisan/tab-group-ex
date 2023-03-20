@@ -8,9 +8,22 @@ export async function getTabs(targetTabConditions: chrome.tabs.QueryInfo): Promi
 }
 
 /*
+ * グループ化されたタブを含む全てのタブを取得する
+ */
+export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        pinned: false,
+        url: ['http://*/*', 'https://*/*']
+    }
+    const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
+    return tabs
+}
+
+/*
  * グループ化されていないタブを取得する
  */
-export async function getNoneGroupedTabs(): Promise<chrome.tabs.Tab[]> {
+export async function getTabsWithoutGrouped(): Promise<chrome.tabs.Tab[]> {
     const targetTabConditions: chrome.tabs.QueryInfo = {
         currentWindow: true,
         pinned: false,

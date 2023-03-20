@@ -4,71 +4,24 @@
 import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
 import { GROUP_MODE } from '../const/groupMode'
-import { getTabs, getNoneGroupedTabs, getTabIdList } from './tab'
+import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
+import { getGroupMode } from './groupMode'
+import { getGroupRule } from './groupRule'
 
 /*
- * タブグループ名にヒットしたタブグループのIDを返す
+ * タブをグループ化
  */
-async function getTabGroupIdByTitle(title: string): Promise<number | undefined> {
-    const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
-    let tabGroupId: number | undefined
-    tabgroups.forEach((tabgroup) => {
-        if (tabgroup.title === title) {
-            tabGroupId = tabgroup.id
-        }
-    })
-    return tabGroupId
-}
+export async function groupTabs(groupMode?: string): Promise<void> {
+    if (groupMode === undefined) {
+        groupMode = await getGroupMode()
+    }
 
-/*
- * 新しくタブをグループ化する
- */
-export async function createTabGroups(tabIdList: number[], title: string = ''): Promise<number> {
-    if (tabIdList.length === 0) {
-        return -1 // IDになり得ないマイナスの値を返す
-    }
-    const groupId = await chrome.tabs.group({ tabIds: tabIdList })
-    if (title === '') {
-        title = groupId.toString()
-    }
-    try {
-        void chrome.tabGroups.update(groupId, {
-            collapsed: false,
-            title
-        })
-    } catch (err) {
-        console.log('failed to update title :%d', err)
-    }
-    return groupId
-}
-
-/*
- * タブグループを更新する
- */
-async function updateTabGroups(tabIdList: number[], title: string): Promise<void> {
-    if (tabIdList.length === 0) {
-        return
-    }
-    let groupId: number | undefined = await getTabGroupIdByTitle(title)
-
-    // 指定したグループ名がなければ新規作成
-    if (groupId === undefined) {
-        groupId = await createTabGroups(tabIdList, title)
-        return
-    }
-    // グループが既に存在していれば追加する
-    await chrome.tabs.group({ groupId, tabIds: tabIdList })
-}
-
-/*
- * 設定に従ってタブをグループ化
- */
-export async function groupCurrentTabs(groupMode: string, groupRule: GroupRule[] | undefined): Promise<void> {
     if (groupMode === GROUP_MODE.domain) {
         await groupCurrentTabsByDomain()
     }
 
     if (groupMode === GROUP_MODE.customDomain) {
+        const groupRule = await getGroupRule()
         if (groupRule === undefined) {
             return
         }
@@ -86,13 +39,52 @@ export async function groupCurrentTabs(groupMode: string, groupRule: GroupRule[]
 }
 
 /*
+ * タブをドメインごとにグループ化
+ * ※サブドメインも含むグループ化となる
+ * ※グループ化されたタブも含む
+ */
+async function groupCurrentTabsByDomain(): Promise<void> {
+    const tabs: chrome.tabs.Tab[] = await getAllTabs()
+    // ドメインを取得
+    const domainMap: Record<string, number[]> = {}
+    const domains = []
+    for (let i: number = 0; i < tabs.length; i++) {
+        const targetUrl = tabs[i].url
+        if (targetUrl === undefined) {
+            continue
+        }
+        const domain = url.getDomainNameIgnoreSubDomain(targetUrl)
+        if (domain === undefined) {
+            continue
+        }
+        if (domainMap[domain] === undefined) {
+            domainMap[domain] = []
+            domains.push(domain)
+        }
+        const targetId = tabs[i].id
+        if (targetId === undefined) {
+            continue
+        }
+        domainMap[domain].push(targetId)
+    }
+    // ドメイン分グループ化を繰り返す
+    await Promise.all(
+        // 再グループ化
+        domains.map(async (domain) => {
+            const groupIds: number[] = domainMap[domain]
+            await updateTabGroups(groupIds, domain)
+        })
+    )
+}
+
+/*
  * カスタムルールに従ってタブをグループ化
- * サブドメインも含むグループ化となる
+ * ※サブドメインも含むグループ化となる
+ * ※グループ化されたタブも含む
  */
 async function groupCurrentTabsByCustom(groupRules: string[]): Promise<void> {
-    // タブを取得
+    const tabs: chrome.tabs.Tab[] = await getAllTabs()
     // ルールにしたがってグループ化
-    const tabs: chrome.tabs.Tab[] = await getNoneGroupedTabs()
     const domainMap: Record<string, number[]> = {}
     const domains: string[] = []
     if (groupRules.length > 0) {
