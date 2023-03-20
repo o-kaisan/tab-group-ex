@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/types/groupRule'
-import { getSavedGroupRule, saveGroupRule } from '../../common/libs/groupRule'
+import { getGroupRule, saveGroupRule } from '../../common/libs/groupRule'
 import { GROUP_MODE } from '../../common/const/groupMode'
 
 export default function GroupRulesList(): JSX.Element {
@@ -17,7 +17,7 @@ export default function GroupRulesList(): JSX.Element {
 
     // 画面表示時にグループ化ルールを読み込む
     useEffect(() => {
-        void getSavedGroupRule().then((value: GroupRule[]) => {
+        void getGroupRule().then((value: GroupRule[]) => {
             setGroupRule(value)
         })
     }, [])

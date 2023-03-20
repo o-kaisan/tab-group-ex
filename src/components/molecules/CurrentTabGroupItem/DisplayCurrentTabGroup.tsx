@@ -34,7 +34,11 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     }
 
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
-        void saveTabGroup(tabGroupTitle, tabGroupId).then().catch((error) => { console.log(error) })
+        void saveTabGroup(tabGroupTitle, tabGroupId)
+            .then()
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean): void => {
