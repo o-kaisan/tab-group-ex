@@ -3,10 +3,12 @@
  */
 import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
-import { GROUP_MODE } from '../const/groupMode'
+import { GROUP_MODE } from '../types/groupMode'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
 import { getGroupMode } from './groupMode'
 import { getGroupRule } from './groupRule'
+
+type DomainMap = Record<string, number[]>
 
 /*
  * タブをグループ化
@@ -16,25 +18,33 @@ export async function groupTabs(groupMode?: string): Promise<void> {
         groupMode = await getGroupMode()
     }
 
-    if (groupMode === GROUP_MODE.domain) {
-        await groupCurrentTabsByDomain()
-    }
-
-    if (groupMode === GROUP_MODE.customDomain) {
-        const groupRule = await getGroupRule()
-        if (groupRule === undefined) {
+    switch (groupMode) {
+        case GROUP_MODE.domain: {
+            const tabs: chrome.tabs.Tab[] = await getAllTabs()
+            await groupCurrentTabsByDomain(tabs)
             return
         }
-
-        const groupRuleList: string[] = []
-        groupRule.forEach((rule: GroupRule) => {
-            groupRuleList.push(rule.domain)
-        })
-        await groupCurrentTabsByCustom(groupRuleList)
-    }
-
-    if (groupMode === GROUP_MODE.all) {
-        await groupAllCurrentTabs()
+        case GROUP_MODE.customDomain: {
+            const tabs: chrome.tabs.Tab[] = await getAllTabs()
+            const groupRule = await getGroupRule()
+            if (groupRule === undefined) {
+                return
+            }
+            const groupRuleList: string[] = []
+            groupRule.forEach((rule: GroupRule) => {
+                groupRuleList.push(rule.domain)
+            })
+            await groupCurrentTabsByCustomDomain(tabs, groupRuleList)
+            return
+        }
+        case GROUP_MODE.all: {
+            const tabs = await getTabsWithoutGrouped()
+            await groupAllCurrentTabs(tabs)
+            return
+        }
+        default:
+            console.error("Failed to group tabs (invalid group mode) groupMode=%s", groupMode)
+            break;
     }
 }
 
@@ -43,95 +53,84 @@ export async function groupTabs(groupMode?: string): Promise<void> {
  * ※サブドメインも含むグループ化となる
  * ※グループ化されたタブも含む
  */
-async function groupCurrentTabsByDomain(): Promise<void> {
-    const tabs: chrome.tabs.Tab[] = await getAllTabs()
-    // ドメインを取得
-    const domainMap: Record<string, number[]> = {}
-    const domains = []
+async function groupCurrentTabsByDomain(tabs: chrome.tabs.Tab[]): Promise<void> {
+    const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
+    await groupTabsByDomain(domainMap)
+}
+
+/*
+* カスタムルールに従ってタブをグループ化
+* ※サブドメインも含むグループ化となる
+* ※グループ化されたタブも含む
+*/
+async function groupCurrentTabsByCustomDomain(tabs: chrome.tabs.Tab[], groupRules: string[]): Promise<void> {
+    if (groupRules.length <= 0) {
+        return
+    }
+    const domainMap = getTabIdsFromCurrentTabsByDomain(tabs, groupRules)
+    await groupTabsByDomain(domainMap)
+}
+
+/*
+ * 現在のタブからドメイン名とタブIDのマッピングしたオブジェクトを返す。
+ * groupRuleが指定されていると、groupRuleのドメイン名とマッチしたオブジェクトのみを返す
+ */
+function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: string[]): DomainMap {
+    const domainMap: DomainMap = {}
+
     for (let i: number = 0; i < tabs.length; i++) {
         const targetUrl = tabs[i].url
         if (targetUrl === undefined) {
             continue
         }
+
         const domain = url.getDomainNameIgnoreSubDomain(targetUrl)
         if (domain === undefined) {
             continue
         }
+
         if (domainMap[domain] === undefined) {
             domainMap[domain] = []
-            domains.push(domain)
         }
+
         const targetId = tabs[i].id
         if (targetId === undefined) {
             continue
         }
         domainMap[domain].push(targetId)
     }
-    // ドメイン分グループ化を繰り返す
+
+    if (groupRule !== undefined && groupRule.length > 0) {
+        const customDomainMap: DomainMap = {}
+        groupRule.forEach((domain) => {
+            const tabIds = domainMap[domain]
+            if (tabIds.length > 0) {
+                customDomainMap[domain] = tabIds
+            }
+        })
+        return customDomainMap
+    }
+
+    return domainMap
+}
+
+async function groupTabsByDomain(domainMap: DomainMap): Promise<void> {
     await Promise.all(
-        // 再グループ化
-        domains.map(async (domain) => {
+        Object.keys(domainMap).map(async (domain) => {
             const groupIds: number[] = domainMap[domain]
-            await updateTabGroups(groupIds, domain)
+            try {
+                await updateOrCreateTabGroups(groupIds, domain)
+            } catch (err) {
+                console.error('failed to group by custom rule :', err)
+            }
         })
     )
 }
 
 /*
- * カスタムルールに従ってタブをグループ化
- * ※サブドメインも含むグループ化となる
- * ※グループ化されたタブも含む
- */
-async function groupCurrentTabsByCustom(groupRules: string[]): Promise<void> {
-    const tabs: chrome.tabs.Tab[] = await getAllTabs()
-    // ルールにしたがってグループ化
-    const domainMap: Record<string, number[]> = {}
-    const domains: string[] = []
-    if (groupRules.length > 0) {
-        groupRules.forEach((domain) => {
-            for (let i: number = 0; i < tabs.length; i++) {
-                const targetUrl = tabs[i].url
-                if (targetUrl === undefined) {
-                    continue
-                }
-                const tabDomain = url.getDomainNameIgnoreSubDomain(targetUrl)
-                if (tabDomain === undefined) {
-                    continue
-                }
-                // タブがドメインルールに含まれてるか確認
-                if (domain !== tabDomain) {
-                    continue
-                }
-                if (domainMap[domain] === undefined) {
-                    domainMap[domain] = []
-                    domains.push(domain)
-                }
-                const targetId = tabs[i].id
-                if (targetId === undefined) {
-                    continue
-                }
-                domainMap[domain].push(targetId)
-            }
-        })
-        // ドメイン分グループ化を繰り返す
-        await Promise.all(
-            domains.map(async (domain) => {
-                const groupIds: number[] = domainMap[domain]
-                try {
-                    await updateTabGroups(groupIds, domain)
-                } catch (err) {
-                    console.log('failed to group by custom rule :', err)
-                }
-            })
-        )
-    }
-}
-
-/*
  * タブを全てグループ化
  */
-async function groupAllCurrentTabs(): Promise<void> {
-    const tabs = await getTabsWithoutGrouped()
+async function groupAllCurrentTabs(tabs: chrome.tabs.Tab[]): Promise<void> {
     const tabIdList: number[] = getTabIdList(tabs)
     await createTabGroups(tabIdList)
 }
@@ -161,7 +160,7 @@ export async function createTabGroups(tabIdList: number[], title: string = ''): 
 /*
  * タブグループを更新する
  */
-async function updateTabGroups(tabIdList: number[], title: string): Promise<void> {
+async function updateOrCreateTabGroups(tabIdList: number[], title: string): Promise<void> {
     if (tabIdList.length === 0) {
         return
     }
@@ -178,6 +177,7 @@ async function updateTabGroups(tabIdList: number[], title: string): Promise<void
 
 /*
  * タブグループ名にヒットしたタブグループのIDを返す
+ * ※同じタブグループ名の場合は最初にヒットしたものとなる
  */
 async function getTabGroupIdByTitle(title: string): Promise<number | undefined> {
     const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
@@ -191,7 +191,7 @@ async function getTabGroupIdByTitle(title: string): Promise<number | undefined> 
 }
 
 /*
- * 指定したグループ化を解除
+ * 指定したタブグループのグループ化を解除する
  */
 export async function ungroupTabs(tabGroupId: number): Promise<void> {
     const targetTabConditions: chrome.tabs.QueryInfo = {
@@ -207,7 +207,7 @@ export async function ungroupTabs(tabGroupId: number): Promise<void> {
 }
 
 /*
- * アクティブなウィドウのタブグループ一覧を取得
+ * アクティブなウィドウのタブグループ一覧を取得する
  */
 export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]> {
     const targetTabGroupConditions: chrome.tabGroups.QueryInfo = {
@@ -241,7 +241,7 @@ export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boo
 /*
  * タブグループからタブのURL一覧を取得する
  */
-export async function getTabUrlsFromTabGroup(tabGroupId: number): Promise<string[]> {
+export async function getUrlsFromTabGroup(tabGroupId: number): Promise<string[]> {
     const targetTabGroupConditions = {
         groupId: tabGroupId
     }

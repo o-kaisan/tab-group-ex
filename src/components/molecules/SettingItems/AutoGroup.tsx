@@ -4,7 +4,7 @@ import ListItemText from '@mui/material/ListItemText'
 import FormControl from '@mui/material/FormControl'
 import Switch from '@mui/material/Switch'
 import { saveAutoGroup, getAutoGroup } from '../../../common/libs/autoGroup'
-import { GROUP_MODE } from '../../../common/const/groupMode'
+import { GROUP_MODE } from '../../../common/types/groupMode'
 
 interface Props {
     groupMode: string

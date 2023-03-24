@@ -1,11 +1,11 @@
 import type { SavedTabGroupInfo } from '../types/savedTabGroupInfo'
-import { getTabUrlsFromTabGroup, createTabGroups } from './tabGroup'
+import { getUrlsFromTabGroup, createTabGroups } from './tabGroup'
 
 /*
  * タブグループを保存する
  */
 export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
-    const urls = await getTabUrlsFromTabGroup(tabGroupId)
+    const urls = await getUrlsFromTabGroup(tabGroupId)
     if (urls.length === 0) {
         return
     }

@@ -1,4 +1,4 @@
-import { GROUP_MODE } from '../const/groupMode'
+import { GROUP_MODE } from '../types/groupMode'
 
 /*
  * ローカルストレージにタブグループの設定を保存

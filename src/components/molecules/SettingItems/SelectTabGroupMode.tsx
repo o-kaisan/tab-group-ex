@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import type { SelectChangeEvent } from '@mui/material/Select'
 import { saveGroupMode } from '../../../common/libs/groupMode'
-import { GROUP_MODE } from '../../../common/const/groupMode'
+import { GROUP_MODE } from '../../../common/types/groupMode'
 
 interface Props {
     groupMode: string

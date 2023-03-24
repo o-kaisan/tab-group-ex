@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/types/groupRule'
 import { getGroupRule, saveGroupRule } from '../../common/libs/groupRule'
-import { GROUP_MODE } from '../../common/const/groupMode'
+import { GROUP_MODE } from '../../common/types/groupMode'
 
 export default function GroupRulesList(): JSX.Element {
     // カスタムルール
