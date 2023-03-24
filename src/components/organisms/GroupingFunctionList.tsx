@@ -10,7 +10,7 @@ interface Props {
 export default function GroupingFunctionList(props: Props): JSX.Element {
     return (
         <List>
-            <ListSubheader>Grouping</ListSubheader>
+            <ListSubheader>Action</ListSubheader>
             <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} />
         </List>
     )
