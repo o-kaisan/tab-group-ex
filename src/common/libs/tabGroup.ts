@@ -207,6 +207,19 @@ export async function ungroupTabs(tabGroupId: number): Promise<void> {
 }
 
 /*
+ *  全てのタブグループを解除する
+ */
+export async function ungroupAllTabs(): Promise<void> {
+    console.log("ここまではきてる")
+    const tabs = await getAllTabs()
+    const tabIdList: number[] = getTabIdList(tabs)
+
+    if (tabIdList.length === 0) return
+    await chrome.tabs.ungroup(tabIdList)
+}
+
+
+/*
  * アクティブなウィドウのタブグループ一覧を取得する
  */
 export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]> {
