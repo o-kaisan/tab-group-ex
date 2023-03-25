@@ -5,36 +5,34 @@ import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
 import { GROUP_MODE } from '../types/groupMode'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
-import { getGroupMode } from './groupMode'
-import { getGroupRule } from './groupRule'
+
+import { getGroupRules } from './groupRule'
 
 type DomainMap = Record<string, number[]>
 
 /*
  * タブをグループ化
  */
-export async function groupTabs(groupMode?: string): Promise<void> {
-    if (groupMode === undefined) {
-        groupMode = await getGroupMode()
-    }
-
+export async function groupTabs(groupMode: string): Promise<void> {
     switch (groupMode) {
         case GROUP_MODE.domain: {
-            const tabs: chrome.tabs.Tab[] = await getAllTabs()
-            await groupCurrentTabsByDomain(tabs)
+            const tabs = await getAllTabs()
+            const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
+            await groupTabsByDomain(domainMap)
             return
         }
         case GROUP_MODE.customDomain: {
-            const tabs: chrome.tabs.Tab[] = await getAllTabs()
-            const groupRule = await getGroupRule()
-            if (groupRule === undefined) {
+            const tabs = await getAllTabs()
+            const groupRules = await getGroupRules()
+            if (groupRules === undefined || groupRules.length <= 0) {
                 return
             }
             const groupRuleList: string[] = []
-            groupRule.forEach((rule: GroupRule) => {
+            groupRules.forEach((rule: GroupRule) => {
                 groupRuleList.push(rule.domain)
             })
-            await groupCurrentTabsByCustomDomain(tabs, groupRuleList)
+            const domainMap = getTabIdsFromCurrentTabsByDomain(tabs, groupRules)
+            await groupTabsByDomain(domainMap)
             return
         }
         case GROUP_MODE.all: {
@@ -43,39 +41,16 @@ export async function groupTabs(groupMode?: string): Promise<void> {
             return
         }
         default:
-            console.error("Failed to group tabs (invalid group mode) groupMode=%s", groupMode)
-            break;
+            console.error('Failed to group tabs (invalid group mode) groupMode=%s', groupMode)
+            break
     }
-}
-
-/*
- * タブをドメインごとにグループ化
- * ※サブドメインも含むグループ化となる
- * ※グループ化されたタブも含む
- */
-async function groupCurrentTabsByDomain(tabs: chrome.tabs.Tab[]): Promise<void> {
-    const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
-    await groupTabsByDomain(domainMap)
-}
-
-/*
-* カスタムルールに従ってタブをグループ化
-* ※サブドメインも含むグループ化となる
-* ※グループ化されたタブも含む
-*/
-async function groupCurrentTabsByCustomDomain(tabs: chrome.tabs.Tab[], groupRules: string[]): Promise<void> {
-    if (groupRules.length <= 0) {
-        return
-    }
-    const domainMap = getTabIdsFromCurrentTabsByDomain(tabs, groupRules)
-    await groupTabsByDomain(domainMap)
 }
 
 /*
  * 現在のタブからドメイン名とタブIDのマッピングしたオブジェクトを返す。
  * groupRuleが指定されていると、groupRuleのドメイン名とマッチしたオブジェクトのみを返す
  */
-function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: string[]): DomainMap {
+function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: GroupRule[]): DomainMap {
     const domainMap: DomainMap = {}
 
     for (let i: number = 0; i < tabs.length; i++) {
@@ -103,9 +78,9 @@ function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: s
     if (groupRule !== undefined && groupRule.length > 0) {
         const customDomainMap: DomainMap = {}
         groupRule.forEach((domain) => {
-            const tabIds = domainMap[domain]
+            const tabIds = domainMap[domain.domain]
             if (tabIds.length > 0) {
-                customDomainMap[domain] = tabIds
+                customDomainMap[domain.domain] = tabIds
             }
         })
         return customDomainMap
@@ -210,14 +185,12 @@ export async function ungroupTabs(tabGroupId: number): Promise<void> {
  *  全てのタブグループを解除する
  */
 export async function ungroupAllTabs(): Promise<void> {
-    console.log("ここまではきてる")
     const tabs = await getAllTabs()
     const tabIdList: number[] = getTabIdList(tabs)
 
     if (tabIdList.length === 0) return
     await chrome.tabs.ungroup(tabIdList)
 }
-
 
 /*
  * アクティブなウィドウのタブグループ一覧を取得する

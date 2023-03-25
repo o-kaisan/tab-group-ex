@@ -4,7 +4,6 @@ import { ListSubheader } from '@mui/material'
 import GroupCurrentTabs from '../molecules/GroupingFunctionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/GroupingFunctionItem/UnGroupAllTabs'
 
-
 interface Props {
     updateCurrentTabGroupList: Function
 }

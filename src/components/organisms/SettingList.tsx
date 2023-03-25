@@ -21,7 +21,8 @@ export default function SettingList(): JSX.Element {
         <List>
             <ListSubheader>Settings</ListSubheader>
             <SelectTabGroupMode groupMode={groupMode} setGroupMode={setGroupMode} />
-            <AutoGroupSwitch groupMode={groupMode} />
+            {/* TODO background.jsが直せるまで自動グループ化は非表示 */}
+            {/* <AutoGroupSwitch groupMode={groupMode} /> */}
         </List>
     )
 }
