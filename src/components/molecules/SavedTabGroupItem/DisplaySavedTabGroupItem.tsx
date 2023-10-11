@@ -36,6 +36,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     }
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
+        // TODO ログ出力(Deleteの結果を出す)
         void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
     }
 

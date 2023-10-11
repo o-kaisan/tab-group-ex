@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import List from '@mui/material/List'
 import ListSubheader from '@mui/material/ListSubheader'
 import SelectTabGroupMode from '../molecules/SettingItems/SelectTabGroupMode'
-import AutoGroupSwitch from '../molecules/SettingItems/AutoGroup'
 import { GROUP_MODE } from '../../common/types/groupMode'
 import { getGroupMode } from '../../common/libs/groupMode'
 
