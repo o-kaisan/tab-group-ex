@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CurrentTabGroupList from '../organisms/CurrentTabGroupList'
-import GroupingFunctionList from '../../components/organisms/GroupingFunctionList'
+import TabGroupFunctionList from '../organisms/TabGroupFunctionList'
 import TabPanel from '../atoms/TabPanel/TabPanel'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
 
@@ -39,7 +39,7 @@ export default function CurrentTabGroupPanel(props: Props): JSX.Element {
 
     return (
         <TabPanel value={props.panelTab} index={props.index}>
-            <GroupingFunctionList updateCurrentTabGroupList={updateCurrentTabGroupList} />
+            <TabGroupFunctionList updateCurrentTabGroupList={updateCurrentTabGroupList} />
             <CurrentTabGroupList
                 currentTabGroups={currentTabGroups}
                 updateCurrentTabGroupList={updateCurrentTabGroupList}

@@ -1,14 +1,14 @@
 import React from 'react'
 import List from '@mui/material/List'
 import { ListSubheader } from '@mui/material'
-import GroupCurrentTabs from '../molecules/GroupingFunctionItem/GroupCurrentTabs'
-import UnGroupAllTabs from '../molecules/GroupingFunctionItem/UnGroupAllTabs'
+import GroupCurrentTabs from '../molecules/TabGroupFunctionItem/GroupCurrentTabs'
+import UnGroupAllTabs from '../molecules/TabGroupFunctionItem/UnGroupAllTabs'
 
 interface Props {
     updateCurrentTabGroupList: Function
 }
 
-export default function GroupingFunctionList(props: Props): JSX.Element {
+export default function TabGroupFunctionList(props: Props): JSX.Element {
     return (
         <List>
             <ListSubheader>Action</ListSubheader>

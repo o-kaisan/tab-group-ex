@@ -119,10 +119,24 @@ async function restoreTab(url: string): Promise<number | undefined> {
 /*
  * タブグループをストレージから削除する
  */
+// TODO バージョンアップしたときバグってる
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
     const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
     await chrome.storage.local.remove(targetTabGroup)
 }
+
+/*
+ * タブグループをストレージから削除する
+ */
+export async function deleteAllTabGroups(): Promise<void> {
+    const savedTabGroups: SavedTabGroupInfo[] = await getAllSavedTabGroup()
+    await Promise.all(
+        savedTabGroups.map(async (savedTabGroup) => {
+            await deleteTabGroup(savedTabGroup.title, savedTabGroup.tabGroupId)
+        }))
+}
+
+
 
 /*
  * ストレージにタブグループを保存するためのkeyを生成する
