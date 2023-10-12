@@ -23,7 +23,7 @@ export default function SavedTabGroupPanel(props: Props): JSX.Element {
     // ストレージに保存されたタブグループを取得し、表示を最新化する
     const updateSavedTabGroupList = (): void => {
         void getAllSavedTabGroup().then((savedTabGroupList) => {
-            // TODO ログ出力(タブの一覧とID)
+            console.log(savedTabGroupList)
             setSavedTabGroup(savedTabGroupList)
         })
     }

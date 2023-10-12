@@ -119,10 +119,26 @@ async function restoreTab(url: string): Promise<number | undefined> {
 /*
  * タブグループをストレージから削除する
  */
-// TODO バージョンアップしたときバグってる
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
-    const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
-    await chrome.storage.local.remove(targetTabGroup)
+    if (tabGroupId !== undefined) {
+        const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
+        await chrome.storage.local.remove(targetTabGroup)
+    }
+    else {
+        // tabGroupIdが"undefined"の可能性があるのでその場合は同じタイトルを削除する
+        const regex = new RegExp("^.*_" + tabGroupTitle + "_.*$")
+        const storageData = await chrome.storage.local.get(null)
+
+        if (storageData.length() === 0) return;
+
+        await Promise.all(
+            Object.keys(storageData).map(async (key) => {
+                if (key !== null && key !== undefined && regex.test(key)) {
+                    await chrome.storage.local.remove(key)
+                }
+            })
+        )
+    }
 }
 
 /*
@@ -142,7 +158,10 @@ export async function deleteAllTabGroups(): Promise<void> {
  * ストレージにタブグループを保存するためのkeyを生成する
  */
 function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number): string {
-    const TabGroupKey: string = `TG_${tabGroupTitle}${String(tabGroupId)}`
+    if (tabGroupId === undefined) {
+        console.log("tabGroupId was undifined.", tabGroupTitle, tabGroupId)
+    }
+    const TabGroupKey: string = `TG_${tabGroupTitle}_${String(tabGroupId)}`
     return TabGroupKey
 }
 
