@@ -12,7 +12,7 @@ interface Props {
 
 export default function DeleteAllSavedTabGroups(props: Props): JSX.Element {
     /*
-     * ストレージに保存されているタブを削除する // TODO
+     * ストレージに保存されているタブグループを全て削除する
      */
     const handleClick = (): void => {
         deleteAllTabGroups()

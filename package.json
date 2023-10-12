@@ -1,6 +1,6 @@
 {
   "name": "tab-group-ex",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "description": "tab-group-ex",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "parse-domain": "^7.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "recoil": "^0.7.7",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

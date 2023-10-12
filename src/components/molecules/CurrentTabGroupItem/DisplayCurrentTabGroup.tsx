@@ -3,8 +3,10 @@ import ListItemText from '@mui/material/ListItemText'
 import { ListItem, ListItemButton } from '@mui/material'
 import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 import CurrentTabGroupOption from './CurrentTabGroupOption'
-import { saveTabGroup } from '../../../common/libs/savedTabGroup'
+import { saveTabGroup, getAllSavedTabGroup } from '../../../common/libs/savedTabGroup'
 import SaveIcon from '../../atoms/Icons/SaveIcon'
+import { savedTabGroupState } from '../../../common/recoil/atoms/savedTabGroupAtom'
+import { useSetRecoilState } from 'recoil'
 
 interface Props {
     tabGroupId: number
@@ -17,6 +19,7 @@ interface Props {
 export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     // タブグループメニュを管理
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
     const open = Boolean(anchorEl)
 
     const handleTabGroupItemClick = (
@@ -35,7 +38,11 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
 
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
         void saveTabGroup(tabGroupTitle, tabGroupId)
-            .then()
+            .then(
+                () => {
+                    updateSavedTabGroupList()
+                }
+            )
             .catch((error) => {
                 console.log(error)
             })
@@ -44,6 +51,13 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean): void => {
         void toggleTabGroupCollapsed(tabGroupId, !collapsed)
         props.updateCurrentTabGroupList()
+    }
+
+    const updateSavedTabGroupList = (): void => {
+        void getAllSavedTabGroup().then((savedTabGroupList) => {
+            console.log(savedTabGroupList)
+            setSavedTabGroups(savedTabGroupList)
+        })
     }
 
     return (
