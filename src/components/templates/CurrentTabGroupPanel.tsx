@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
 import CurrentTabGroupList from '../organisms/CurrentTabGroupList'
 import TabGroupFunctionList from '../organisms/TabGroupFunctionList'
 import TabPanel from '../atoms/TabPanel/TabPanel'
 import { getAllTabGroupList } from '../../common/libs/tabGroup'
-
+import { currentTabGroupState } from '../../common/recoil/atoms/currentTabGroupAtom'
 /*
  * 拡張機能のメニュー
  */
@@ -14,7 +15,8 @@ interface Props {
 
 export default function CurrentTabGroupPanel(props: Props): JSX.Element {
     // タブグループの一覧
-    const [currentTabGroups, setCurrentTabGroups] = useState<chrome.tabGroups.TabGroup[]>([]) // TODO 状態管理を適切な場所でするように
+    const [currentTabGroups, setCurrentTabGroups] = useRecoilState(currentTabGroupState)
+
     // 画面表示時にウィンドウのタブグループを読み込む
     useEffect(() => {
         getAllTabGroupList()

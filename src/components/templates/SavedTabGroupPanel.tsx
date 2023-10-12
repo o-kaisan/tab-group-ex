@@ -1,10 +1,11 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
 import SavedTabGroupList from '../../components/organisms/SavedTabGroupList'
 import SavedTabGroupFunctionList from '../../components/organisms/SavedTabGroupFunctionList'
 import TabPanel from '../atoms/TabPanel/TabPanel'
 import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
-import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
+import { savedTabGroupState } from '../../common/recoil/atoms/savedTabGroupAtom'
 
 interface Props {
     panelTab: number
@@ -13,7 +14,7 @@ interface Props {
 
 export default function SavedTabGroupPanel(props: Props): JSX.Element {
     // 保存されたタブグループの一覧
-    const [savedTabGroups, setSavedTabGroup] = useState<SavedTabGroupInfo[]>([])
+    const [savedTabGroups, setSavedTabGroups] = useRecoilState(savedTabGroupState)
 
     // 画面表示時にストレージに保存されたタブグループを読み込む
     useEffect(() => {
@@ -24,15 +25,15 @@ export default function SavedTabGroupPanel(props: Props): JSX.Element {
     const updateSavedTabGroupList = (): void => {
         void getAllSavedTabGroup().then((savedTabGroupList) => {
             console.log(savedTabGroupList)
-            setSavedTabGroup(savedTabGroupList)
+            setSavedTabGroups(savedTabGroupList)
         })
     }
 
     return (
         <TabPanel value={props.panelTab} index={props.index}>
-            <SavedTabGroupFunctionList
+            {/* <SavedTabGroupFunctionList
                 updateSavedTabGroupList={updateSavedTabGroupList}
-            />
+            /> */}
             <SavedTabGroupList
                 savedTabGroups={savedTabGroups}
                 updateSavedTabGroupList={updateSavedTabGroupList}
