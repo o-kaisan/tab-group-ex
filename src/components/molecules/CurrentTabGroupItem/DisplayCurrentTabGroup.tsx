@@ -55,7 +55,6 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
 
     const updateSavedTabGroupList = (): void => {
         void getAllSavedTabGroup().then((savedTabGroupList) => {
-            console.log(savedTabGroupList)
             setSavedTabGroups(savedTabGroupList)
         })
     }

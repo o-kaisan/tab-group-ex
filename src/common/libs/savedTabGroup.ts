@@ -156,9 +156,6 @@ export async function deleteAllTabGroups(): Promise<void> {
  * ストレージにタブグループを保存するためのkeyを生成する
  */
 function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number): string {
-    if (tabGroupId === undefined) {
-        console.log("tabGroupId was undifined.", tabGroupTitle, tabGroupId)
-    }
     const TabGroupKey: string = `TG_${tabGroupTitle}_${String(tabGroupId)}`
     return TabGroupKey
 }

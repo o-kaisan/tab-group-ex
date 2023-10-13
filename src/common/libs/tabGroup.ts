@@ -127,7 +127,7 @@ export async function createTabGroups(tabIdList: number[], title: string = ''): 
             title
         })
     } catch (err) {
-        console.log('failed to update title :%d', err)
+        console.log('Failed to update title :%d', err)
     }
     return groupId
 }
