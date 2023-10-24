@@ -53,7 +53,7 @@ export default function GroupRulesList(): JSX.Element {
 
     return (
         <List>
-            <ListSubheader>Group Rules For {GROUP_MODE.customDomain}</ListSubheader>
+            <ListSubheader>Rules For {GROUP_MODE.customDomain}</ListSubheader>
             {groupRule.map((rule: GroupRule) => (
                 <ListItem key={rule.id}>
                     <TextField
@@ -77,10 +77,10 @@ export default function GroupRulesList(): JSX.Element {
             ))}
             <ListItem>
                 <Button sx={{ m: 1 }} variant="outlined" size="small" onClick={handleAddDomain}>
-                    Add Group Rule
+                    Add Rule
                 </Button>
                 <Button sx={{ m: 1 }} variant="outlined" size="small" color="success" onClick={handleSaveGroupRule}>
-                    Save Group Rules
+                    Save Rules
                 </Button>
             </ListItem>
         </List>

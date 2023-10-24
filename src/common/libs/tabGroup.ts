@@ -21,6 +21,7 @@ export async function groupTabs(groupMode: string): Promise<void> {
             await groupTabsByDomain(domainMap)
             return
         }
+
         case GROUP_MODE.customDomain: {
             const tabs = await getAllTabs()
             const groupRules = await getGroupRules()
@@ -35,11 +36,13 @@ export async function groupTabs(groupMode: string): Promise<void> {
             await groupTabsByDomain(domainMap)
             return
         }
+
         case GROUP_MODE.all: {
             const tabs = await getTabsWithoutGrouped()
             await groupAllCurrentTabs(tabs)
             return
         }
+
         default:
             console.error('Failed to group tabs (invalid group mode) groupMode=%s', groupMode)
             break
@@ -52,7 +55,6 @@ export async function groupTabs(groupMode: string): Promise<void> {
  */
 function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: GroupRule[]): DomainMap {
     const domainMap: DomainMap = {}
-
     for (let i: number = 0; i < tabs.length; i++) {
         const targetUrl = tabs[i].url
         if (targetUrl === undefined) {
@@ -79,13 +81,12 @@ function getTabIdsFromCurrentTabsByDomain(tabs: chrome.tabs.Tab[], groupRule?: G
         const customDomainMap: DomainMap = {}
         groupRule.forEach((domain) => {
             const tabIds = domainMap[domain.domain]
-            if (tabIds.length > 0) {
+            if (tabIds !== undefined && tabIds.length > 0) {
                 customDomainMap[domain.domain] = tabIds
             }
         })
         return customDomainMap
     }
-
     return domainMap
 }
 
