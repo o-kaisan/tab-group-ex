@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import SavedTabGroupList from '../../components/organisms/SavedTabGroupList'
-import SavedTabGroupFunctionList from '../../components/organisms/SavedTabGroupFunctionList'
+// import SavedTabGroupFunctionList from '../../components/organisms/SavedTabGroupFunctionList'
 import TabPanel from '../atoms/TabPanel/TabPanel'
 import { getAllSavedTabGroup } from '../../common/libs/savedTabGroup'
 import { savedTabGroupState } from '../../common/recoil/atoms/savedTabGroupAtom'
