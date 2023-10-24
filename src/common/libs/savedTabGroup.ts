@@ -120,19 +120,17 @@ async function restoreTab(url: string): Promise<number | undefined> {
  * タブグループをストレージから削除する
  */
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
+    // tabGroupIdが"undefined"の可能性があるのでその場合は同じタイトルを削除する
     if (tabGroupId === undefined) {
         const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
         await chrome.storage.local.remove(targetTabGroup)
     }
     else {
-        // tabGroupIdが"undefined"の可能性があるのでその場合は同じタイトルを削除する
-        const regex = new RegExp("^.*_" + tabGroupTitle + "_.*$")
-        const storageData = await chrome.storage.local.get(null)
-
+        const savedTabGroups = await getAllSavedTabGroup()
         await Promise.all(
-            Object.keys(storageData).map(async (key) => {
-                if (key !== null && key !== undefined && regex.test(key)) {
-                    await chrome.storage.local.remove(key)
+            Object.values(savedTabGroups).map(async (value) => {
+                if (value !== null && value !== undefined && value.title === tabGroupTitle) {
+                    await chrome.storage.local.remove(resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId))
                 }
             })
         )
