@@ -22,7 +22,7 @@ export default function SelectTabGroupMode(props: Props): JSX.Element {
 
     return (
         <ListItem>
-            <ListItemText id="list-label-Mode" primary="GroupMode" />
+            <ListItemText id="list-label-Mode" primary="Group Mode" />
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                 <Select
                     labelId="demo-simple-select-standard-label"
