@@ -1,6 +1,6 @@
 import React from 'react'
 import List from '@mui/material/List'
-import { ListSubheader } from '@mui/material'
+import StyledListSubheader from './ListSubheader'
 import CurrentTabGroupItem from '../../components/molecules/CurrentTabGroupItem/CurrentTabGroupItem'
 import NoListItem from '../molecules/NoListItem/NoListItem'
 
@@ -15,7 +15,7 @@ export default function CurrentTabGroupList(props: Props): JSX.Element {
     // 一つ上で状態管理しているため、このパネルに来ても画面再描写されていないと思われる
     return (
         <List>
-            <ListSubheader>Current TabGroups</ListSubheader>
+            <StyledListSubheader>Current TabGroups</StyledListSubheader>
             {props.currentTabGroups.length > 0 ? (
                 props.currentTabGroups.map((tabGroup) => (
                     <CurrentTabGroupItem

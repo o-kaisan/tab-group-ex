@@ -1,6 +1,7 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
-import { ListItem, ListItemButton } from '@mui/material'
+import StyledListItem from './StyledListItem'
+import { ListItemButton } from '@mui/material'
 import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 import CurrentTabGroupOption from './CurrentTabGroupOption'
 import { saveTabGroup, getAllSavedTabGroup } from '../../../common/libs/savedTabGroup'
@@ -22,12 +23,14 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
     const open = Boolean(anchorEl)
 
+    // TODO 開閉機能はオプションに移動
     const handleTabGroupItemClick = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         isRight: boolean,
         tabGroupId: number,
         collapsed: boolean
     ): void => {
+        // TODO 右クリックでいきなりグループ名変えられるようにする
         e.preventDefault()
         if (isRight) {
             setAnchorEl(e.currentTarget)
@@ -60,7 +63,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     }
 
     return (
-        <ListItem>
+        <StyledListItem groupcolor="#2196f3">
             <ListItemButton
                 sx={{ pl: 4 }}
                 onClick={(e) => {
@@ -85,6 +88,6 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
             />
-        </ListItem>
+        </StyledListItem>
     )
 }

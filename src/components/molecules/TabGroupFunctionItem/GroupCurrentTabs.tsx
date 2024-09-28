@@ -1,7 +1,8 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import { ListItem, ListItemButton } from '@mui/material'
+import StyledListItem from './StyledListItem'
+import StyledListItemButton from './StyledListItemButton'
 import LayersIcon from '@mui/icons-material/Layers'
 import { groupTabs } from '../../../common/libs/tabGroup'
 import { getGroupMode } from '../../../common/libs/groupMode'
@@ -40,13 +41,13 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
     }
 
     return (
-        <ListItem>
-            <ListItemButton onClick={handleClick}>
+        <StyledListItem>
+            <StyledListItemButton onClick={handleClick}>
                 <ListItemIcon>
                     <LayersIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>タブをグループ化</ListItemText>
-            </ListItemButton>
-        </ListItem>
+            </StyledListItemButton>
+        </StyledListItem>
     )
 }

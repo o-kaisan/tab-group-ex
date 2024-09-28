@@ -1,7 +1,8 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import { ListItem, ListItemButton } from '@mui/material'
+import StyledListItem from './StyledListItem'
+import StyledListItemButton from './StyledListItemButton'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
 import { ungroupAllTabs } from '../../../common/libs/tabGroup'
 
@@ -23,13 +24,13 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
             })
     }
     return (
-        <ListItem>
-            <ListItemButton onClick={handleClick}>
+        <StyledListItem>
+            <StyledListItemButton onClick={handleClick}>
                 <ListItemIcon>
                     <LayersClearIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>タブグループを全て解除</ListItemText>
-            </ListItemButton>
-        </ListItem>
+            </StyledListItemButton>
+        </StyledListItem>
     )
 }

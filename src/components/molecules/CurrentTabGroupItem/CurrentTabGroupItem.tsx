@@ -20,9 +20,12 @@ export default function CurrentTabGroupItem(props: Props): JSX.Element {
 
     const [editMode, setEditMode] = React.useState(false)
 
+    // TODO タブグループをクリックしたらURL一覧がでるように
+
     return (
         <div>
             {editMode ? (
+                // TODO Editモード開くと画面幅が変わる
                 <EditCurrentTabGroup
                     tabGroupId={props.tabGroupId}
                     tabGroupTitle={_title}
