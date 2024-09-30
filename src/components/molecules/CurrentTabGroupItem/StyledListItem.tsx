@@ -8,6 +8,9 @@ const StyledListItem = styled(ListItem)<{ groupcolor: string }>(({ theme, groupc
     height: '3rem',
     borderLeft: `3px solid ${groupcolor}`,
     transition: 'all 0.3s',
+    '.css-wqyty6:hover': {
+        'background-color': 'rgba(0, 0, 0, 0)'
+    },
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         transform: 'translateX(3px)',
