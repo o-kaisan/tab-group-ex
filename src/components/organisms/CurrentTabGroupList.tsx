@@ -1,8 +1,8 @@
 import React from 'react'
 import List from '@mui/material/List'
 import StyledListSubheader from './ListSubheader'
-import CurrentTabGroupItem from '../../components/molecules/CurrentTabGroupItem/CurrentTabGroupItem'
 import NoListItem from '../molecules/NoListItem/NoListItem'
+import DisplayCurrentTabGroup from '../molecules/CurrentTabGroupItem/DisplayCurrentTabGroup'
 
 interface Props {
     currentTabGroups: chrome.tabGroups.TabGroup[]
@@ -18,11 +18,9 @@ export default function CurrentTabGroupList(props: Props): JSX.Element {
             <StyledListSubheader>Current TabGroups</StyledListSubheader>
             {props.currentTabGroups.length > 0 ? (
                 props.currentTabGroups.map((tabGroup) => (
-                    <CurrentTabGroupItem
+                    <DisplayCurrentTabGroup
                         key={tabGroup.id}
-                        tabGroupId={tabGroup.id}
-                        collapsed={tabGroup.collapsed}
-                        tabGroupTitle={tabGroup.title}
+                        tabGroup={tabGroup}
                         updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                     />
                 ))

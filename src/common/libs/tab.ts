@@ -21,6 +21,20 @@ export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
 }
 
 /*
+ * 指定したタブグループのタブ一覧を取得する
+ */
+export async function getTabsByGroupId(tabGroupId: number): Promise<chrome.tabs.Tab[]> {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        pinned: false,
+        groupId: tabGroupId,
+        url: ['http://*/*', 'https://*/*']
+    }
+    const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
+    return tabs
+}
+
+/*
  * グループ化されていないタブを取得する
  */
 export async function getTabsWithoutGrouped(): Promise<chrome.tabs.Tab[]> {
