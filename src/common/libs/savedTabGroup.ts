@@ -1,4 +1,4 @@
-import type { SavedTabGroupInfo } from '../types/savedTabGroupInfo'
+import type { SavedTabGroupInfo, Url } from '../types/savedTabGroupInfo'
 import { getUrlsFromTabGroup, createTabGroups } from './tabGroup'
 
 /*
@@ -19,7 +19,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): P
         type: 'TGEX',
         tabGroupId,
         title: renamedTabGroupTitle,
-        urlList: urls
+        urls,
     }
 
     // タブグループがundefinedだったらストレージに保存せずに返却
@@ -83,14 +83,14 @@ export async function getAllSavedTabGroup(): Promise<SavedTabGroupInfo[]> {
 /*
  * 指定したタブグループを復元する
  */
-export async function restoreTabGroup(tabGroupTitle: string, urlList: string[]): Promise<void> {
+export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promise<void> {
     // 一通りタブを開くchrome.tabs.create
     // 新しく開いたタブのIDをリスト化する
     // もともと設定されているグループの名前でグループ化する
     // 新しくタブグループを作成するとsavedTabGroupのidが変わるからupdateすること
 
     const result = await Promise.all(
-        urlList.map(async (url) => {
+        urls.map(async (url) => {
             const tabId = restoreTab(url)
             return await tabId
         })
@@ -107,10 +107,10 @@ export async function restoreTabGroup(tabGroupTitle: string, urlList: string[]):
 /*
  * タブを復元する
  */
-async function restoreTab(url: string): Promise<number | undefined> {
+async function restoreTab(url: Url): Promise<number | undefined> {
     const createProperties: chrome.tabs.CreateProperties = {
         active: false,
-        url
+        url: url.url
     }
     const tab = await chrome.tabs.create(createProperties)
     return tab.id

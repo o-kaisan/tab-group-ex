@@ -30,9 +30,6 @@ export default function SavedTabGroupPanel(props: Props): JSX.Element {
 
     return (
         <TabPanel value={props.panelTab} index={props.index}>
-            {/* <SavedTabGroupFunctionList
-                updateSavedTabGroupList={updateSavedTabGroupList}
-            /> */}
             <SavedTabGroupList
                 savedTabGroups={savedTabGroups}
                 updateSavedTabGroupList={updateSavedTabGroupList}

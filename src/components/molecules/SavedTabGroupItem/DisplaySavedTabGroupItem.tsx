@@ -1,47 +1,44 @@
 import React from 'react'
-import { restoreTabGroup, deleteTabGroup } from '../../../common/libs/savedTabGroup'
-import { ListItem, ListItemButton, ListItemText } from '@mui/material'
-import SavedTabGroupOption from './SavedTabGroupOption'
 import DeleteIcon from '../../atoms/Icons/DeleteIcon'
+import RestoreIconX from '../../atoms/Icons/RestoreIcon'
+import StyledListItem from './StyledListItem'
+import SavedUrlItem from './SavedUrlItem'
+import { restoreTabGroup, deleteTabGroup } from '../../../common/libs/savedTabGroup'
+import { Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { getAllTabGroupList } from '../../../common/libs/tabGroup'
 import { currentTabGroupState } from '../../../common/recoil/atoms/currentTabGroupAtom'
 import { useSetRecoilState } from 'recoil'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import type { SavedTabGroupInfo, Url } from '../../../common/types/savedTabGroupInfo'
 
 interface Props {
-    tabGroupId: number
-    tabGroupTitle: string
-    urlList: string[]
-    setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+    savedTabGroup: SavedTabGroupInfo
     updateSavedTabGroupList: Function
 }
 
 export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     // タブグループメニュを管理
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const setCurrentTabGroups = useSetRecoilState(currentTabGroupState)
-    const open = Boolean(anchorEl)
 
     const handleTabGroupItemClick = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        isRight: boolean,
         tabGroupTitle: string,
-        urlList: string[]
+        urls: Url[]
     ): void => {
-        e.preventDefault()
-        if (isRight) {
-            setAnchorEl(e.currentTarget)
-        } else {
-            void restoreTabGroup(tabGroupTitle, urlList)
-                .then(
-                    () => {
-                        updateCurrentTabGroupList()
-                    }
-                )
-                .catch((error) => {
-                    console.log(error)
-                })
-        }
+        void restoreTabGroup(tabGroupTitle, urls)
+            .then(
+                () => {
+                    updateCurrentTabGroupList()
+                }
+            )
+            .catch((error) => {
+                console.log(error)
+            })
     }
+
+    const [openUrl, setOpenUrl] = React.useState(false);
+    const handleClick = (): void => {
+        setOpenUrl(!openUrl);
+    };
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
         void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
@@ -59,30 +56,28 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     }
 
     return (
-        <ListItem>
-            <ListItemButton
-                sx={{ pl: 4 }}
-                onClick={(e) => {
-                    handleTabGroupItemClick(e, false, props.tabGroupTitle, props.urlList)
-                }}
-                onContextMenu={(e) => {
-                    handleTabGroupItemClick(e, true, props.tabGroupTitle, props.urlList)
-                }}
-            >
-                <ListItemText>{props.tabGroupTitle}</ListItemText>
-            </ListItemButton>
-            <DeleteIcon
-                onClick={() => {
-                    handleDeleteIconClick(props.tabGroupTitle, props.tabGroupId)
-                }}
-            />
-            <SavedTabGroupOption
-                tabGroupId={props.tabGroupId}
-                setEditMode={props.setEditMode}
-                open={open}
-                anchorEl={anchorEl}
-                setAnchorEl={setAnchorEl}
-            />
-        </ListItem>
+        <div>
+            <StyledListItem>
+                <ListItemButton onClick={handleClick}>
+                    <ListItemText>{props.savedTabGroup.title}</ListItemText>
+                    {openUrl ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <RestoreIconX 
+                    onClick={() => {
+                        handleTabGroupItemClick(props.savedTabGroup.title, props.savedTabGroup.urls)
+                    }} 
+                />
+                <DeleteIcon
+                    onClick={() => {
+                        handleDeleteIconClick(props.savedTabGroup.title, props.savedTabGroup.tabGroupId)
+                    }}
+                />
+            </StyledListItem>
+            <Collapse in={openUrl} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    {props.savedTabGroup.urls.map((url: Url, index: number) => (<SavedUrlItem key={index} url={url} />))}
+                </List>
+            </Collapse>
+        </div>
     )
 }

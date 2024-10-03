@@ -6,5 +6,11 @@ export interface SavedTabGroupInfo {
     // タブグループのタイトル
     title: string
     // タブグループに保存されているタブ
-    urlList: string[]
+    urls: Url[]
+}
+
+export interface Url {
+    title: string | undefined
+    url: string
+    favIconUrl: string | undefined
 }

@@ -5,8 +5,8 @@ import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
 import { GROUP_MODE } from '../types/groupMode'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
-
 import { getGroupRules } from './groupRule'
+import type { Url } from '../types/savedTabGroupInfo'
 
 type DomainMap = Record<string, number[]>
 
@@ -228,15 +228,16 @@ export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boo
 /*
  * タブグループからタブのURL一覧を取得する
  */
-export async function getUrlsFromTabGroup(tabGroupId: number): Promise<string[]> {
+export async function getUrlsFromTabGroup(tabGroupId: number): Promise<Url[]> {
     const targetTabGroupConditions = {
         groupId: tabGroupId
     }
-    const urls: string[] = []
+    const urls: Url[] = []
     const tabs = await getTabs(targetTabGroupConditions)
     tabs.forEach((tab) => {
         if (tab.url !== undefined) {
-            urls.push(tab.url)
+            const url: Url = {title: tab.title,  url: tab.url, favIconUrl: tab.favIconUrl}
+            urls.push(url)
         }
     })
     return urls

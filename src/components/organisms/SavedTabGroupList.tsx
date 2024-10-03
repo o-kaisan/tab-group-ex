@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, ListSubheader } from '@mui/material'
-import SavedTabGroupItem from '../../components/molecules/SavedTabGroupItem/SavedTabGroupItem'
+import DisplaySavedTabGroupItem from '../molecules/SavedTabGroupItem/DisplaySavedTabGroupItem'
 import NoListItem from '../molecules/NoListItem/NoListItem'
 import type { SavedTabGroupInfo } from '../../common/types/savedTabGroupInfo'
 
@@ -17,11 +17,9 @@ export default function SavedTabGroupList(props: Props): JSX.Element {
             <ListSubheader>Saved TabGroups</ListSubheader>
             {props.savedTabGroups.length > 0 ? (
                 props.savedTabGroups.map((tabGroup) => (
-                    <SavedTabGroupItem
+                    <DisplaySavedTabGroupItem
                         key={tabGroup.tabGroupId}
-                        tabGroupId={tabGroup.tabGroupId}
-                        tabGroupTitle={tabGroup.title}
-                        urlList={tabGroup.urlList}
+                        savedTabGroup={tabGroup}
                         updateSavedTabGroupList={props.updateSavedTabGroupList}
                     />
                 ))

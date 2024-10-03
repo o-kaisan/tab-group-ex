@@ -10,7 +10,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import CurrentLinkItem from './CurrentLinkItem';
+import CurrentUrlItem from './CurrentUrlItem';
 import { getTabsByGroupId } from '../../../common/libs/tab';
 
 interface Props {
@@ -88,16 +88,16 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                 />
             </StyledListItem>
             <Collapse in={openUrl} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-                {tabs.length > 0 ? (
-                        tabs.map((url: chrome.tabs.Tab, index: number) => (
-                            <CurrentLinkItem key={index} tab={url} />
-                        ))
-                    ) : ( 
-                        <div></div>
-                    )
-                } 
-            </List>
+                <List component="div" disablePadding>
+                    {tabs.length > 0 ? (
+                            tabs.map((url: chrome.tabs.Tab, index: number) => (
+                                <CurrentUrlItem key={index} tab={url} />
+                            ))
+                        ) : ( 
+                            <div></div>
+                        )
+                    } 
+                </List>
             </Collapse>
         </div>
 )

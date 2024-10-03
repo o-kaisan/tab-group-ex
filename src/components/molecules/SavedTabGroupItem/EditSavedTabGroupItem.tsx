@@ -4,19 +4,19 @@ import ApplyIcon from '../../atoms/Icons/ApplyIcon'
 import CancelIcon from '../../atoms/Icons/CancelIcon'
 import { updateSavedTabGroupName } from '../../../common/libs/savedTabGroup'
 import TextField from '../../atoms/Inputs/TextField'
+import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 
 interface Props {
-    tabGroupId: number
-    tabGroupTitle: string
+    savedTabGroup: SavedTabGroupInfo
     setEditMode: React.Dispatch<React.SetStateAction<boolean>>
     updateSavedTabGroupList: Function
 }
 
 export default function EditSavedTabGroupItem(props: Props): JSX.Element {
     // 変更前の名前
-    const [title, setTitle] = React.useState(props.tabGroupTitle)
+    const [title, setTitle] = React.useState(props.savedTabGroup.title)
     // 変更後の名前
-    const [renamedTitle, setRenamedTitle] = React.useState(props.tabGroupTitle)
+    const [renamedTitle, setRenamedTitle] = React.useState(props.savedTabGroup.title)
 
     const updateSavedTabGroupTitle = (id: number, title: string, renamedTitle: string): void => {
         // ストレージの更新
@@ -41,20 +41,20 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
         //  Enterキー押下時でもグループ名の更新処理が走る
         if (event.nativeEvent.isComposing || event.key !== 'Enter') return
-        updateSavedTabGroupTitle(props.tabGroupId, title, renamedTitle)
+        updateSavedTabGroupTitle(props.savedTabGroup.tabGroupId, title, renamedTitle)
     }
 
     return (
         <ListItem>
             <TextField
-                defaultValue={props.tabGroupTitle}
+                defaultValue={props.savedTabGroup.title}
                 placeholder={'Saved Tab Group Name'}
                 onChange={handleTextChange}
                 onKeyDown={handleKeyDown}
             />
             <ApplyIcon
                 onClick={() => {
-                    updateSavedTabGroupTitle(props.tabGroupId, title, renamedTitle)
+                    updateSavedTabGroupTitle(props.savedTabGroup.tabGroupId, title, renamedTitle)
                 }}
             />
             <CancelIcon
