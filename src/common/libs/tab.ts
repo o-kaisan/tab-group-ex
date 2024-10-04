@@ -61,3 +61,14 @@ export function getTabIdList(targetTabList: chrome.tabs.Tab[]): number[] {
     })
     return tabIdList
 }
+
+
+/*
+ * タブを選択状態に更新する
+ */
+export async function activedTab(tabId: number): Promise<chrome.tabs.Tab> {
+    const targetTabConditions: chrome.tabs.UpdateProperties = {
+        active: true
+    }
+    return await chrome.tabs.update(tabId, targetTabConditions)
+}
