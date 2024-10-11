@@ -40,7 +40,6 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const _title = resolveTitle(props.tabGroup.title)
 
 
-    // ダミーURLはちゃんと取れるようにする
     getTabsByGroupId(props.tabGroup.id).then((tabs: chrome.tabs.Tab[]) => {
         setTabs(tabs) 
     })
@@ -91,7 +90,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                 <List component="div" disablePadding>
                     {tabs.length > 0 ? (
                             tabs.map((url: chrome.tabs.Tab, index: number) => (
-                                <CurrentUrlItem key={index} tab={url} />
+                                <CurrentUrlItem key={index} tab={url} updateTabs={getTabsByGroupId} groupId={props.tabGroup.id}/>
                             ))
                         ) : ( 
                             <div></div>

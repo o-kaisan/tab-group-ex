@@ -1,21 +1,35 @@
-# Tab Group Ex
-タブをグループ化を管理するchromeの拡張機能
+# Tab-Group-Ex
+
+An extension for managing tab groups.
 
 ## Features
-- タブのグループ化
-   - 全てのタブをグループ化(デフォルト)
-   - ドメインごとにグループ化
-   - カスタム設定
-     - 任意のドメインルールを作成可
-     - ルール以外をグループ化 するかの設定
-- タブグループの保存
-  - 保存したタブグループの削除
-  - 保存したタブグループの復元
-- ウィンドウのタブグループの一覧表示
-  - タブグループの開閉
-  - 名前の変更
-  - 閉じる
-  - タブグループの解除
+* Group tabs together
+   * Modes can be selected from "SETTINGS":
+       * All (Default): Groups all ungrouped tabs into a single group
+       * Domain: Groups tabs by domain
+       * Custom Domain: Groups tabs by specified domains (ignoring subdomains)
+* Ungroup all tabs
+* Display a list of groups
+   * Displays a list of tab groups in the current browser
+   * Clicking on a group name shows the list of URLs in that group
+   * Clicking the group settings icon opens a menu:
+       * Close: Closes the group
+       * Ungroup: Ungroups the group
+* Save tab groups
+* Display saved groups
+   * Clicking on a group name shows the list of URLs in that group
+   * Groups can be restored as a whole or by individual URLs
+
+## Custom Domain
+To group tabs by custom domains, open the "Rule" tab and add domains.
+
+Example:
+https://chrome.google.com/ → google
+https://www.google.com/ → google
+
+※ After modifying settings, save them by clicking "SAVE RULES".
+※ Subdomains are ignored, so they will be treated as part of the main domain.
+
 
 ## Prerequisites
 

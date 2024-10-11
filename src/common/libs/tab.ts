@@ -72,3 +72,21 @@ export async function activedTab(tabId: number): Promise<chrome.tabs.Tab> {
     }
     return await chrome.tabs.update(tabId, targetTabConditions)
 }
+
+/*
+ * タブを削除する
+ */
+export async function removeTab(tabId: number): Promise<void> {
+    await chrome.tabs.remove(tabId)
+}
+
+/*
+ * 指定したurlでタブを新規に開く
+ */
+export async function createTab(url: string): Promise<void> {
+    const createProperties: chrome.tabs.CreateProperties = {
+        url,
+        active: true,
+    }
+    await chrome.tabs.create(createProperties)
+}

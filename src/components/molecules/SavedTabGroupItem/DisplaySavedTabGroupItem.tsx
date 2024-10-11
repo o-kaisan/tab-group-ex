@@ -17,6 +17,15 @@ interface Props {
 }
 
 export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
+
+    const resolveUrls = (urls: Url[]): Url[] => {
+        if (urls === undefined) {
+            return []
+        }
+        return urls
+    }
+    const _urls = resolveUrls(props.savedTabGroup.urls)
+
     // タブグループメニュを管理
     const setCurrentTabGroups = useSetRecoilState(currentTabGroupState)
 
@@ -75,7 +84,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
             </StyledListItem>
             <Collapse in={openUrl} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {props.savedTabGroup.urls.map((url: Url, index: number) => (<SavedUrlItem key={index} url={url} />))}
+                    {_urls.map((url: Url, index: number) => (<SavedUrlItem key={index} url={url} />))}
                 </List>
             </Collapse>
         </div>

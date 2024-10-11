@@ -46,7 +46,7 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
                 <ListItemIcon>
                     <LayersIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>タブをグループ化</ListItemText>
+                <ListItemText>Group tabs</ListItemText>
             </StyledListItemButton>
         </StyledListItem>
     )
