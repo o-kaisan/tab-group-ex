@@ -1,11 +1,10 @@
 import React from 'react'
 import DisplaySavedTabGroupItem from './DisplaySavedTabGroupItem'
 import EditSavedTabGroupItem from './EditSavedTabGroupItem'
+import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 
 interface Props {
-    tabGroupId: number
-    tabGroupTitle: string
-    urlList: string[]
+    savedTabGroup: SavedTabGroupInfo
     updateSavedTabGroupList: Function
 }
 
@@ -16,17 +15,13 @@ export default function SavedTabGroupItem(props: Props): JSX.Element {
         <div>
             {editMode ? (
                 <EditSavedTabGroupItem
-                    tabGroupId={props.tabGroupId}
-                    tabGroupTitle={props.tabGroupTitle}
+                    savedTabGroup={props.savedTabGroup}
                     setEditMode={setEditMode}
                     updateSavedTabGroupList={props.updateSavedTabGroupList}
                 />
             ) : (
                 <DisplaySavedTabGroupItem
-                    tabGroupId={props.tabGroupId}
-                    tabGroupTitle={props.tabGroupTitle}
-                    urlList={props.urlList}
-                    setEditMode={setEditMode}
+                    savedTabGroup={props.savedTabGroup}
                     updateSavedTabGroupList={props.updateSavedTabGroupList}
                 />
             )}

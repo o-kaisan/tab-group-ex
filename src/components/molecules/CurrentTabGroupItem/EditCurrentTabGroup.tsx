@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem } from '@mui/material'
+import StyledListItem from './StyledListItem'
 import { updateTabGroupName } from '../../../common/libs/tabGroup'
 import ApplyIcon from '../../atoms/Icons/ApplyIcon'
 import CancelIcon from '../../atoms/Icons/CancelIcon'
@@ -37,7 +37,8 @@ export default function EditCurrentTabGroup(props: Props): JSX.Element {
     }
 
     return (
-        <ListItem>
+        // TODO タブグループの色にできるように
+        <StyledListItem groupcolor='#2196f3'>
             <TextField
                 defaultValue={tabGroupTitle}
                 placeholder={'Tab Group Name'}
@@ -54,6 +55,6 @@ export default function EditCurrentTabGroup(props: Props): JSX.Element {
                     handleCancelIconClick()
                 }}
             />
-        </ListItem>
+        </StyledListItem>
     )
 }

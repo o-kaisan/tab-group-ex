@@ -21,6 +21,20 @@ export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
 }
 
 /*
+ * 指定したタブグループのタブ一覧を取得する
+ */
+export async function getTabsByGroupId(tabGroupId: number): Promise<chrome.tabs.Tab[]> {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        pinned: false,
+        groupId: tabGroupId,
+        url: ['http://*/*', 'https://*/*']
+    }
+    const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
+    return tabs
+}
+
+/*
  * グループ化されていないタブを取得する
  */
 export async function getTabsWithoutGrouped(): Promise<chrome.tabs.Tab[]> {
@@ -46,4 +60,33 @@ export function getTabIdList(targetTabList: chrome.tabs.Tab[]): number[] {
         }
     })
     return tabIdList
+}
+
+
+/*
+ * タブを選択状態に更新する
+ */
+export async function activedTab(tabId: number): Promise<chrome.tabs.Tab> {
+    const targetTabConditions: chrome.tabs.UpdateProperties = {
+        active: true
+    }
+    return await chrome.tabs.update(tabId, targetTabConditions)
+}
+
+/*
+ * タブを削除する
+ */
+export async function removeTab(tabId: number): Promise<void> {
+    await chrome.tabs.remove(tabId)
+}
+
+/*
+ * 指定したurlでタブを新規に開く
+ */
+export async function createTab(url: string): Promise<void> {
+    const createProperties: chrome.tabs.CreateProperties = {
+        url,
+        active: true,
+    }
+    await chrome.tabs.create(createProperties)
 }

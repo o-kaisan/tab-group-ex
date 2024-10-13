@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { closeTabGroup, ungroupTabs } from '../../../common/libs/tabGroup'
-import MenuEditItem from '../../atoms/Menu/MenuItem/MenuEditItem'
+// import MenuEditItem from '../../atoms/Menu/MenuItem/MenuEditItem'
 import MenuCloseItem from '../../atoms/Menu/MenuItem/MenuCloseItem'
 import MenuUngroupItem from '../../atoms/Menu/MenuItem/MenuUngroupItem'
 import OptionIcon from '../../atoms/Icons/OptionIcon'
@@ -9,7 +9,6 @@ import { StyledMenu } from '../../atoms/Menu/StyledMenu/StyledMenu'
 interface Props {
     tabGroupId: number
     updateCurrentTabGroupList: Function
-    setEditMode: React.Dispatch<React.SetStateAction<boolean>>
     open: boolean
     anchorEl: HTMLElement | null
     setAnchorEl: Function
@@ -20,10 +19,9 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
         props.setAnchorEl(null)
     }
 
-    const handleMenuEditItemClick = (): void => {
-        props.setEditMode(true)
-        props.setAnchorEl(null)
-    }
+    // const handleMenuEditItemClick = (): void => {
+    //     props.setAnchorEl(null)
+    // }
 
     const handleMenuUngroupItemClick = (tabGroupId: number): void => {
         /*
@@ -54,7 +52,7 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
                 open={props.open}
                 onClose={handleStyledMenuClose}
             >
-                <MenuEditItem onClick={handleMenuEditItemClick} />
+                {/* <MenuEditItem onClick={handleMenuEditItemClick} /> */}
                 <MenuCloseItem
                     onClick={() => {
                         handleMenuCloseItemClick(props.tabGroupId)

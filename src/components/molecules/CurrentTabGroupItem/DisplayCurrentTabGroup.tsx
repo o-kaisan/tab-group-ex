@@ -1,18 +1,20 @@
 import React from 'react'
-import ListItemText from '@mui/material/ListItemText'
-import { ListItem, ListItemButton } from '@mui/material'
-import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
+import StyledListItem from './StyledListItem'
 import CurrentTabGroupOption from './CurrentTabGroupOption'
 import { saveTabGroup, getAllSavedTabGroup } from '../../../common/libs/savedTabGroup'
 import SaveIcon from '../../atoms/Icons/SaveIcon'
 import { savedTabGroupState } from '../../../common/recoil/atoms/savedTabGroupAtom'
 import { useSetRecoilState } from 'recoil'
+import { List, ListItemText } from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import CurrentUrlItem from './CurrentUrlItem';
+import { getTabsByGroupId } from '../../../common/libs/tab';
 
 interface Props {
-    tabGroupId: number
-    collapsed: boolean
-    tabGroupTitle: string
-    setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+    tabGroup: chrome.tabGroups.TabGroup    
     updateCurrentTabGroupList: Function
 }
 
@@ -22,19 +24,29 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
     const open = Boolean(anchorEl)
 
-    const handleTabGroupItemClick = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        isRight: boolean,
-        tabGroupId: number,
-        collapsed: boolean
-    ): void => {
-        e.preventDefault()
-        if (isRight) {
-            setAnchorEl(e.currentTarget)
-        } else {
-            runUpdateTabGroupCollapsed(tabGroupId, collapsed)
+    const [openUrl, setOpenUrl] = React.useState(false);
+    const handleClick = (): void => {
+        setOpenUrl(!openUrl);
+    };
+
+    const [tabs, setTabs] = React.useState<chrome.tabs.Tab[]>([])
+
+    const resolveTitle = (title: string | undefined): string => {
+        if (title === undefined) {
+            title = 'none title'
         }
+        return title
     }
+    const _title = resolveTitle(props.tabGroup.title)
+
+
+    getTabsByGroupId(props.tabGroup.id).then((tabs: chrome.tabs.Tab[]) => {
+        setTabs(tabs) 
+    })
+    .catch((error) => {
+        console.log(error)
+        return  [] as chrome.tabs.Tab[]
+    })
 
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
         void saveTabGroup(tabGroupTitle, tabGroupId)
@@ -48,11 +60,6 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
             })
     }
 
-    const runUpdateTabGroupCollapsed = (tabGroupId: number, collapsed: boolean): void => {
-        void toggleTabGroupCollapsed(tabGroupId, !collapsed)
-        props.updateCurrentTabGroupList()
-    }
-
     const updateSavedTabGroupList = (): void => {
         void getAllSavedTabGroup().then((savedTabGroupList) => {
             setSavedTabGroups(savedTabGroupList)
@@ -60,31 +67,37 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     }
 
     return (
-        <ListItem>
-            <ListItemButton
-                sx={{ pl: 4 }}
-                onClick={(e) => {
-                    handleTabGroupItemClick(e, false, props.tabGroupId, props.collapsed)
-                }}
-                onContextMenu={(e) => {
-                    handleTabGroupItemClick(e, true, props.tabGroupId, props.collapsed)
-                }}
-            >
-                <ListItemText>{props.tabGroupTitle}</ListItemText>
-            </ListItemButton>
-            <SaveIcon
-                onClick={() => {
-                    handleSaveIconClick(props.tabGroupTitle, props.tabGroupId)
-                }}
-            />
-            <CurrentTabGroupOption
-                tabGroupId={props.tabGroupId}
-                updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-                setEditMode={props.setEditMode}
-                open={open}
-                anchorEl={anchorEl}
-                setAnchorEl={setAnchorEl}
-            />
-        </ListItem>
-    )
+        <div>
+            <StyledListItem groupcolor={props.tabGroup.color}>
+                <ListItemButton onClick={handleClick}>
+                    <ListItemText>{_title}</ListItemText>
+                    {openUrl ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <SaveIcon
+                    onClick={() => {
+                        handleSaveIconClick(_title, props.tabGroup.id)
+                    }}
+                />
+                <CurrentTabGroupOption
+                    tabGroupId={props.tabGroup.id}
+                    updateCurrentTabGroupList={props.updateCurrentTabGroupList}
+                    open={open}
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                />
+            </StyledListItem>
+            <Collapse in={openUrl} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    {tabs.length > 0 ? (
+                            tabs.map((url: chrome.tabs.Tab, index: number) => (
+                                <CurrentUrlItem key={index} tab={url} updateTabs={getTabsByGroupId} groupId={props.tabGroup.id}/>
+                            ))
+                        ) : ( 
+                            <div></div>
+                        )
+                    } 
+                </List>
+            </Collapse>
+        </div>
+)
 }
