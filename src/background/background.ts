@@ -1,34 +1,39 @@
-// import { getAutoGroup } from '../common/libs/autoGroup'
-// import { getGroupMode } from '../common/libs/groupMode'
-// import { groupTabs } from '../common/libs/tabGroup'
-// import { GROUP_MODE } from '../common/types/groupMode'
 
-// /*
-//  * タブを追加した時の処理
-//  */
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//     // グループ化の自動
-//     //  TODO タブが変更される度にタブのグループ化が多重実行してエラーが起きるの修正する
-//     void getAutoGroup()
-//         .then((autoGroup) => {
-//             void getGroupMode()
-//                 .then((groupMode) => {
-//                     if (groupMode !== GROUP_MODE.domain && groupMode !== GROUP_MODE.customDomain) {
-//                         return
-//                     }
-//                     if (autoGroup) {
-//                         groupTabs(groupMode)
-//                             .then()
-//                             .catch((error) => {
-//                                 console.log(error)
-//                             })
-//                     }
-//                 })
-//                 .catch((error) => {
-//                     console.log(error)
-//                 })
-//         })
-//         .catch((error) => {
-//             console.log(error)
-//         })
-// })
+import { groupTabs, ungroupAllTabs } from "../common/libs/tabGroup";
+import { GROUP_MODE } from "../common/types/groupMode"
+
+chrome.commands.onCommand.addListener((command) => {
+    console.log("Command: %s", command)
+    switch (command) {
+        case "GroupAllUnGroupedTabs":
+            console.log("grouped by all")
+            groupAllUngroupedTabs().catch((e) => { console.log(e) })
+            break;
+        case "GroupTabsByDomain":
+            console.log("grouped by domain")
+            groupByDomain().catch((e) => { console.log(e) });
+            break;
+        case "GroupTabsByCustomDomain":
+            console.log("grouped by custom domain")
+            groupByCustomDomain().catch((e) => { console.log(e) });
+            break;
+        case "UngroupAllGroups":
+            console.log("upgroup all groups")
+            ungroupAllGroups().catch((e) => { console.log(e) });
+            break;
+    }
+})
+
+const groupAllUngroupedTabs = async (): Promise<void> => {
+    await groupTabs(GROUP_MODE.all)
+}
+const groupByDomain = async (): Promise<void> => {
+    await groupTabs(GROUP_MODE.domain)
+}
+const groupByCustomDomain = async (): Promise<void> => {
+    await groupTabs(GROUP_MODE.customDomain)
+}
+
+const ungroupAllGroups = async (): Promise<void> => {
+    await ungroupAllTabs()
+}
