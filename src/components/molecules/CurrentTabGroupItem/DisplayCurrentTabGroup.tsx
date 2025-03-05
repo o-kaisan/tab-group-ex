@@ -5,16 +5,16 @@ import { saveTabGroup, getAllSavedTabGroup } from '../../../common/libs/savedTab
 import SaveIcon from '../../atoms/Icons/SaveIcon'
 import { savedTabGroupState } from '../../../common/recoil/atoms/savedTabGroupAtom'
 import { useSetRecoilState } from 'recoil'
-import { List, ListItemText } from '@mui/material';
-import ListItemButton from '@mui/material/ListItemButton';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import CurrentUrlItem from './CurrentUrlItem';
-import { getTabsByGroupId } from '../../../common/libs/tab';
+import { List, ListItemText } from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
+import Collapse from '@mui/material/Collapse'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import CurrentTabItem from './CurrentTabItem'
+import { getTabsByGroupId } from '../../../common/libs/tab'
 
 interface Props {
-    tabGroup: chrome.tabGroups.TabGroup    
+    tabGroup: chrome.tabGroups.TabGroup
     updateCurrentTabGroupList: Function
 }
 
@@ -24,10 +24,10 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
     const open = Boolean(anchorEl)
 
-    const [openUrl, setOpenUrl] = React.useState(false);
+    const [openUrl, setOpenUrl] = React.useState(false)
     const handleClick = (): void => {
-        setOpenUrl(!openUrl);
-    };
+        setOpenUrl(!openUrl)
+    }
 
     const [tabs, setTabs] = React.useState<chrome.tabs.Tab[]>([])
 
@@ -39,22 +39,20 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     }
     const _title = resolveTitle(props.tabGroup.title)
 
-
-    getTabsByGroupId(props.tabGroup.id).then((tabs: chrome.tabs.Tab[]) => {
-        setTabs(tabs) 
-    })
-    .catch((error) => {
-        console.log(error)
-        return  [] as chrome.tabs.Tab[]
-    })
+    getTabsByGroupId(props.tabGroup.id)
+        .then((tabs: chrome.tabs.Tab[]) => {
+            setTabs(tabs)
+        })
+        .catch((error) => {
+            console.log(error)
+            return [] as chrome.tabs.Tab[]
+        })
 
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
         void saveTabGroup(tabGroupTitle, tabGroupId)
-            .then(
-                () => {
-                    updateSavedTabGroupList()
-                }
-            )
+            .then(() => {
+                updateSavedTabGroupList()
+            })
             .catch((error) => {
                 console.log(error)
             })
@@ -89,15 +87,19 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
             <Collapse in={openUrl} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {tabs.length > 0 ? (
-                            tabs.map((url: chrome.tabs.Tab, index: number) => (
-                                <CurrentUrlItem key={index} tab={url} updateTabs={getTabsByGroupId} groupId={props.tabGroup.id}/>
-                            ))
-                        ) : ( 
-                            <div></div>
-                        )
-                    } 
+                        tabs.map((url: chrome.tabs.Tab, index: number) => (
+                            <CurrentTabItem
+                                key={index}
+                                tab={url}
+                                updateTabs={getTabsByGroupId}
+                                groupId={props.tabGroup.id}
+                            />
+                        ))
+                    ) : (
+                        <div></div>
+                    )}
                 </List>
             </Collapse>
         </div>
-)
+    )
 }

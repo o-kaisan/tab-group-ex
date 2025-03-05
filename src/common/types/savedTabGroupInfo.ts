@@ -1,6 +1,5 @@
 export interface SavedTabGroupInfo {
-    // ストレージ保存用のタイプ
-    type: string
+    id: string
     // 保存時のグループID
     tabGroupId: number
     // タブグループのタイトル

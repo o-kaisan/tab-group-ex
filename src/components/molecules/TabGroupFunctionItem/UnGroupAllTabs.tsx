@@ -29,7 +29,7 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
                 <ListItemIcon>
                     <LayersClearIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Ungroup all TabGroups</ListItemText>
+                <ListItemText>Ungroup all</ListItemText>
             </StyledListItemButton>
         </StyledListItem>
     )

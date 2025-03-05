@@ -1,5 +1,7 @@
 import type { GroupRule } from '../types/groupRule'
 
+const GROUP_RULE_KEY = "groupRule"
+
 /*
  * グループルールをローカルストレージに保存する
  */
@@ -11,8 +13,8 @@ export async function saveGroupRule(groupRule: GroupRule[]): Promise<void> {
  * ローカルストレージに保存されているグループルールを取得する
  */
 export async function getGroupRules(): Promise<GroupRule[]> {
-    const groupRuleKV = await chrome.storage.local.get('groupRule')
-    let ret = groupRuleKV.groupRule
+    const storageData = await chrome.storage.local.get(GROUP_RULE_KEY)
+    let ret: any = storageData.groupRule
     if (ret === undefined) {
         ret = []
     }

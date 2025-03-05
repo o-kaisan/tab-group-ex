@@ -1,6 +1,9 @@
 import type { SavedTabGroupInfo, Url } from '../types/savedTabGroupInfo'
 import { getUrlsFromTabGroup, createTabGroups } from './tabGroup'
 
+// ストレージのキー
+const SAVED_TAB_GROUP_KEY: string = "savedTabGroups"
+
 /*
  * タブグループを保存する
  */
@@ -15,8 +18,8 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): P
     // 同じ名前のグループ名があるかを確認し、同じ名前があればrename
     const renamedTabGroupTitle = duplicateRenameTabGroupTitle(tabGroupTitle, savedTabGroups)
 
-    const saveTabGroupInfo: SavedTabGroupInfo = {
-        type: 'TGEX',
+    const targetTabGroup: SavedTabGroupInfo = {
+        id: resolveStorageKeyforTabGroup(renamedTabGroupTitle, tabGroupId),
         tabGroupId,
         title: renamedTabGroupTitle,
         urls,
@@ -24,8 +27,8 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): P
 
     // タブグループがundefinedだったらストレージに保存せずに返却
     if (tabGroupTitle === undefined) return
-    const storageKey: string = resolveStorageKeyforTabGroup(renamedTabGroupTitle, tabGroupId)
-    await chrome.storage.local.set({ [storageKey]: saveTabGroupInfo })
+    savedTabGroups.push(targetTabGroup)
+    await chrome.storage.local.set({ savedTabGroups })
 }
 
 /*
@@ -61,23 +64,30 @@ function duplicateRenameTabGroupTitle(
 
 // 指定したタブグループをストレージから取得する
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-export async function getTabGroupFromStorage(key: string): Promise<{ [key: string]: any }> {
-    const savedTabGroup = await chrome.storage.local.get(key)
-    return savedTabGroup
+export async function getSavedTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<SavedTabGroupInfo | undefined> {
+    const savedTabGroups = await getAllSavedTabGroup()
+    const id = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
+
+    let ret: SavedTabGroupInfo | undefined
+    savedTabGroups.forEach((savedTabGroup) => {
+        if (savedTabGroup.id !== id) {
+            ret = savedTabGroup
+        }
+    })
+    return ret
 }
 
 /*
  * ローカルストレージから保存されたタブグループを取得する
  */
 export async function getAllSavedTabGroup(): Promise<SavedTabGroupInfo[]> {
-    const storageData = await chrome.storage.local.get(null)
-    const ret: SavedTabGroupInfo[] = []
-    Object.keys(storageData).forEach((key) => {
-        if (storageData[key].type === 'TGEX') {
-            ret.push(storageData[key])
-        }
-    })
-    return ret
+    const storageData: any = await chrome.storage.local.get(SAVED_TAB_GROUP_KEY)
+    const savedTabGroups: SavedTabGroupInfo[] = storageData.savedTabGroups
+
+    if (typeof savedTabGroups === "undefined") {
+        return []
+    }
+    return savedTabGroups
 }
 
 /*
@@ -88,7 +98,6 @@ export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promi
     // 新しく開いたタブのIDをリスト化する
     // もともと設定されているグループの名前でグループ化する
     // 新しくタブグループを作成するとsavedTabGroupのidが変わるからupdateすること
-
     const result = await Promise.all(
         urls.map(async (url) => {
             const tabId = restoreTab(url)
@@ -120,41 +129,17 @@ async function restoreTab(url: Url): Promise<number | undefined> {
  * タブグループをストレージから削除する
  */
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
-    // tabGroupIdが"undefined"の可能性があるのでその場合は同じタイトルを削除する
-    if (tabGroupId === undefined) {
-        const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
-        await chrome.storage.local.remove(targetTabGroup)
-    }
-    else {
-        const savedTabGroups = await getAllSavedTabGroup()
-        await Promise.all(
-            Object.values(savedTabGroups).map(async (value) => {
-                if (value !== null && value !== undefined && value.title === tabGroupTitle) {
-                    await chrome.storage.local.remove(resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId))
-                }
-            })
-        )
-    }
+    const savedTabGroups = await getAllSavedTabGroup()
+    const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
+    const deletedSavedTabGroups = savedTabGroups.filter((savedTabGroup) => savedTabGroup.id !== targetTabGroup)
+    await updateSavedTabGroups(deletedSavedTabGroups)
 }
-
-/*
- * タブグループをストレージから削除する
- */
-export async function deleteAllTabGroups(): Promise<void> {
-    const savedTabGroups: SavedTabGroupInfo[] = await getAllSavedTabGroup()
-    await Promise.all(
-        savedTabGroups.map(async (savedTabGroup) => {
-            await deleteTabGroup(savedTabGroup.title, savedTabGroup.tabGroupId)
-        }))
-}
-
-
 
 /*
  * ストレージにタブグループを保存するためのkeyを生成する
  */
 function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number): string {
-    const TabGroupKey: string = `TG_${tabGroupTitle}_${String(tabGroupId)}`
+    const TabGroupKey: string = `${tabGroupTitle}_${String(tabGroupId)}`
     return TabGroupKey
 }
 
@@ -164,5 +149,15 @@ function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number)
 export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string): Promise<void> {
     await deleteTabGroup(title, tabGroupId)
     await saveTabGroup(renamedTitle, tabGroupId)
+}
+
+/*
+ * 保存されたタブグループを一括更新する
+ */
+export async function updateSavedTabGroups(savedTabGroups: SavedTabGroupInfo[]): Promise<void> {
+    // 一度ローカルストレージに保存しているタブグループを削除する
+    await chrome.storage.local.remove(SAVED_TAB_GROUP_KEY)
+    // 再度ローカルストレージにタブグループを保存する
+    await chrome.storage.local.set({ savedTabGroups })
 }
 

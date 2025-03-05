@@ -30,14 +30,14 @@ export default function TabNavigator(): JSX.Element {
                 <Tabs value={panelTab} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Groups" {...a11yProps(0)} />
                     <Tab label="Saved" {...a11yProps(1)} />
-                    <Tab label="Rules" {...a11yProps(2)} />
-                    <Tab label="Settings" {...a11yProps(3)} />
+                    <Tab label="Settings" {...a11yProps(2)} />
+                    <Tab label="Rules" {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <CurrentTabGroupPanel panelTab={panelTab} index={0} />
             <SavedTabGroupPanel panelTab={panelTab} index={1} />
-            <GroupRulesPanel panelTab={panelTab} index={2} />
-            <SettingsPanel panelTab={panelTab} index={3} />
+            <SettingsPanel panelTab={panelTab} index={2} />
+            <GroupRulesPanel panelTab={panelTab} index={3} />
         </Box>
     )
 }
