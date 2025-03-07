@@ -12,6 +12,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import CurrentTabItem from './CurrentTabItem'
 import { getTabsByGroupId } from '../../../common/libs/tab'
+import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
 
 interface Props {
     tabGroup: chrome.tabGroups.TabGroup
@@ -48,8 +49,8 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
             return [] as chrome.tabs.Tab[]
         })
 
-    const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
-        void saveTabGroup(tabGroupTitle, tabGroupId)
+    const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number, color: string): void => {
+        void saveTabGroup(tabGroupTitle, tabGroupId, color)
             .then(() => {
                 updateSavedTabGroupList()
             })
@@ -67,13 +68,15 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     return (
         <div>
             <StyledListItem groupcolor={props.tabGroup.color}>
-                <ListItemButton onClick={handleClick}>
-                    <ListItemText>{_title}</ListItemText>
+                <ListItemButton onClick={handleClick} style={{ padding: '3px' }}>
+                    <ListItemText>
+                        <TextTruncator text={_title} maxLength={33} />
+                    </ListItemText>
                     {openUrl ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <SaveIcon
                     onClick={() => {
-                        handleSaveIconClick(_title, props.tabGroup.id)
+                        handleSaveIconClick(_title, props.tabGroup.id, props.tabGroup.color)
                     }}
                 />
                 <CurrentTabGroupOption

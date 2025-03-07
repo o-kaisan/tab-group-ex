@@ -6,6 +6,8 @@ export interface SavedTabGroupInfo {
     title: string
     // タブグループに保存されているタブ
     urls: Url[]
+    // カラー
+    color: string
 }
 
 export interface Url {

@@ -21,7 +21,7 @@ export default function OptionIcon(props: Props): JSX.Element {
             aria-haspopup="true"
             onClick={handleClick}
         >
-            <MoreVertIcon />
+            <MoreVertIcon fontSize="small" />
         </IconButton>
     )
 }

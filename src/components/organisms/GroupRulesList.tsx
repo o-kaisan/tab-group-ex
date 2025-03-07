@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List'
-import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import ClearIcon from '@mui/icons-material/Clear'
 import Button from '@mui/material/Button'
 import TextField from '@material-ui/core/TextField'
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import { v4 as uuidv4 } from 'uuid'
 import type { GroupRule } from '../../common/types/groupRule'
 import { getGroupRules, saveGroupRule } from '../../common/libs/groupRule'
-import { GROUP_MODE } from '../../common/types/groupMode'
+import { Box, createTheme, Paper, ThemeProvider, Typography } from '@mui/material'
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#1976d2'
+        },
+        error: {
+            main: '#d32f2f'
+        },
+        success: {
+            main: '#2e7d32'
+        }
+    }
+})
 
 export default function GroupRulesList(): JSX.Element {
     // カスタムルール
@@ -53,8 +67,12 @@ export default function GroupRulesList(): JSX.Element {
 
     return (
         <List>
-            <ListSubheader>Rules For {GROUP_MODE.customDomain}</ListSubheader>
-            {groupRule.map((rule: GroupRule) => (
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 2, mr: 2, mt: 1, mb: 1 }}>
+                This configuration is for custom domains. Add the domains to be grouped together. Subdomains will be
+                ignored.
+            </Typography>
+            <ExamplesDiscription />
+            {groupRule.map((rule: GroupRule, index: number) => (
                 <ListItem key={rule.id}>
                     <TextField
                         label="domain"
@@ -71,7 +89,7 @@ export default function GroupRulesList(): JSX.Element {
                             handleDeleteDomain(rule.id)
                         }}
                     >
-                        <ClearIcon />
+                        {index > 1 ? <ClearIcon /> : ''}
                     </IconButton>
                 </ListItem>
             ))}
@@ -84,5 +102,41 @@ export default function GroupRulesList(): JSX.Element {
                 </Button>
             </ListItem>
         </List>
+    )
+}
+
+function ExamplesDiscription(): JSX.Element {
+    return (
+        <ThemeProvider theme={theme}>
+            <Paper
+                elevation={2}
+                sx={{
+                    p: 3,
+                    maxWidth: 500,
+                    mx: 'auto',
+                    mt: 2,
+                    backgroundColor: 'ghostwhite'
+                }}
+            >
+                <Typography variant="caption" fontWeight="medium" sx={{ display: 'block', mb: 1 }}>
+                    Domain format examples:
+                </Typography>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ minWidth: 120 }}>
+                        example.com
+                    </Typography>
+                    <ArrowRightAltIcon fontSize="small" sx={{ mx: 1 }} />
+                    <Typography variant="caption">example</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="caption" sx={{ minWidth: 120 }}>
+                        sub.example.com
+                    </Typography>
+                    <ArrowRightAltIcon fontSize="small" sx={{ mx: 1 }} />
+                    <Typography variant="caption">example</Typography>
+                </Box>
+            </Paper>
+        </ThemeProvider>
     )
 }

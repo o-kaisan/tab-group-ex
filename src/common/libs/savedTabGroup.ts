@@ -7,7 +7,7 @@ const SAVED_TAB_GROUP_KEY: string = "savedTabGroups"
 /*
  * タブグループを保存する
  */
-export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
+export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, color: string): Promise<void> {
     const urls = await getUrlsFromTabGroup(tabGroupId)
     if (urls.length === 0) {
         return
@@ -23,6 +23,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number): P
         tabGroupId,
         title: renamedTabGroupTitle,
         urls,
+        color
     }
 
     // タブグループがundefinedだったらストレージに保存せずに返却
@@ -119,7 +120,7 @@ export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promi
 async function restoreTab(url: Url): Promise<number | undefined> {
     const createProperties: chrome.tabs.CreateProperties = {
         active: false,
-        url: url.url
+        url: url.url,
     }
     const tab = await chrome.tabs.create(createProperties)
     return tab.id
@@ -146,9 +147,9 @@ function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number)
 /*
  * 保存されたタブグループの名前を更新する
  */
-export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string): Promise<void> {
+export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string, color: string): Promise<void> {
     await deleteTabGroup(title, tabGroupId)
-    await saveTabGroup(renamedTitle, tabGroupId)
+    await saveTabGroup(renamedTitle, tabGroupId, color)
 }
 
 /*

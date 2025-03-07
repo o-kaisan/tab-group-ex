@@ -13,7 +13,7 @@ export default function CancelIcon(props: Props): JSX.Element {
 
     return (
         <IconButton onClick={handleClick}>
-            <ClearIcon />
+            <ClearIcon fontSize="small" />
         </IconButton>
     )
 }

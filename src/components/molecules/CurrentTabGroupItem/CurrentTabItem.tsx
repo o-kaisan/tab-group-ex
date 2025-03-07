@@ -34,6 +34,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
     return (
         <ListItemButton
             sx={{ pl: 4 }}
+            style={{ padding: '3px 8px' }}
             onClick={() => {
                 handleOnClickUrl(props.tab)
             }}
@@ -44,6 +45,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
                 alt={props.tab.favIconUrl}
                 onError={(e: any) => {
                     e.target.src = <PublicIcon />
+                    e.target.alt = <PublicIcon />
                 }}
             />
             <ListItemText primary={props.tab.title} />

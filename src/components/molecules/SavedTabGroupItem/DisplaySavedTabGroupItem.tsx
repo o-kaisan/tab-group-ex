@@ -1,6 +1,7 @@
 import React from 'react'
 import DeleteIcon from '../../atoms/Icons/DeleteIcon'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
+import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
 import StyledListItem from './StyledListItem'
 import SavedTabItem from './SavedTabItem'
 import DragIndicatorSharpIcon from '@mui/icons-material/DragIndicatorSharp'
@@ -82,6 +83,13 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
             })
     }
 
+    const resolveColor = (color: string): string => {
+        if (typeof color === 'undefined') {
+            return '#dcdcdc'
+        }
+        return color
+    }
+
     return (
         <div
             ref={setNodeRef}
@@ -90,23 +98,27 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
                 transition
             }}
         >
-            <StyledListItem>
+            <StyledListItem groupcolor={resolveColor(props.savedTabGroup.color)}>
                 <div
                     ref={setActivatorNodeRef}
                     {...attributes}
                     {...listeners}
                     style={{
-                        cursor: isDragging ? 'grabbing' : 'grab'
+                        cursor: isDragging ? 'grabbing' : 'grab',
+                        paddingTop: '3px'
                     }}
                 >
                     <DragIndicatorSharpIcon style={{ fontSize: '1.3rem' }} />
                 </div>
                 <ListItemButton
+                    style={{ padding: '2px 2px' }}
                     onClick={() => {
                         handleClick(props.savedTabGroup.id)
                     }}
                 >
-                    <ListItemText>{props.savedTabGroup.title}</ListItemText>
+                    <ListItemText>
+                        <TextTruncator text={props.savedTabGroup.title} maxLength={33} />
+                    </ListItemText>
                     {props.isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <RestoreIconX

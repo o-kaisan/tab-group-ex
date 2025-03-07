@@ -12,8 +12,8 @@ export default function ApplyIcon(props: Props): JSX.Element {
     }
 
     return (
-        <IconButton onClick={handleClick}>
-            <CheckIcon />
+        <IconButton onClick={handleClick} style={{ padding: '3px' }}>
+            <CheckIcon fontSize="small" />
         </IconButton>
     )
 }
