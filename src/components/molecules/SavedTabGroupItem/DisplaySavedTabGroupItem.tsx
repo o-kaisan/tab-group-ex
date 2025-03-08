@@ -57,7 +57,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     }
 
     const handleClick = (savedTabGroupId: string): void => {
-        props.setOpenIds((prev: string) => {
+        props.setOpenIds((prev: Set<string>) => {
             const newOpenIds = new Set(prev)
             if (newOpenIds.has(savedTabGroupId)) {
                 newOpenIds.delete(savedTabGroupId)

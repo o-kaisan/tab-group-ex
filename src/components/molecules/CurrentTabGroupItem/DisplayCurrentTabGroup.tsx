@@ -13,23 +13,18 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import CurrentTabItem from './CurrentTabItem'
 import { getTabsByGroupId } from '../../../common/libs/tab'
 import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
+import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 
 interface Props {
     tabGroup: chrome.tabGroups.TabGroup
     updateCurrentTabGroupList: Function
+    isCollapsed: boolean
+    setCollapsedIds: Function
 }
 
 export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     // タブグループメニュを管理
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
-    const open = Boolean(anchorEl)
-
-    const [openUrl, setOpenUrl] = React.useState(false)
-    const handleClick = (): void => {
-        setOpenUrl(!openUrl)
-    }
-
     const [tabs, setTabs] = React.useState<chrome.tabs.Tab[]>([])
 
     const resolveTitle = (title: string | undefined): string => {
@@ -59,6 +54,31 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
             })
     }
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const open = Boolean(anchorEl)
+    const [openUrl, setOpenUrl] = React.useState(false)
+    const handleTabGroupItemClick = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        isRight: boolean,
+        tabGroupId: number
+    ): void => {
+        e.preventDefault()
+        if (isRight) {
+            void toggleTabGroupCollapsed(tabGroupId, !props.isCollapsed)
+            props.setCollapsedIds((prev: Set<number>) => {
+                const newOpenIds = new Set(prev)
+                if (newOpenIds.has(tabGroupId)) {
+                    newOpenIds.delete(tabGroupId)
+                } else {
+                    newOpenIds.add(tabGroupId)
+                }
+                return newOpenIds
+            })
+        } else {
+            setOpenUrl(!openUrl)
+        }
+    }
+
     const updateSavedTabGroupList = (): void => {
         void getAllSavedTabGroup().then((savedTabGroupList) => {
             setSavedTabGroups(savedTabGroupList)
@@ -68,7 +88,15 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     return (
         <div>
             <StyledListItem groupcolor={props.tabGroup.color}>
-                <ListItemButton onClick={handleClick} style={{ padding: '3px' }}>
+                <ListItemButton
+                    onClick={(e) => {
+                        handleTabGroupItemClick(e, false, props.tabGroup.id)
+                    }}
+                    onContextMenu={(e) => {
+                        handleTabGroupItemClick(e, true, props.tabGroup.id)
+                    }}
+                    style={{ padding: '3px' }}
+                >
                     <ListItemText>
                         <TextTruncator text={_title} maxLength={33} />
                     </ListItemText>

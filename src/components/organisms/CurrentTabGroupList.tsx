@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import List from '@mui/material/List'
 import StyledListSubheader from './ListSubheader'
 import NoListItem from '../molecules/NoListItem/NoListItem'
@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function CurrentTabGroupList(props: Props): JSX.Element {
+    const [collapsedIds, setCollapsedIds] = useState<Set<number>>(new Set())
 
     return (
         <List>
@@ -19,6 +20,8 @@ export default function CurrentTabGroupList(props: Props): JSX.Element {
                     <DisplayCurrentTabGroup
                         key={tabGroup.id}
                         tabGroup={tabGroup}
+                        isCollapsed={collapsedIds.has(tabGroup.id)}
+                        setCollapsedIds={setCollapsedIds}
                         updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                     />
                 ))
