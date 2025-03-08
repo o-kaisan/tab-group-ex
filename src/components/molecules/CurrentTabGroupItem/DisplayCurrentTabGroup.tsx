@@ -64,7 +64,6 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     ): void => {
         e.preventDefault()
         if (isRight) {
-            void toggleTabGroupCollapsed(tabGroupId, !props.isCollapsed)
             props.setCollapsedIds((prev: Set<number>) => {
                 const newOpenIds = new Set(prev)
                 if (newOpenIds.has(tabGroupId)) {
@@ -74,6 +73,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                 }
                 return newOpenIds
             })
+            void toggleTabGroupCollapsed(tabGroupId, !props.isCollapsed)
         } else {
             setOpenUrl(!openUrl)
         }
