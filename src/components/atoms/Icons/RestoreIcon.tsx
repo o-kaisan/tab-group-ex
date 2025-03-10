@@ -12,8 +12,8 @@ export default function RestoreIconX(props: Props): JSX.Element {
     }
 
     return (
-        <IconButton onClick={handleClick}>
-            <RestoreIcon />
+        <IconButton onClick={handleClick} style={{ padding: '3px' }}>
+            <RestoreIcon fontSize="small" />
         </IconButton>
     )
 }

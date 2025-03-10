@@ -14,6 +14,7 @@ export default function OptionIcon(props: Props): JSX.Element {
 
     return (
         <IconButton
+            style={{ padding: '3px' }}
             aria-label="more"
             id="demo-customized-button"
             aria-controls={props.open ? 'long-menu' : undefined}
@@ -21,7 +22,7 @@ export default function OptionIcon(props: Props): JSX.Element {
             aria-haspopup="true"
             onClick={handleClick}
         >
-            <MoreVertIcon />
+            <MoreVertIcon fontSize="small" />
         </IconButton>
     )
 }

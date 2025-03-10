@@ -18,9 +18,9 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
     // 変更後の名前
     const [renamedTitle, setRenamedTitle] = React.useState(props.savedTabGroup.title)
 
-    const updateSavedTabGroupTitle = (id: number, title: string, renamedTitle: string): void => {
+    const updateSavedTabGroupTitle = (id: number, title: string, renamedTitle: string, color: string): void => {
         // ストレージの更新
-        void updateSavedTabGroupName(id, title, renamedTitle).then(() => {
+        void updateSavedTabGroupName(id, title, renamedTitle, color).then(() => {
             setTitle(renamedTitle)
             props.updateSavedTabGroupList()
             props.setEditMode(false)
@@ -41,7 +41,7 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
         //  Enterキー押下時でもグループ名の更新処理が走る
         if (event.nativeEvent.isComposing || event.key !== 'Enter') return
-        updateSavedTabGroupTitle(props.savedTabGroup.tabGroupId, title, renamedTitle)
+        updateSavedTabGroupTitle(props.savedTabGroup.tabGroupId, title, renamedTitle, props.savedTabGroup.color)
     }
 
     return (
@@ -54,7 +54,12 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
             />
             <ApplyIcon
                 onClick={() => {
-                    updateSavedTabGroupTitle(props.savedTabGroup.tabGroupId, title, renamedTitle)
+                    updateSavedTabGroupTitle(
+                        props.savedTabGroup.tabGroupId,
+                        title,
+                        renamedTitle,
+                        props.savedTabGroup.color
+                    )
                 }}
             />
             <CancelIcon

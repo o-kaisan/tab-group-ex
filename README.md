@@ -16,6 +16,7 @@ An extension for managing tab groups.
 * Display a list of groups
    * Displays a list of tab groups in the current browser
    * Clicking on a group name shows the list of URLs in that group
+   * Right-clicking on a group name toggles the tab group open or closed.
    * Clicking the group settings icon opens a menu:
        * Close: Closes the group
        * Ungroup: Ungroups the group

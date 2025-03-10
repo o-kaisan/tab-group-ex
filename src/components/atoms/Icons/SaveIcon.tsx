@@ -12,8 +12,8 @@ export default function SaveIcon(props: Props): JSX.Element {
     }
 
     return (
-        <IconButton onClick={handleClick}>
-            <SaveAltIcon />
+        <IconButton onClick={handleClick} style={{ padding: '3px' }}>
+            <SaveAltIcon fontSize="small" />
         </IconButton>
     )
 }

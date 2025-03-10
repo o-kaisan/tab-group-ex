@@ -13,7 +13,7 @@ export default function DeleteIcon(props: Props): JSX.Element {
 
     return (
         <IconButton onClick={handleClick}>
-            <DeleteForeverIcon />
+            <DeleteForeverIcon fontSize="small" />
         </IconButton>
     )
 }
