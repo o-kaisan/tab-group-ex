@@ -11,21 +11,17 @@ interface Props {
 
 export default function CurrentTabGroupList(props: Props): JSX.Element {
     const [collapsedIds, setCollapsedIds] = useState<Set<number>>(new Set())
-    const initCollapsedIds = (): void => {
-        const collapsedIds = new Set<number>()
-        props.currentTabGroups.forEach((tabGroup) => {
-            if (tabGroup.collapsed) {
-                collapsedIds.add(tabGroup.id)
-            }
-        })
-        setCollapsedIds(collapsedIds)
-    }
 
     useEffect(() => {
-        initCollapsedIds()
-    }, [])
+        const newCollapsedIds = new Set<number>()
+        props.currentTabGroups.forEach((tabGroup) => {
+            if (tabGroup.collapsed) {
+                newCollapsedIds.add(tabGroup.id)
+            }
+        })
+        setCollapsedIds(newCollapsedIds)
+    }, [props.currentTabGroups])
 
-    console.log(collapsedIds)
     return (
         <List>
             <StyledListSubheader>Current TabGroups</StyledListSubheader>
