@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tab Group Ex",
   "description": "Tab group extension",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "action": {
     "default_icon": {
       "16": "images/icon_16.png",
@@ -19,6 +19,27 @@
     "128": "images/icon_128.png"
   },
   "commands": {
+    "GroupAllUnGroupedTabs": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1"
+      },
+      "description": "Group all ungrouped tabs into a new group."
+    },
+    "GroupTabsByDomain": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2"
+      },
+      "description": "Group tabs by domain."
+    },
+    "GroupTabsByCustomDomain": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3"
+      },
+      "description": "Group tabs by custom domain."
+    },
+    "UngroupAllGroups": {
+      "description": "Ungroup all Groups"
+    },
     "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+Z"

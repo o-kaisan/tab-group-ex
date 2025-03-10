@@ -236,7 +236,7 @@ export async function getUrlsFromTabGroup(tabGroupId: number): Promise<Url[]> {
     const tabs = await getTabs(targetTabGroupConditions)
     tabs.forEach((tab) => {
         if (tab.url !== undefined) {
-            const url: Url = {title: tab.title,  url: tab.url, favIconUrl: tab.favIconUrl}
+            const url: Url = { title: tab.title, url: tab.url, favIconUrl: tab.favIconUrl }
             urls.push(url)
         }
     })

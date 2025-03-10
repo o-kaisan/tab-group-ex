@@ -86,7 +86,7 @@ export async function removeTab(tabId: number): Promise<void> {
 export async function createTab(url: string): Promise<void> {
     const createProperties: chrome.tabs.CreateProperties = {
         url,
-        active: true,
+        active: false,
     }
     await chrome.tabs.create(createProperties)
 }
