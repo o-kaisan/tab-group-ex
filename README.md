@@ -6,9 +6,13 @@ An extension for managing tab groups.
 * Group tabs together
    * Modes can be selected from "SETTINGS":
        * All (Default): Groups all ungrouped tabs into a single group
+         * Shortcut keys：ctrl+shift+1(Default)
        * Domain: Groups tabs by domain
+         * Shortcut keys：ctrl+shift+2(Default)
        * Custom Domain: Groups tabs by specified domains (ignoring subdomains)
+         * Shortcut keys：ctrl+shift+3(Default)
 * Ungroup all tabs
+  * Shortcut keys : Not set(Default)
 * Display a list of groups
    * Displays a list of tab groups in the current browser
    * Clicking on a group name shows the list of URLs in that group
@@ -20,6 +24,7 @@ An extension for managing tab groups.
 * Display saved groups
    * Clicking on a group name shows the list of URLs in that group
    * Groups can be restored as a whole or by individual URLs
+
 
 ## Custom Domain
 To group tabs by custom domains, open the "Rule" tab and add domains.
