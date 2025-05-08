@@ -131,9 +131,32 @@ async function restoreTab(url: Url): Promise<number | undefined> {
  */
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
     const savedTabGroups = await getAllSavedTabGroup()
-    const targetTabGroup: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
-    const deletedSavedTabGroups = savedTabGroups.filter((savedTabGroup) => savedTabGroup.id !== targetTabGroup)
-    await updateSavedTabGroups(deletedSavedTabGroups)
+    const targetTabGroupId: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
+    const newSavedTabGroups = savedTabGroups.filter((savedTabGroup) => savedTabGroup.id !== targetTabGroupId)
+    await updateSavedTabGroups(newSavedTabGroups)
+}
+
+/*
+ * タブグループのアイテム(Url)を削除する
+ */
+export async function deleteUrl(tabGroupTitle: string, tabGroupId: number, index: number): Promise<void> {
+    const savedTabGroups = await getAllSavedTabGroup()
+    const targetTabGroupId: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
+
+    const newSavedTabGroups: SavedTabGroupInfo[] = []
+    savedTabGroups.forEach((tabGroup: SavedTabGroupInfo) => {
+        if (tabGroup.id !== targetTabGroupId) {
+            newSavedTabGroups.push(tabGroup)
+            return
+        }
+
+        const newUrls = tabGroup.urls.filter((_, i) => i !== index);
+        if (newUrls.length !== 0) {
+            newSavedTabGroups.push({ ...tabGroup, urls: newUrls })
+        }
+    })
+
+    await updateSavedTabGroups(newSavedTabGroups)
 }
 
 /*

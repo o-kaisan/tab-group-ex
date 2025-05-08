@@ -2,19 +2,29 @@ import React from 'react'
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText'
 import type { Url } from '../../../common/types/savedTabGroupInfo'
+import { deleteUrl } from '../../../common/libs/savedTabGroup'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
 import { createTab } from '../../../common/libs/tab'
 import PublicIcon from '@mui/icons-material/Public'
+import DeleteIcon from '../../../components/atoms/Icons/DeleteIcon'
 
 interface Props {
+    index: number
+    tabGroupTitle: string
+    tabGroupId: number
     url: Url
+    updateSavedTabGroupList: Function
 }
 
 export default function SavedTabItem(props: Props): JSX.Element {
-    const handleUrlClick = (url: Url): void => {
+    const handleRestoreIconClick = (url: Url): void => {
         createTab(url.url).catch((e) => {
             console.log(e)
         })
+    }
+
+    const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number, index: number): void => {
+        void deleteUrl(tabGroupTitle, tabGroupId, index).then(() => props.updateSavedTabGroupList())
     }
 
     return (
@@ -31,9 +41,15 @@ export default function SavedTabItem(props: Props): JSX.Element {
             <ListItemText primary={props.url.title} />
             <RestoreIconX
                 onClick={() => {
-                    handleUrlClick(props.url)
+                    handleRestoreIconClick(props.url)
                 }}
             />
+            <DeleteIcon
+                onClick={() => {
+                    handleDeleteIconClick(props.tabGroupTitle, props.tabGroupId, props.index)
+                }}
+            />
+
         </ListItem>
     )
 }
