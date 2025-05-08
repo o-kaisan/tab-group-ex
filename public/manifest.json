@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tab Group Ex",
   "description": "Tab group extension",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "action": {
     "default_icon": {
       "16": "images/icon_16.png",
@@ -46,6 +46,9 @@
       },
       "description": "open tab group ex"
     }
+  },
+  "background": {
+    "service_worker": "js/background.js"
   },
   "permissions": [
     "storage",
