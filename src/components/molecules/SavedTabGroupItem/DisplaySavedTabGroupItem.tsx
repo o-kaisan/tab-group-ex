@@ -135,7 +135,14 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
             <Collapse in={props.isOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {_urls.map((url: Url, index: number) => (
-                        <SavedTabItem key={index} url={url} />
+                        <SavedTabItem
+                            key={index}
+                            index={index}
+                            tabGroupTitle={props.savedTabGroup.title}
+                            tabGroupId={props.savedTabGroup.tabGroupId}
+                            url={url}
+                            updateSavedTabGroupList={props.updateSavedTabGroupList}
+                        />
                     ))}
                 </List>
             </Collapse>
