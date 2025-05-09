@@ -1,6 +1,7 @@
 export interface SavedTabGroupInfo {
+    // アプリが内部で持つタブグループID
     id: string
-    // 保存時のグループID
+    // chromeが設定したタブグループID
     tabGroupId: number
     // タブグループのタイトル
     title: string
