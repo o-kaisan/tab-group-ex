@@ -10,6 +10,7 @@ interface Props {
     tab: chrome.tabs.Tab
     groupId: number
     updateTabs: Function
+    updateCurrentTabGroupList: Function
 }
 
 export default function CurrentTabItem(props: Props): JSX.Element {
@@ -22,13 +23,17 @@ export default function CurrentTabItem(props: Props): JSX.Element {
         })
     }
 
-    const handleOnClickDelete = (tab: chrome.tabs.Tab): void => {
+    const handleOnClickDelete = (tab: chrome.tabs.Tab, groupId: number): void => {
         if (tab.id === undefined) {
             return
         }
-        removeTab(tab.id).catch((e) => {
-            console.log(e)
-        })
+        removeTab(tab.id, groupId)
+            .then(() => {
+                props.updateCurrentTabGroupList()
+            })
+            .catch((e) => {
+                console.log(e)
+            })
         props.updateTabs(props.groupId)
     }
 
@@ -54,7 +59,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
             </ListItemButton>
             <SimpleDeleteIcon
                 onClick={() => {
-                    handleOnClickDelete(props.tab)
+                    handleOnClickDelete(props.tab, props.groupId)
                 }}
             />
         </ListItem>

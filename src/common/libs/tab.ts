@@ -1,3 +1,5 @@
+import { closeTabGroup, getUrlsFromTabGroup } from "./tabGroup"
+
 /*
  * 指定した条件でタブを取得する
  * ※タブが取得できなかった場合は空の配列を返す。
@@ -76,7 +78,15 @@ export async function activedTab(tabId: number): Promise<chrome.tabs.Tab> {
 /*
  * タブを削除する
  */
-export async function removeTab(tabId: number): Promise<void> {
+export async function removeTab(tabId: number, groupId: number): Promise<void> {
+    const urls = await getUrlsFromTabGroup(groupId)
+
+    // タブグループのURLが残り一つの場合はタブグループごと消す
+    if (urls.length === 1) {
+        await closeTabGroup(groupId)
+        return
+    }
+
     await chrome.tabs.remove(tabId)
 }
 
