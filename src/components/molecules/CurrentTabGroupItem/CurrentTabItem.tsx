@@ -2,7 +2,7 @@ import React from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { activedTab, removeTab } from '../../../common/libs/tab'
-import DeleteIcon from '../../atoms/Icons/DeleteIcon'
+import SimpleDeleteIcon from '../../atoms/Icons/SimpleDeleteIcon'
 import PublicIcon from '@mui/icons-material/Public'
 
 interface Props {
@@ -49,7 +49,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
                 }}
             />
             <ListItemText primary={props.tab.title} />
-            <DeleteIcon
+            <SimpleDeleteIcon
                 onClick={() => {
                     handleOnClickDelete(props.tab)
                 }}

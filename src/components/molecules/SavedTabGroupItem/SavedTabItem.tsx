@@ -6,7 +6,7 @@ import { deleteUrl } from '../../../common/libs/savedTabGroup'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
 import { createTab } from '../../../common/libs/tab'
 import PublicIcon from '@mui/icons-material/Public'
-import DeleteIcon from '../../../components/atoms/Icons/DeleteIcon'
+import SimpleDeleteIcon from '../../../components/atoms/Icons/SimpleDeleteIcon'
 
 interface Props {
     index: number
@@ -44,12 +44,11 @@ export default function SavedTabItem(props: Props): JSX.Element {
                     handleRestoreIconClick(props.url)
                 }}
             />
-            <DeleteIcon
+            <SimpleDeleteIcon
                 onClick={() => {
                     handleDeleteIconClick(props.tabGroupTitle, props.tabGroupId, props.index)
                 }}
             />
-
         </ListItem>
     )
 }
