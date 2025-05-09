@@ -2,7 +2,7 @@ import React from 'react'
 import StyledListItem from './StyledListItem'
 import { updateTabGroupName } from '../../../common/libs/tabGroup'
 import ApplyIcon from '../../atoms/Icons/ApplyIcon'
-import CancelIcon from '../../atoms/Icons/CancelIcon'
+import CloseIcon from '../../atoms/Icons/CloseIcon'
 import TextField from '../../atoms/Inputs/TextField'
 
 interface Props {
@@ -38,7 +38,7 @@ export default function EditCurrentTabGroup(props: Props): JSX.Element {
 
     return (
         // TODO タブグループの色にできるように
-        <StyledListItem groupcolor='#2196f3'>
+        <StyledListItem groupcolor="#2196f3">
             <TextField
                 defaultValue={tabGroupTitle}
                 placeholder={'Tab Group Name'}
@@ -50,7 +50,7 @@ export default function EditCurrentTabGroup(props: Props): JSX.Element {
                     handleApplyIconClick(props.tabGroupId, tabGroupTitle)
                 }}
             />
-            <CancelIcon
+            <CloseIcon
                 onClick={() => {
                     handleCancelIconClick()
                 }}
