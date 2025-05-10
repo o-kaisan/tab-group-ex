@@ -14,7 +14,7 @@ export async function getTabs(targetTabConditions: chrome.tabs.QueryInfo): Promi
  */
 export async function getCurrentTabs(): Promise<chrome.tabs.Tab> {
     const targetTabConditions: chrome.tabs.QueryInfo = {
-        currentWindow: true,
+        lastFocusedWindow: true,
         active: true,
     }
     const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)

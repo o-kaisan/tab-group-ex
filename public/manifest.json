@@ -21,10 +21,9 @@
   "commands": {
     "SaveCurrentTabGroup": {
       "suggested_key": {
-        "default": "Ctrl+Shift+0"
+        "default": "Ctrl+Shift+9"
       },
       "description": "Save the tab group that the Current tab belongs to."
-
     },
     "GroupAllUnGroupedTabs": {
       "suggested_key": {
@@ -54,6 +53,18 @@
   "background": {
     "service_worker": "js/background.js"
   },
+  "content_scripts": [
+    {
+      "js": [
+        "js/content_scripts.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_end"
+    }
+  ],
   "permissions": [
     "storage",
     "tabGroups",
