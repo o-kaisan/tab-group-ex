@@ -10,6 +10,19 @@ export async function getTabs(targetTabConditions: chrome.tabs.QueryInfo): Promi
 }
 
 /*
+ * 現在開いているタブを取得する
+ */
+export async function getCurrentTabs(): Promise<chrome.tabs.Tab> {
+    const targetTabConditions: chrome.tabs.QueryInfo = {
+        currentWindow: true,
+        active: true,
+    }
+    const tabs: chrome.tabs.Tab[] = await getTabs(targetTabConditions)
+    return tabs[0]
+}
+
+
+/*
  * グループ化されたタブを含む全てのタブを取得する
  */
 export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
