@@ -27,7 +27,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
 
         // 既に同じタブグループ名が存在する場合はurlを更新する
         isTabGroupExist = true
-        newSavedTabGroups.push({ ...savedTabGroup, urls})
+        newSavedTabGroups.push({ ...savedTabGroup, urls, color})
     })
 
     // 保存対象が既に保存済みタブグループ存在していなければ新たに追加
