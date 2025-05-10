@@ -152,21 +152,6 @@ async function updateOrCreateTabGroups(tabIdList: number[], title: string): Prom
 }
 
 /*
- * タブグループ名にヒットしたタブグループのIDを返す
- * ※同じタブグループ名の場合は最初にヒットしたものとなる
- */
-async function getTabGroupIdByTitle(title: string): Promise<number | undefined> {
-    const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
-    let tabGroupId: number | undefined
-    tabgroups.forEach((tabgroup) => {
-        if (tabgroup.title === title) {
-            tabGroupId = tabgroup.id
-        }
-    })
-    return tabGroupId
-}
-
-/*
  * 指定したタブグループのグループ化を解除する
  */
 export async function ungroupTabs(tabGroupId: number): Promise<void> {
@@ -194,6 +179,17 @@ export async function ungroupAllTabs(): Promise<void> {
 }
 
 /*
+ * タブグループ一覧を取得
+ * タググループが存在しない場合は空のリストを返す
+ */
+async function getTabGroupList(
+    targetTabGroupConditions: chrome.tabGroups.QueryInfo
+): Promise<chrome.tabGroups.TabGroup[]> {
+    const tabGroupList: chrome.tabGroups.TabGroup[] = await chrome.tabGroups.query(targetTabGroupConditions)
+    return tabGroupList
+}
+
+/*
  * アクティブなウィドウのタブグループ一覧を取得する
  */
 export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]> {
@@ -205,14 +201,32 @@ export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]>
 }
 
 /*
- * タブグループ一覧を取得
- * タググループが存在しない場合は空のリストを返す
+ * 指定したタブグループIDのタブグループを取得する
  */
-async function getTabGroupList(
-    targetTabGroupConditions: chrome.tabGroups.QueryInfo
-): Promise<chrome.tabGroups.TabGroup[]> {
-    const tabGroupList: chrome.tabGroups.TabGroup[] = await chrome.tabGroups.query(targetTabGroupConditions)
-    return tabGroupList
+export async function getTabGroupByTabGroupId(tabGroupId: number): Promise<chrome.tabGroups.TabGroup | undefined> {
+    const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
+    let ret: chrome.tabGroups.TabGroup | undefined
+    tabgroups.forEach((tabgroup) => {
+        if (tabgroup.id === tabGroupId) {
+            ret = tabgroup
+        }
+    })
+    return ret
+}
+
+/*
+ * タブグループ名にヒットしたタブグループのIDを返す
+ * ※同じタブグループ名の場合は最初にヒットしたものとなる
+ */
+async function getTabGroupIdByTitle(title: string): Promise<number | undefined> {
+    const tabgroups: chrome.tabGroups.TabGroup[] = await getAllTabGroupList()
+    let tabGroupId: number | undefined
+    tabgroups.forEach((tabgroup) => {
+        if (tabgroup.title === title) {
+            tabGroupId = tabgroup.id
+        }
+    })
+    return tabGroupId
 }
 
 /*

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ListItem } from '@mui/material'
 import ApplyIcon from '../../atoms/Icons/ApplyIcon'
-import CancelIcon from '../../atoms/Icons/CancelIcon'
+import CloseIcon from '../../atoms/Icons/CloseIcon'
 import { updateSavedTabGroupName } from '../../../common/libs/savedTabGroup'
 import TextField from '../../atoms/Inputs/TextField'
 import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
@@ -62,7 +62,7 @@ export default function EditSavedTabGroupItem(props: Props): JSX.Element {
                     )
                 }}
             />
-            <CancelIcon
+            <CloseIcon
                 onClick={() => {
                     cancelEditMode()
                 }}

@@ -6,7 +6,7 @@ interface Props {
     onClick: Function
 }
 
-export default function CancelIcon(props: Props): JSX.Element {
+export default function CloseIcon(props: Props): JSX.Element {
     const handleClick = (): void => {
         props.onClick()
     }

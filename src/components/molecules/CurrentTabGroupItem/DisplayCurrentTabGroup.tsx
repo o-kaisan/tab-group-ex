@@ -122,6 +122,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                             <CurrentTabItem
                                 key={index}
                                 tab={url}
+                                updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                                 updateTabs={getTabsByGroupId}
                                 groupId={props.tabGroup.id}
                             />

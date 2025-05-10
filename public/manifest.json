@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tab Group Ex",
   "description": "Tab group extension",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "action": {
     "default_icon": {
       "16": "images/icon_16.png",
@@ -19,6 +19,13 @@
     "128": "images/icon_128.png"
   },
   "commands": {
+    "SaveCurrentTabGroup": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+0"
+      },
+      "description": "Save the tab group that the Current tab belongs to."
+
+    },
     "GroupAllUnGroupedTabs": {
       "suggested_key": {
         "default": "Ctrl+Shift+1"
@@ -32,9 +39,6 @@
       "description": "Group tabs by domain."
     },
     "GroupTabsByCustomDomain": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+3"
-      },
       "description": "Group tabs by custom domain."
     },
     "UngroupAllGroups": {

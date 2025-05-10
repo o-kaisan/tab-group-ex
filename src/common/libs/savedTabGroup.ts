@@ -8,6 +8,7 @@ const SAVED_TAB_GROUP_KEY: string = "savedTabGroups"
  * タブグループを保存する
  */
 export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, color: string): Promise<void> {
+    // タブグループに含まれるページを取得
     const urls = await getUrlsFromTabGroup(tabGroupId)
     if (urls.length === 0) {
         return
@@ -15,52 +16,33 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
 
     const savedTabGroups = await getAllSavedTabGroup()
 
-    // 同じ名前のグループ名があるかを確認し、同じ名前があればrename
-    const renamedTabGroupTitle = duplicateRenameTabGroupTitle(tabGroupTitle, savedTabGroups)
-
-    const targetTabGroup: SavedTabGroupInfo = {
-        id: resolveStorageKeyforTabGroup(renamedTabGroupTitle, tabGroupId),
-        tabGroupId,
-        title: renamedTabGroupTitle,
-        urls,
-        color
-    }
-
-    // タブグループがundefinedだったらストレージに保存せずに返却
-    if (tabGroupTitle === undefined) return
-    savedTabGroups.push(targetTabGroup)
-    await chrome.storage.local.set({ savedTabGroups })
-}
-
-/*
- * 保存されたタブグループに同一のタイトルが存在するかを確認する
- */
-function isExistTabGroupTitle(tabGroupTitle: string, savedTabGroup: SavedTabGroupInfo[]): boolean {
-    let ret = false
-    savedTabGroup.forEach((savedTabGroup: SavedTabGroupInfo) => {
-        if (tabGroupTitle === savedTabGroup.title) {
-            ret = true
+    let isTabGroupExist = false
+    const newSavedTabGroups: SavedTabGroupInfo[] = []
+    savedTabGroups.forEach((savedTabGroup: SavedTabGroupInfo) => {
+        
+        if (tabGroupTitle !== savedTabGroup.title) {
+            newSavedTabGroups.push(savedTabGroup)
+            return  
         }
-    })
-    return ret
-}
 
-// 保存されたタブグループに同一のタイトルがないかを確認し、あれば末尾に(n)を追加する
-function duplicateRenameTabGroupTitle(
-    tabGroupTitle: string,
-    savedTabGroup: SavedTabGroupInfo[],
-    count: number = 1
-): string {
-    if (isExistTabGroupTitle(tabGroupTitle, savedTabGroup)) {
-        const regexp = /^(.+)\([0-9]+\)$/
-        // タイトルについている"(数値)"を取り除く
-        const TabGroupTitleWithoutNumber: string = tabGroupTitle.replace(regexp, '$1')
-        // リネーム
-        const renamedTabGroupTitle: string = `${TabGroupTitleWithoutNumber}(${count})`
-        return duplicateRenameTabGroupTitle(renamedTabGroupTitle, savedTabGroup, count + 1)
-    } else {
-        return tabGroupTitle
+        // 既に同じタブグループ名が存在する場合はurlを更新する
+        isTabGroupExist = true
+        newSavedTabGroups.push({ ...savedTabGroup, urls})
+    })
+
+    // 保存対象が既に保存済みタブグループ存在していなければ新たに追加
+    if (!isTabGroupExist) {
+        const newTabGroup: SavedTabGroupInfo = {
+            id: resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId),
+            tabGroupId,
+            title: tabGroupTitle,
+            urls,
+            color
+        }
+        newSavedTabGroups.push(newTabGroup)
     }
+    
+    await chrome.storage.local.set({ savedTabGroups: newSavedTabGroups })
 }
 
 // 指定したタブグループをストレージから取得する
