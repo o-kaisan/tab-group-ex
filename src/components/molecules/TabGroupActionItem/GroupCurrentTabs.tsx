@@ -3,42 +3,30 @@ import ListItemText from '@mui/material/ListItemText'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
 import { groupTabs } from '../../../common/libs/tabGroup'
-import { getAllSavedTabGroup } from '../../../common/libs/savedTabGroup'
-import { savedTabGroupState } from '../../../common/recoil/atoms/savedTabGroupAtom'
-import { useSetRecoilState } from 'recoil'
 import StyledListItemIcon from './StyledListItemIcon'
-import type { GroupModeType } from '../../../common/types/groupMode'
-import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
-
+import type { GroupMode } from '../../../common/types/groupMode'
 
 interface Props {
     title: string
-    groupMode: GroupModeType
+    groupMode: GroupMode
     updateCurrentTabGroupList: () => void
     children: ReactNode
 }
 
 export default function GroupCurrentTabs(props: Props): JSX.Element {
-    const setSavedTabGroups = useSetRecoilState(savedTabGroupState)
-
     /*
      * タブをグループ化
      */
     const handleClick = (): void => {
         groupTabs(props.groupMode)
             .then(() => {
+                // 現在表示しているタブを取得
                 props.updateCurrentTabGroupList()
-                updateSavedTabGroupList()
+
             })
             .catch((error) => {
                 console.log(error)
             })
-    }
-
-    const updateSavedTabGroupList = (): void => {
-        void getAllSavedTabGroup().then((savedTabGroupList: SavedTabGroupInfo[]) => {
-            setSavedTabGroups(savedTabGroupList)
-        })
     }
 
     return (

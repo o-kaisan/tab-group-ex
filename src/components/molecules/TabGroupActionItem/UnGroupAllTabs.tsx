@@ -17,6 +17,7 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
     const handleClick = (): void => {
         ungroupAllTabs()
             .then(() => {
+                // グループを更新する
                 props.updateCurrentTabGroupList()
             })
             .catch((error) => {

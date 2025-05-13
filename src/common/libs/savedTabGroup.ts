@@ -19,15 +19,15 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
     let isTabGroupExist = false
     const newSavedTabGroups: SavedTabGroupInfo[] = []
     savedTabGroups.forEach((savedTabGroup: SavedTabGroupInfo) => {
-        
+
         if (tabGroupTitle !== savedTabGroup.title) {
             newSavedTabGroups.push(savedTabGroup)
-            return  
+            return
         }
 
         // 既に同じタブグループ名が存在する場合はurlを更新する
         isTabGroupExist = true
-        newSavedTabGroups.push({ ...savedTabGroup, urls, color})
+        newSavedTabGroups.push({ ...savedTabGroup, urls, color })
     })
 
     // 保存対象が既に保存済みタブグループ存在していなければ新たに追加
@@ -41,7 +41,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
         }
         newSavedTabGroups.push(newTabGroup)
     }
-    
+
     await chrome.storage.local.set({ savedTabGroups: newSavedTabGroups })
 }
 

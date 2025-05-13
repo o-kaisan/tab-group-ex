@@ -56,9 +56,13 @@ export default function TabNavigator(): JSX.Element {
 
     // ストレージに保存されたタブグループを取得し、表示を最新化する
     const updateSavedTabGroupList = (): void => {
-        void getAllSavedTabGroup().then((savedTabGroupList) => {
-            setSavedTabGroups(savedTabGroupList)
-        })
+        void getAllSavedTabGroup()
+            .then((savedTabGroupList) => {
+                setSavedTabGroups(savedTabGroupList)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     // タブを切り替える
@@ -77,8 +81,8 @@ export default function TabNavigator(): JSX.Element {
                 </Tabs>
             </Box>
             <CurrentTabGroupPanel panelTab={panelTab} index={0} currentTabGroups={currentTabGroups} updateCurrentTabGroupList={updateCurrentTabGroupList} />
-            <SavedTabGroupPanel panelTab={panelTab} index={1} savedTabGroups={savedTabGroups} updateSavedTabGroupList={updateCurrentTabGroupList} />
-            <ActionPanel panelTab={panelTab} index={2} updateCurrentTabGroupList={updateCurrentTabGroupList} updateSavedTabGroupList={updateSavedTabGroupList} />
+            <SavedTabGroupPanel panelTab={panelTab} index={1} savedTabGroups={savedTabGroups} updateSavedTabGroupList={updateSavedTabGroupList} />
+            <ActionPanel panelTab={panelTab} index={2} updateCurrentTabGroupList={updateCurrentTabGroupList} />
             <GroupRulesPanel panelTab={panelTab} index={3} />
         </Box>
     )

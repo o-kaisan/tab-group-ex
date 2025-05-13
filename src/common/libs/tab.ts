@@ -1,3 +1,6 @@
+import { GroupModeType, type GroupMode } from "../types/groupMode"
+import { MessageType } from "../types/message"
+import { sendMessageToTab } from "./message"
 import { closeTabGroup, getUrlsFromTabGroup } from "./tabGroup"
 
 /*
@@ -112,4 +115,56 @@ export async function createTab(url: string): Promise<void> {
         active: false,
     }
     await chrome.tabs.create(createProperties)
+}
+
+/*
+ * 現在のタブに保存処理実行メッセージを送信する
+ */
+export async function sendSaveMessageToTab(): Promise<void> {
+    // スナックバー表示用にメッセージを送信
+    const currentTab = await getCurrentTabs()
+    if (currentTab.id === undefined) return
+    sendMessageToTab(currentTab.id, { messageType: MessageType.groupAll })
+}
+
+/*
+ * 現在のタブにグループ化処理実行メッセージを送信する
+ */
+export async function sendGroupMessageToTab(groupMode: GroupMode): Promise<void> {
+    // スナックバー表示用にメッセージを送信
+    const currentTab = await getCurrentTabs()
+    if (currentTab.id === undefined) return
+    switch (groupMode) {
+        case GroupModeType.all:
+            sendMessageToTab(currentTab.id, { messageType: MessageType.groupAll })
+            break;
+        case GroupModeType.domain:
+            sendMessageToTab(currentTab.id, { messageType: MessageType.groupByDomain })
+            break;
+        case GroupModeType.customDomain:
+            sendMessageToTab(currentTab.id, { messageType: MessageType.groupByCustomDomain })
+            break;
+        default:
+            throw Error("never reach here")
+    }
+}
+
+/*
+ * 現在のタブにグループ化解除処理実行メッセージを送信する
+ */
+export async function sendUngroupMessageToTab(): Promise<void> {
+    // スナックバー表示用にメッセージを送信
+    const currentTab = await getCurrentTabs()
+    if (currentTab.id === undefined) return
+    sendMessageToTab(currentTab.id, { messageType: MessageType.ungroupAll })
+}
+
+/*
+ * 現在のタブにグループ化解除処理実行メッセージを送信する
+ */
+export async function sendRestoreMessageToTab(): Promise<void> {
+    // スナックバー表示用にメッセージを送信
+    const currentTab = await getCurrentTabs()
+    if (currentTab.id === undefined) return
+    sendMessageToTab(currentTab.id, { messageType: MessageType.restore })
 }

@@ -1,11 +1,35 @@
-import { MessageType } from "../common/types/message";
+import { type Message, MessageType } from "../common/types/message";
 
-chrome.runtime.onMessage.addListener(function (msg) {
-    console.log("Received message:", msg);
+console.log("content_script loaded")
 
-    const text = "タブグループが保存されました";
-    switch (msg.MessageType) {
-        case MessageType.saveTabGroup: // タブグループの保存
+chrome.runtime.onMessage.addListener(function (msg: Message) {
+    let text: string
+    switch (msg.messageType) {
+        // タブグループの保存
+        case MessageType.save:
+            text = "タブグループが保存しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブをグループ化
+        case MessageType.groupAll:
+            text = "未グループ化のタブでグループ化しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        case MessageType.groupByDomain:
+            text = "ドメインごとにタブをグループ化しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        case MessageType.groupByCustomDomain:
+            text = "指定したドメインごとにタブをグループ化しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブグループを全て解除
+        case MessageType.ungroupAll:
+            text = "タブグループを全て解除しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        case MessageType.close:
+            text = "タブグループを閉じました";
             injectSnackbarFromBottomLeft(text);
             break;
         default:

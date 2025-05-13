@@ -61,8 +61,7 @@
       "matches": [
         "http://*/*",
         "https://*/*"
-      ],
-      "run_at": "document_end"
+      ]
     }
   ],
   "permissions": [

@@ -3,13 +3,12 @@ import StyledList from './StyledList'
 import { ListSubheader } from '@mui/material'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/TabGroupActionItem/UnGroupAllTabs'
-import { GroupMode } from '../../common/types/groupMode'
+import { GroupModeType } from '../../common/types/groupMode'
 import LayersIcon from '@mui/icons-material/Layers'
 
 
 interface Props {
     updateCurrentTabGroupList: () => void
-    updateSavedTabGroupList: () => void
 }
 
 export default function TabGroupActionList(props: Props): JSX.Element {
@@ -17,16 +16,16 @@ export default function TabGroupActionList(props: Props): JSX.Element {
         <StyledList>
             <ListSubheader>Actions</ListSubheader>
             {/* 未グループ化タブをグループ化 */}
-            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group ungrouped tabs"} groupMode={GroupMode.all}>
+            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group ungrouped tabs"} groupMode={GroupModeType.all}>
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
             {/* ドメインごとにグループ化 */}
-            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group tabs by domain"} groupMode={GroupMode.domain}>
+            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group tabs by domain"} groupMode={GroupModeType.domain}>
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
 
             {/* 指定したドメインごとにグループ化 */}
-            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group tabs by custom domain"} groupMode={GroupMode.customDomain}>
+            <GroupCurrentTabs updateCurrentTabGroupList={props.updateCurrentTabGroupList} title={"Group tabs by custom domain"} groupMode={GroupModeType.customDomain}>
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
 

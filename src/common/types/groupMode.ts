@@ -1,8 +1,8 @@
-export const GroupMode = {
+export const GroupModeType = {
     all: 'All',
     domain: 'Domain',
     customDomain: 'Custom Domain'
 }
 
 // 型定義
-export type GroupModeType = typeof GroupMode[keyof typeof GroupMode];
+export type GroupMode = typeof GroupModeType[keyof typeof GroupModeType];
