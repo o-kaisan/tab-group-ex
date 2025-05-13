@@ -1,5 +1,3 @@
-import { ActionType } from "../const/action"
-import { sendMessageToTab } from "./message"
 import { closeTabGroup, getUrlsFromTabGroup } from "./tabGroup"
 
 /*
@@ -83,7 +81,7 @@ export function getTabIdList(targetTabList: chrome.tabs.Tab[]): number[] {
 /*
  * タブを選択状態に更新する
  */
-export async function activedTab(tabId: number): Promise<chrome.tabs.Tab> {
+export async function moveToTargetTab(tabId: number): Promise<chrome.tabs.Tab> {
     const targetTabConditions: chrome.tabs.UpdateProperties = {
         active: true
     }
@@ -114,56 +112,4 @@ export async function createTab(url: string): Promise<void> {
         active: false,
     }
     await chrome.tabs.create(createProperties)
-}
-
-/*
- * 現在のタブに保存処理実行メッセージを送信する
- */
-export async function sendSaveMessageToTab(): Promise<void> {
-    // スナックバー表示用にメッセージを送信
-    const currentTab = await getCurrentTabs()
-    if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.groupAll })
-}
-
-/*
- * 現在のタブにグループ化処理実行メッセージを送信する
- */
-export async function sendGroupMessageToTab(actionType: string): Promise<void> {
-    // スナックバー表示用にメッセージを送信
-    const currentTab = await getCurrentTabs()
-    if (currentTab.id === undefined) return
-    switch (actionType) {
-        case ActionType.groupAll:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupAll })
-            break;
-        case ActionType.groupByDomain:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByDomain })
-            break;
-        case ActionType.groupByCustomDomain:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByCustomDomain })
-            break;
-        default:
-            throw Error("never reach here")
-    }
-}
-
-/*
- * 現在のタブにグループ化解除処理実行メッセージを送信する
- */
-export async function sendUngroupMessageToTab(): Promise<void> {
-    // スナックバー表示用にメッセージを送信
-    const currentTab = await getCurrentTabs()
-    if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.ungroupAll })
-}
-
-/*
- * 現在のタブにグループ化解除処理実行メッセージを送信する
- */
-export async function sendRestoreMessageToTab(): Promise<void> {
-    // スナックバー表示用にメッセージを送信
-    const currentTab = await getCurrentTabs()
-    if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.restoreGroup })
 }

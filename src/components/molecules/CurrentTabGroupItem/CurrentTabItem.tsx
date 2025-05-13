@@ -1,10 +1,11 @@
 import React from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import { activedTab, removeTab } from '../../../common/libs/tab'
-import SimpleDeleteIcon from '../../atoms/Icons/SimpleDeleteIcon'
 import PublicIcon from '@mui/icons-material/Public'
 import { ListItem } from '@mui/material'
+import SimpleDeleteIcon from '../../atoms/Icons/SimpleDeleteIcon'
+import { moveToTargetTab, removeTab } from '../../../common/libs/tab'
+import { sendCloseTabMessageToTab } from '../../../common/libs/message'
 
 interface Props {
     tab: chrome.tabs.Tab
@@ -18,7 +19,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
         if (tab.id === undefined) {
             return
         }
-        activedTab(tab.id).catch((e) => {
+        moveToTargetTab(tab.id).catch((e) => {
             console.log(e)
         })
     }
@@ -29,7 +30,11 @@ export default function CurrentTabItem(props: Props): JSX.Element {
         }
         removeTab(tab.id, groupId)
             .then(() => {
+                // 表示を更新
                 props.updateCurrentTabGroupList()
+
+                // context_scriptにメッセージを渡す
+                sendCloseTabMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((e) => {
                 console.log(e)

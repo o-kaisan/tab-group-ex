@@ -12,6 +12,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import CurrentTabItem from './CurrentTabItem'
 import { getTabsByGroupId } from '../../../common/libs/tab'
+import { sendSaveMessageToTab } from '../../../common/libs/message'
 import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
 import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 
@@ -47,7 +48,11 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
     const handleSaveIconClick = (tabGroupTitle: string, tabGroupId: number, color: string): void => {
         void saveTabGroup(tabGroupTitle, tabGroupId, color)
             .then(() => {
+                // 表示を更新
                 updateSavedTabGroupList()
+
+                // context_scriptにメッセージを渡す
+                sendSaveMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {
                 console.log(error)

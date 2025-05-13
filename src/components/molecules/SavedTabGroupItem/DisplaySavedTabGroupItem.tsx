@@ -14,6 +14,7 @@ import { currentTabGroupState } from '../../../common/recoil/atoms/currentTabGro
 import { useSetRecoilState } from 'recoil'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import type { SavedTabGroupInfo, Url } from '../../../common/types/savedTabGroupInfo'
+import { sendDeleteSavedGroupMessageToTab, sendRestoreGroupMessageToTab } from '../../../common/libs/message'
 
 interface Props {
     savedTabGroup: SavedTabGroupInfo
@@ -49,7 +50,11 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     const handleTabGroupItemClick = (tabGroupTitle: string, urls: Url[]): void => {
         void restoreTabGroup(tabGroupTitle, urls)
             .then(() => {
+                // 表示更新
                 updateCurrentTabGroupList()
+
+                // context_scriptにメッセージを渡す
+                sendRestoreGroupMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {
                 console.log(error)
@@ -69,7 +74,14 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     }
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
-        void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
+        void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => {
+            // 表示の更新
+            props.updateSavedTabGroupList()
+
+            // context_scriptにメッセージを渡す
+            sendDeleteSavedGroupMessageToTab().catch((e) => { console.log(e) })
+
+        })
     }
 
     // 現在のウィンドウにあるタブグループを取得し、表示を最新化する

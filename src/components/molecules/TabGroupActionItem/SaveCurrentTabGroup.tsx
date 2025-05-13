@@ -4,31 +4,29 @@ import StyledListItemIcon from './StyledListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
-import { ungroupAllTabs } from '../../../common/libs/tabGroup'
 import ShortcutKeyItem from './ShortcutKeyItem'
-import { sendUngroupMessageToTab } from '../../../common/libs/message'
+import { sendMessageToTab, sendSaveMessageToTab } from '../../../common/libs/message'
+import { saveCurrentTabGroupToStorage, saveTabGroup } from '../../../common/libs/savedTabGroup'
+import { ActionType } from '../../../common/const/action'
 
 interface Props {
-    updateCurrentTabGroupList: Function
+    updateSavedTabGroupList: () => void
     shortcutKey: string
 }
 
-export default function UngroupAllTabs(props: Props): JSX.Element {
+export default function SaveCurrentTabGroup(props: Props): JSX.Element {
     /*
      * タブをグループ化
      */
     const handleClick = (): void => {
-        ungroupAllTabs()
-            .then(() => {
-                // グループを更新する
-                props.updateCurrentTabGroupList()
-
-                // context_scriptにメッセージを渡す
-                sendUngroupMessageToTab().catch((e) => { console.log(e) })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        // TODO Promise連鎖してるのでリファクタリングしたい
+        saveCurrentTabGroupToStorage((tabId) => {
+            // content_scriptにメッセージを送信
+            sendMessageToTab(tabId, { actionType: ActionType.save })
+        }).then(() => {
+            //表示を更新
+            props.updateSavedTabGroupList()
+        }).catch((e) => { console.log(e) })
     }
     return (
         <StyledListItem>
@@ -36,7 +34,7 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
                 <StyledListItemIcon>
                     <LayersClearIcon fontSize="small" />
                 </StyledListItemIcon>
-                <ListItemText>Ungroup all</ListItemText>
+                <ListItemText>Save current group </ListItemText>
                 <ShortcutKeyItem shortcutKey={props.shortcutKey} />
             </StyledListItemButton>
         </StyledListItem>

@@ -82,7 +82,7 @@ export default function TabNavigator(): JSX.Element {
             </Box>
             <CurrentTabGroupPanel panelTab={panelTab} index={0} currentTabGroups={currentTabGroups} updateCurrentTabGroupList={updateCurrentTabGroupList} />
             <SavedTabGroupPanel panelTab={panelTab} index={1} savedTabGroups={savedTabGroups} updateSavedTabGroupList={updateSavedTabGroupList} />
-            <ActionPanel panelTab={panelTab} index={2} updateCurrentTabGroupList={updateCurrentTabGroupList} />
+            <ActionPanel panelTab={panelTab} index={2} updateCurrentTabGroupList={updateCurrentTabGroupList} updateSavedTabGroupList={updateSavedTabGroupList} />
             <GroupRulesPanel panelTab={panelTab} index={3} />
         </Box>
     )

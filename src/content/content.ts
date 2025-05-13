@@ -1,27 +1,25 @@
 import { ActionType } from "../common/const/action";
 import type { Message } from "../common/types/message";
 
-console.log("content_script loaded")
-
 chrome.runtime.onMessage.addListener(function (msg: Message) {
     let text: string
     switch (msg.actionType) {
         // タブグループの保存
         case ActionType.save:
-            text = "タブグループが保存しました";
+            text = "Tab group saved";
             injectSnackbarFromBottomLeft(text);
             break;
         // タブをグループ化
         case ActionType.groupAll:
-            text = "未グループ化のタブでグループ化しました";
+            text = "Grouped remaining tabs";
             injectSnackbarFromBottomLeft(text);
             break;
         case ActionType.groupByDomain:
-            text = "ドメインごとにタブをグループ化しました";
+            text = "Grouped tabs by domain";
             injectSnackbarFromBottomLeft(text);
             break;
         case ActionType.groupByCustomDomain:
-            text = "指定したドメインごとにタブをグループ化しました";
+            text = "Grouped tabs by custom domain";
             injectSnackbarFromBottomLeft(text);
             break;
         // タブグループを全て解除
@@ -29,8 +27,33 @@ chrome.runtime.onMessage.addListener(function (msg: Message) {
             text = "タブグループを全て解除しました";
             injectSnackbarFromBottomLeft(text);
             break;
+        // タブグループを閉じる
         case ActionType.closeGroup:
             text = "タブグループを閉じました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブを閉じる
+        case ActionType.closeTab:
+            text = "タブを閉じました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブグループを復元
+        case ActionType.restoreGroup:
+            text = "タブグループを復元しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブを復元
+        case ActionType.restoreTab:
+            text = "タブを復元しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        // タブを復元
+        case ActionType.deleteGroup:
+            text = "保存済みのタブグループを削除しました";
+            injectSnackbarFromBottomLeft(text);
+            break;
+        case ActionType.deleteTab:
+            text = "保存済みのタブグループからタブを削除しました";
             injectSnackbarFromBottomLeft(text);
             break;
         default:

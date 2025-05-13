@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import StyledList from './StyledList'
 import { ListSubheader } from '@mui/material'
+import { styled } from '@mui/material/styles';
+import LayersIcon from '@mui/icons-material/Layers'
+import StyledList from './StyledList'
+import { ActionType } from '../../common/const/action'
+import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
+import SaveCurrentTabGroup from '../molecules/TabGroupActionItem/SaveCurrentTabGroup'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/TabGroupActionItem/UnGroupAllTabs'
-import { ActionType } from '../../common/const/action'
-import LayersIcon from '@mui/icons-material/Layers'
-import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
 
 
 interface Props {
     updateCurrentTabGroupList: () => void
+    updateSavedTabGroupList: () => void
 }
 
 export default function TabGroupActionList(props: Props): JSX.Element {
@@ -37,7 +40,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
 
     return (
         <StyledList>
-            <ListSubheader>Group tabs</ListSubheader>
+            <StyledListSubheader>Group tabs</StyledListSubheader>
             {/* 未グループ化タブをグループ化 */}
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
@@ -56,7 +59,6 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
-
             {/* 指定したドメインごとにグループ化 */}
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
@@ -66,13 +68,22 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
-
-            <ListSubheader>Ungroup tabs</ListSubheader>
+            {/* タブグループの保存 */}
+            <StyledListSubheader>Save groups</StyledListSubheader>
+            <SaveCurrentTabGroup
+                updateSavedTabGroupList={props.updateSavedTabGroupList}
+                shortcutKey={resolveShortcutKey(ActionType.save)}
+            />
+            <StyledListSubheader>Ungroup tabs</StyledListSubheader>
             {/* 全てのタブグループを解除 */}
             <UnGroupAllTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.ungroupAll)}
             />
-        </StyledList>
+        </StyledList >
     )
 }
+
+const StyledListSubheader = styled(ListSubheader)(({ theme }) => ({
+    height: "2.5rem"
+}));

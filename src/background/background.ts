@@ -1,7 +1,6 @@
-import { groupTabs, ungroupAllTabs, getTabGroupByTabGroupId } from '../common/libs/tabGroup'
-import { saveTabGroup } from '../common/libs/savedTabGroup'
-import { getCurrentTabs, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/tab'
-import { sendMessageToTab } from '../common/libs/message'
+import { groupTabs, ungroupAllTabs } from '../common/libs/tabGroup'
+import { saveCurrentTabGroupToStorage } from '../common/libs/savedTabGroup'
+import { sendMessageToTab, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/message'
 import { ActionType } from '../common/const/action'
 import { CommandType } from '../common/const/command'
 
@@ -38,20 +37,10 @@ chrome.commands.onCommand.addListener((command) => {
 })
 
 const saveCurrentTabGroup = async (): Promise<void> => {
-    const tab = await getCurrentTabs()
-    if (tab === undefined) return
-    if (tab.id === undefined) return
-
-    const tabGroup = await getTabGroupByTabGroupId(tab.groupId)
-    if (tabGroup === undefined) return
-
-    let tabGroupTitle = String(tabGroup.id)
-    if (tabGroup.title !== undefined) {
-        tabGroupTitle = tabGroup.title
-    }
-    await saveTabGroup(tabGroupTitle, tabGroup.id, tabGroup.color)
-    // content_scriptにメッセージを送信
-    sendMessageToTab(tab.id, { actionType: ActionType.save })
+    saveCurrentTabGroupToStorage((tabId) => {
+        // content_scriptにメッセージを送信
+        sendMessageToTab(tabId, { actionType: ActionType.save })
+    })
 }
 
 const groupUngroupedTabs = async (): Promise<void> => {
