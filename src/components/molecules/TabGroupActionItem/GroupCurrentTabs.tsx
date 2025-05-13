@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import ListItemText from '@mui/material/ListItemText'
-import ListItemIcon from '@mui/material/ListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
-import LayersIcon from '@mui/icons-material/Layers'
 import { groupTabs } from '../../../common/libs/tabGroup'
-import { getGroupMode } from '../../../common/libs/groupMode'
 import { getAllSavedTabGroup } from '../../../common/libs/savedTabGroup'
 import { savedTabGroupState } from '../../../common/recoil/atoms/savedTabGroupAtom'
 import { useSetRecoilState } from 'recoil'
+import StyledListItemIcon from './StyledListItemIcon'
+import type { GroupModeType } from '../../../common/types/groupMode'
 import type { SavedTabGroupInfo } from '../../../common/types/savedTabGroupInfo'
 
+
 interface Props {
-    updateCurrentTabGroupList: Function
+    title: string
+    groupMode: GroupModeType
+    updateCurrentTabGroupList: () => void
+    children: ReactNode
 }
 
 export default function GroupCurrentTabs(props: Props): JSX.Element {
@@ -22,16 +25,14 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
      * タブをグループ化
      */
     const handleClick = (): void => {
-        void getGroupMode().then((groupMode) => {
-            groupTabs(groupMode)
-                .then(() => {
-                    props.updateCurrentTabGroupList()
-                    updateSavedTabGroupList()
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-        })
+        groupTabs(props.groupMode)
+            .then(() => {
+                props.updateCurrentTabGroupList()
+                updateSavedTabGroupList()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const updateSavedTabGroupList = (): void => {
@@ -43,10 +44,10 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
     return (
         <StyledListItem>
             <StyledListItemButton onClick={handleClick}>
-                <ListItemIcon>
-                    <LayersIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Group tabs</ListItemText>
+                <StyledListItemIcon>
+                    {props.children}
+                </StyledListItemIcon>
+                <ListItemText>{props.title}</ListItemText>
             </StyledListItemButton>
         </StyledListItem>
     )

@@ -1,16 +1,18 @@
 import React from 'react'
-import SettingList from '../organisms/SettingList'
+import TabGroupActionList from '../organisms/TabGroupActionList'
 import TabPanel from '../atoms/TabPanel/TabPanel'
 
 interface Props {
     panelTab: number
     index: number
+    updateCurrentTabGroupList: () => void
+    updateSavedTabGroupList: () => void
 }
 
-export default function SettingsPanel(props: Props): JSX.Element {
+export default function ActionPanel(props: Props): JSX.Element {
     return (
         <TabPanel value={props.panelTab} index={props.index}>
-            <SettingList />
+            <TabGroupActionList updateCurrentTabGroupList={props.updateCurrentTabGroupList} updateSavedTabGroupList={props.updateSavedTabGroupList} />
         </TabPanel>
     )
 }

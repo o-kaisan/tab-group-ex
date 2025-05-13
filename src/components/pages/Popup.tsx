@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 import { RecoilRoot } from 'recoil';
-import TabNavigator from '../templates/TabNavigator'
+import TabNavigator from '../template/TabNavigator'
 
 ReactDOM.render(
     <React.StrictMode>

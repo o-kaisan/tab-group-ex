@@ -1,7 +1,7 @@
 import { groupTabs, ungroupAllTabs, getTabGroupByTabGroupId } from '../common/libs/tabGroup'
 import { saveTabGroup } from '../common/libs/savedTabGroup'
 import { getCurrentTabs } from '../common/libs/tab'
-import { GROUP_MODE } from '../common/types/groupMode'
+import { GroupMode } from '../common/types/groupMode'
 import { CommandType as commandType } from '../common/types/command'
 import { MessageType } from '../common/types/message'
 
@@ -58,13 +58,13 @@ const saveCurrentTabGroup = async (): Promise<void> => {
 }
 
 const groupAllUngroupedTabs = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.all)
+    await groupTabs(GroupMode.all)
 }
 const groupByDomain = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.domain)
+    await groupTabs(GroupMode.domain)
 }
 const groupByCustomDomain = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.customDomain)
+    await groupTabs(GroupMode.customDomain)
 }
 
 const ungroupAllGroups = async (): Promise<void> => {

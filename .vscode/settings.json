@@ -1,7 +1,7 @@
 {
     "typescript.tsdk": "./node_modules/typescript/lib",
     "files.eol": "\n",
-    "editor.formatOnSave" : true,
+    "editor.formatOnSave": true,
     "json.schemas": [
         {
             "fileMatch": [
@@ -9,5 +9,8 @@
             ],
             "url": "http://json.schemastore.org/chrome-manifest"
         }
+    ],
+    "cSpell.words": [
+        "ungroup"
     ]
 }

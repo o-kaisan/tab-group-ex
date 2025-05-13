@@ -1,6 +1,6 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
-import ListItemIcon from '@mui/material/ListItemIcon'
+import StyledListItemIcon from './StyledListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
@@ -26,9 +26,9 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
     return (
         <StyledListItem>
             <StyledListItemButton onClick={handleClick}>
-                <ListItemIcon>
+                <StyledListItemIcon>
                     <LayersClearIcon fontSize="small" />
-                </ListItemIcon>
+                </StyledListItemIcon>
                 <ListItemText>Ungroup all</ListItemText>
             </StyledListItemButton>
         </StyledListItem>
