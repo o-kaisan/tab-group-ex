@@ -2,9 +2,8 @@ import React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import CurrentTabGroupPanel from '../templates/CurrentTabGroupPanel'
-import SettingsPanel from '../templates/SettingsPanel'
-import SavedTabGroupPanel from '../templates/SavedTabGroupPanel'
+import CurrentTabGroupPanel from '../template/CurrentTabGroupPanel'
+import SavedTabGroupPanel from '../template/SavedTabGroupPanel'
 import GroupRulesPanel from './GroupRulesPanel'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
