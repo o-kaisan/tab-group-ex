@@ -2,9 +2,8 @@ import { groupTabs, ungroupAllTabs, getTabGroupByTabGroupId } from '../common/li
 import { saveTabGroup } from '../common/libs/savedTabGroup'
 import { getCurrentTabs, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/tab'
 import { sendMessageToTab } from '../common/libs/message'
-import { GroupModeType } from '../common/types/groupMode'
-import { CommandType } from '../common/types/command'
-import { MessageType } from '../common/types/message'
+import { ActionType } from '../common/const/action'
+import { CommandType } from '../common/const/command'
 
 // キーボードショートカットを処理する
 chrome.commands.onCommand.addListener((command) => {
@@ -52,23 +51,23 @@ const saveCurrentTabGroup = async (): Promise<void> => {
     }
     await saveTabGroup(tabGroupTitle, tabGroup.id, tabGroup.color)
     // content_scriptにメッセージを送信
-    sendMessageToTab(tab.id, { messageType: MessageType.save })
+    sendMessageToTab(tab.id, { actionType: ActionType.save })
 }
 
 const groupUngroupedTabs = async (): Promise<void> => {
-    await groupTabs(GroupModeType.all)
+    await groupTabs(ActionType.groupAll)
     // content_scriptにメッセージを送信
-    await sendGroupMessageToTab(GroupModeType.all)
+    await sendGroupMessageToTab(ActionType.groupAll)
 }
 const groupByDomain = async (): Promise<void> => {
-    await groupTabs(GroupModeType.domain)
+    await groupTabs(ActionType.groupByDomain)
     // content_scriptにメッセージを送信
-    await sendGroupMessageToTab(GroupModeType.domain)
+    await sendGroupMessageToTab(ActionType.groupByDomain)
 }
 const groupByCustomDomain = async (): Promise<void> => {
-    await groupTabs(GroupModeType.customDomain)
+    await groupTabs(ActionType.groupByCustomDomain)
     // content_scriptにメッセージを送信
-    await sendGroupMessageToTab(GroupModeType.customDomain)
+    await sendGroupMessageToTab(ActionType.groupByCustomDomain)
 }
 
 const ungroupAllGroups = async (): Promise<void> => {

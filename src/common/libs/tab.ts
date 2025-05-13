@@ -1,5 +1,4 @@
-import { GroupModeType, type GroupMode } from "../types/groupMode"
-import { MessageType } from "../types/message"
+import { ActionType } from "../const/action"
 import { sendMessageToTab } from "./message"
 import { closeTabGroup, getUrlsFromTabGroup } from "./tabGroup"
 
@@ -124,25 +123,25 @@ export async function sendSaveMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTabs()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { messageType: MessageType.groupAll })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.groupAll })
 }
 
 /*
  * 現在のタブにグループ化処理実行メッセージを送信する
  */
-export async function sendGroupMessageToTab(groupMode: GroupMode): Promise<void> {
+export async function sendGroupMessageToTab(actionType: string): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTabs()
     if (currentTab.id === undefined) return
-    switch (groupMode) {
-        case GroupModeType.all:
-            sendMessageToTab(currentTab.id, { messageType: MessageType.groupAll })
+    switch (actionType) {
+        case ActionType.groupAll:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.groupAll })
             break;
-        case GroupModeType.domain:
-            sendMessageToTab(currentTab.id, { messageType: MessageType.groupByDomain })
+        case ActionType.groupByDomain:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByDomain })
             break;
-        case GroupModeType.customDomain:
-            sendMessageToTab(currentTab.id, { messageType: MessageType.groupByCustomDomain })
+        case ActionType.groupByCustomDomain:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByCustomDomain })
             break;
         default:
             throw Error("never reach here")
@@ -156,7 +155,7 @@ export async function sendUngroupMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTabs()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { messageType: MessageType.ungroupAll })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.ungroupAll })
 }
 
 /*
@@ -166,5 +165,5 @@ export async function sendRestoreMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTabs()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { messageType: MessageType.restore })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.restoreGroup })
 }

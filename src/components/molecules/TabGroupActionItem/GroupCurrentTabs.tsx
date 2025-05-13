@@ -2,13 +2,14 @@ import React, { type ReactNode } from 'react'
 import ListItemText from '@mui/material/ListItemText'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
+import ShortcutKeyItem from './ShortcutKeyItem'
 import { groupTabs } from '../../../common/libs/tabGroup'
 import StyledListItemIcon from './StyledListItemIcon'
-import type { GroupMode } from '../../../common/types/groupMode'
 
 interface Props {
     title: string
-    groupMode: GroupMode
+    actionType: string
+    shortcutKey: string
     updateCurrentTabGroupList: () => void
     children: ReactNode
 }
@@ -18,7 +19,7 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
      * タブをグループ化
      */
     const handleClick = (): void => {
-        groupTabs(props.groupMode)
+        groupTabs(props.actionType)
             .then(() => {
                 // 現在表示しているタブを取得
                 props.updateCurrentTabGroupList()
@@ -36,6 +37,7 @@ export default function GroupCurrentTabs(props: Props): JSX.Element {
                     {props.children}
                 </StyledListItemIcon>
                 <ListItemText>{props.title}</ListItemText>
+                <ShortcutKeyItem shortcutKey={props.shortcutKey} />
             </StyledListItemButton>
         </StyledListItem>
     )

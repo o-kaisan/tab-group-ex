@@ -3,7 +3,7 @@
  */
 import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
-import { type GroupMode, GroupModeType } from '../types/groupMode'
+import { ActionType } from '../const/action'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
 import { getGroupRules } from './groupRule'
 import type { Url } from '../types/savedTabGroupInfo'
@@ -13,16 +13,16 @@ type DomainMap = Record<string, number[]>
 /*
  * タブをグループ化
  */
-export async function groupTabs(groupMode: GroupMode): Promise<void> {
-    switch (groupMode) {
-        case GroupModeType.domain: {
+export async function groupTabs(actionType: string): Promise<void> {
+    switch (actionType) {
+        case ActionType.groupByDomain: {
             const tabs = await getAllTabs()
             const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
             await groupTabsByDomain(domainMap)
             return
         }
 
-        case GroupModeType.customDomain: {
+        case ActionType.groupByCustomDomain: {
             const tabs = await getAllTabs()
             const groupRules = await getGroupRules()
             if (groupRules === undefined || groupRules.length <= 0) {
@@ -37,14 +37,14 @@ export async function groupTabs(groupMode: GroupMode): Promise<void> {
             return
         }
 
-        case GroupModeType.all: {
+        case ActionType.groupAll: {
             const tabs = await getTabsWithoutGrouped()
             await groupAllCurrentTabs(tabs)
             return
         }
 
         default:
-            console.error('Failed to group tabs (invalid group mode) groupMode=%s', groupMode)
+            console.error('Failed to group tabs (invalid action type) actionType=%s', actionType)
             break
     }
 }

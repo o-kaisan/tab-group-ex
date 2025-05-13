@@ -3,7 +3,7 @@ import { ListItemIcon } from '@mui/material'
 import { styled } from '@mui/material/styles';
 
 const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
-    minWidth: 35,
+    minWidth: 26,
     paddingLeft: "0px"
 }));
 

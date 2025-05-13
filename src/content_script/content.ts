@@ -1,34 +1,35 @@
-import { type Message, MessageType } from "../common/types/message";
+import { ActionType } from "../common/const/action";
+import type { Message } from "../common/types/message";
 
 console.log("content_script loaded")
 
 chrome.runtime.onMessage.addListener(function (msg: Message) {
     let text: string
-    switch (msg.messageType) {
+    switch (msg.actionType) {
         // タブグループの保存
-        case MessageType.save:
+        case ActionType.save:
             text = "タブグループが保存しました";
             injectSnackbarFromBottomLeft(text);
             break;
         // タブをグループ化
-        case MessageType.groupAll:
+        case ActionType.groupAll:
             text = "未グループ化のタブでグループ化しました";
             injectSnackbarFromBottomLeft(text);
             break;
-        case MessageType.groupByDomain:
+        case ActionType.groupByDomain:
             text = "ドメインごとにタブをグループ化しました";
             injectSnackbarFromBottomLeft(text);
             break;
-        case MessageType.groupByCustomDomain:
+        case ActionType.groupByCustomDomain:
             text = "指定したドメインごとにタブをグループ化しました";
             injectSnackbarFromBottomLeft(text);
             break;
         // タブグループを全て解除
-        case MessageType.ungroupAll:
+        case ActionType.ungroupAll:
             text = "タブグループを全て解除しました";
             injectSnackbarFromBottomLeft(text);
             break;
-        case MessageType.close:
+        case ActionType.closeGroup:
             text = "タブグループを閉じました";
             injectSnackbarFromBottomLeft(text);
             break;

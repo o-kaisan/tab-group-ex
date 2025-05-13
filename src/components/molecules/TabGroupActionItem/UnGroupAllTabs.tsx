@@ -5,9 +5,11 @@ import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
 import { ungroupAllTabs } from '../../../common/libs/tabGroup'
+import ShortcutKeyItem from './ShortcutKeyItem'
 
 interface Props {
     updateCurrentTabGroupList: Function
+    shortcutKey: string
 }
 
 export default function UngroupAllTabs(props: Props): JSX.Element {
@@ -31,6 +33,7 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
                     <LayersClearIcon fontSize="small" />
                 </StyledListItemIcon>
                 <ListItemText>Ungroup all</ListItemText>
+                <ShortcutKeyItem shortcutKey={props.shortcutKey} />
             </StyledListItemButton>
         </StyledListItem>
     )
