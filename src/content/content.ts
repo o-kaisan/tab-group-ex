@@ -7,54 +7,55 @@ chrome.runtime.onMessage.addListener(function (msg: Message) {
         // タブグループの保存
         case ActionType.save:
             text = "Tab group saved";
-            injectSnackbarFromBottomLeft(text);
+            injectSnackbar(text);
             break;
         // タブをグループ化
         case ActionType.groupAll:
             text = "Grouped remaining tabs";
-            injectSnackbarFromBottomLeft(text);
+            injectSnackbar(text);
             break;
         case ActionType.groupByDomain:
             text = "Grouped tabs by domain";
-            injectSnackbarFromBottomLeft(text);
+            injectSnackbar(text);
             break;
         case ActionType.groupByCustomDomain:
             text = "Grouped tabs by custom domain";
-            injectSnackbarFromBottomLeft(text);
+            injectSnackbar(text);
             break;
         // タブグループを全て解除
         case ActionType.ungroupAll:
-            text = "タブグループを全て解除しました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Ungrouped all tab groups";
+            injectSnackbar(text);
             break;
         // タブグループを閉じる
         case ActionType.closeGroup:
-            text = "タブグループを閉じました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Closed tab group";
+            injectSnackbar(text);
             break;
         // タブを閉じる
         case ActionType.closeTab:
-            text = "タブを閉じました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Closed tab";
+            injectSnackbar(text);
             break;
         // タブグループを復元
         case ActionType.restoreGroup:
-            text = "タブグループを復元しました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Restored tab group";
+            injectSnackbar(text);
             break;
         // タブを復元
         case ActionType.restoreTab:
-            text = "タブを復元しました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Restored tab";
+            injectSnackbar(text);
             break;
-        // タブを復元
+        // 保存済みのタブグループを削除
         case ActionType.deleteGroup:
-            text = "保存済みのタブグループを削除しました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Deleted saved group";
+            injectSnackbar(text);
             break;
+        // 保存済みのタブグループからタブを削除
         case ActionType.deleteTab:
-            text = "保存済みのタブグループからタブを削除しました";
-            injectSnackbarFromBottomLeft(text);
+            text = "Removed tab from group";
+            injectSnackbar(text);
             break;
         default:
             break;
@@ -68,7 +69,7 @@ chrome.runtime.onMessage.addListener(function (msg: Message) {
  *   Reactコンポーネントで実装したかったが、コンパイルに膨大な時間がかかるため
  *   暫定対処としてJavaScript形式でSnackbarを実装する
  */
-function injectSnackbarFromBottomLeft(text: string): void {
+function injectSnackbar(text: string): void {
     const SNACKBAR_ELEMENT_ID = "tab-group-ex-bgs-snackbar";
 
     // すでに要素があるか確認

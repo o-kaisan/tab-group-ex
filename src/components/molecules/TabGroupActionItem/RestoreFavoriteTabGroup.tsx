@@ -3,38 +3,39 @@ import ListItemText from '@mui/material/ListItemText'
 import StyledListItemIcon from './StyledListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
-import LayersClearIcon from '@mui/icons-material/LayersClear'
 import ShortcutKeyItem from './ShortcutKeyItem'
-import { sendMessageToTab } from '../../../common/libs/message'
-import { saveCurrentTabGroupToStorage } from '../../../common/libs/savedTabGroup'
-import { ActionType } from '../../../common/const/action'
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { sendRestoreGroupMessageToTab } from '../../../common/libs/message'
+import { restoreFavoriteTabGroup } from '../../../common/libs/savedTabGroup'
+import RestorePageIcon from '@mui/icons-material/RestorePage';
 
 interface Props {
-    updateSavedTabGroupList: () => void
+    updateCurrentTabGroupList: () => void
     shortcutKey: string
 }
 
-export default function SaveCurrentTabGroup(props: Props): JSX.Element {
+export default function ResotreFavoriteSavedTabGroup(props: Props): JSX.Element {
     /**
      * タブをグループ化
      */
     const handleClick = (): void => {
-        saveCurrentTabGroupToStorage((tabId) => {
+        restoreFavoriteTabGroup((result) => {
             // content_scriptにメッセージを送信
-            sendMessageToTab(tabId, { actionType: ActionType.save })
+            if (result) {
+                sendRestoreGroupMessageToTab()
+                return
+            }
         }).then(() => {
             //表示を更新
-            props.updateSavedTabGroupList()
+            props.updateCurrentTabGroupList()
         }).catch((e) => { console.log(e) })
     }
     return (
         <StyledListItem>
             <StyledListItemButton onClick={handleClick}>
                 <StyledListItemIcon>
-                    <SaveAltIcon fontSize="small" />
+                    <RestorePageIcon fontSize="small" />
                 </StyledListItemIcon>
-                <ListItemText>Save current group </ListItemText>
+                <ListItemText>Restore favorite group</ListItemText>
                 <ShortcutKeyItem shortcutKey={props.shortcutKey} />
             </StyledListItemButton>
         </StyledListItem>

@@ -1,5 +1,5 @@
 import type { SavedTabGroupInfo, Url } from '../types/savedTabGroupInfo'
-import { getCurrentTabs } from './tab'
+import { getCurrentTab } from './tab'
 import { getUrlsFromTabGroup, createTabGroups, getTabGroupByTabGroupId } from './tabGroup'
 
 // ストレージのキー
@@ -38,7 +38,8 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
             tabGroupId,
             title: tabGroupTitle,
             urls,
-            color
+            color,
+            isFavorited: false,
         }
         newSavedTabGroups.push(newTabGroup)
     }
@@ -95,6 +96,60 @@ export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promi
         }
     })
     await createTabGroups(tabIdList, tabGroupTitle)
+}
+
+/**
+ * お気に入りした保存済みのタブグループを復元すsる
+ */
+export async function restoreFavoriteTabGroup(callback: (result: boolean) => void): Promise<void> {
+    const tabgGroups = await getAllSavedTabGroup()
+
+    // 既に同じタブグループ名が存在する場合はurlを更新する
+    let favoriteTabgroups: SavedTabGroupInfo[] = []
+
+    tabgGroups.forEach((tabGroup) => {
+        if (tabGroup.isFavorited === true) {
+            favoriteTabgroups.push(tabGroup)
+        }
+    })
+
+    // お気に入りのタブグループが見つからなかった場合
+    if (favoriteTabgroups.length === 0) {
+        callback(false)
+        return
+    }
+
+    favoriteTabgroups.forEach((favoriteTabgroup) => {
+        restoreTabGroup(favoriteTabgroup.title, favoriteTabgroup.urls)
+    })
+    callback(true)
+
+}
+
+/**
+ * 保存済みのタブをお気に入り登録する
+ */
+export async function favoriteTabgroup(tabGroupTitle: string, tabGroupId: number, isFavorited: boolean) {
+    const savedTabGroups = await getAllSavedTabGroup()
+
+    let isTabGroupExist = false
+    const newSavedTabGroups: SavedTabGroupInfo[] = []
+    savedTabGroups.forEach((savedTabGroup: SavedTabGroupInfo) => {
+        if (tabGroupTitle === savedTabGroup.title) {
+            isTabGroupExist = true
+            newSavedTabGroups.push({ ...savedTabGroup, isFavorited: isFavorited })
+            return
+        }
+        // 対象をお気に入り登録
+        newSavedTabGroups.push(savedTabGroup)
+    })
+
+    if (!isTabGroupExist) {
+        // 保存対象が既に保存済みタブグループ存在していなければ何もしない
+        return
+    }
+    // ストレージを更新
+    await chrome.storage.local.set({ savedTabGroups: newSavedTabGroups })
 }
 
 /**
@@ -172,7 +227,7 @@ export async function updateSavedTabGroups(savedTabGroups: SavedTabGroupInfo[]):
  * 現在開いているタブが所属するタブグループを保存する
  */
 export async function saveCurrentTabGroupToStorage(callback?: (tabId: number) => void): Promise<void> {
-    const tab = await getCurrentTabs()
+    const tab = await getCurrentTab()
     if (tab === undefined) return
     if (tab.id === undefined) return
 

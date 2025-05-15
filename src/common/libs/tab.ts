@@ -12,7 +12,7 @@ export async function getTabs(targetTabConditions: chrome.tabs.QueryInfo): Promi
 /**
  * 現在開いているタブを取得する
  */
-export async function getCurrentTabs(): Promise<chrome.tabs.Tab> {
+export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
     const targetTabConditions: chrome.tabs.QueryInfo = {
         lastFocusedWindow: true,
         active: true,

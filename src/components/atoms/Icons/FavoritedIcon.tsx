@@ -1,19 +1,20 @@
 import React from 'react'
-import RestorePageIcon from '@mui/icons-material/RestorePage';
 import { IconButton } from '@mui/material'
+import GradeIcon from '@mui/icons-material/Grade';
+
 
 interface Props {
     onClick: Function
 }
 
-export default function RestoreIconX(props: Props): JSX.Element {
+export default function FavoritedIcon(props: Props): JSX.Element {
     const handleClick = (): void => {
         props.onClick()
     }
 
     return (
         <IconButton onClick={handleClick}>
-            <RestorePageIcon fontSize="small" />
+            <GradeIcon fontSize="small" />
         </IconButton>
     )
 }
