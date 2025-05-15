@@ -5,7 +5,7 @@ import { getUrlsFromTabGroup, createTabGroups, getTabGroupByTabGroupId } from '.
 // ストレージのキー
 const SAVED_TAB_GROUP_KEY: string = "savedTabGroups"
 
-/*
+/**
  * タブグループを保存する
  */
 export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, color: string): Promise<void> {
@@ -61,7 +61,7 @@ export async function getSavedTabGroup(tabGroupTitle: string, tabGroupId: number
     return ret
 }
 
-/*
+/**
  * ローカルストレージから保存されたタブグループを取得する
  */
 export async function getAllSavedTabGroup(): Promise<SavedTabGroupInfo[]> {
@@ -74,7 +74,7 @@ export async function getAllSavedTabGroup(): Promise<SavedTabGroupInfo[]> {
     return savedTabGroups
 }
 
-/*
+/**
  * 指定したタブグループを復元する
  */
 export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promise<void> {
@@ -97,7 +97,7 @@ export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promi
     await createTabGroups(tabIdList, tabGroupTitle)
 }
 
-/*
+/**
  * タブを復元する
  */
 async function restoreTab(url: Url): Promise<number | undefined> {
@@ -109,7 +109,7 @@ async function restoreTab(url: Url): Promise<number | undefined> {
     return tab.id
 }
 
-/*
+/**
  * タブグループをストレージから削除する
  */
 export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number): Promise<void> {
@@ -119,7 +119,7 @@ export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number):
     await updateSavedTabGroups(newSavedTabGroups)
 }
 
-/*
+/**
  * タブグループのアイテム(Url)を削除する
  */
 export async function deleteUrl(tabGroupTitle: string, tabGroupId: number, index: number): Promise<void> {
@@ -142,7 +142,7 @@ export async function deleteUrl(tabGroupTitle: string, tabGroupId: number, index
     await updateSavedTabGroups(newSavedTabGroups)
 }
 
-/*
+/**
  * ストレージにタブグループを保存するためのkeyを生成する
  */
 function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number): string {
@@ -150,7 +150,7 @@ function resolveStorageKeyforTabGroup(tabGroupTitle: string, tabGroupId: number)
     return TabGroupKey
 }
 
-/*
+/**
  * 保存されたタブグループの名前を更新する
  */
 export async function updateSavedTabGroupName(tabGroupId: number, title: string, renamedTitle: string, color: string): Promise<void> {
@@ -158,7 +158,7 @@ export async function updateSavedTabGroupName(tabGroupId: number, title: string,
     await saveTabGroup(renamedTitle, tabGroupId, color)
 }
 
-/*
+/**
  * 保存されたタブグループを一括更新する
  */
 export async function updateSavedTabGroups(savedTabGroups: SavedTabGroupInfo[]): Promise<void> {
@@ -168,7 +168,7 @@ export async function updateSavedTabGroups(savedTabGroups: SavedTabGroupInfo[]):
     await chrome.storage.local.set({ savedTabGroups })
 }
 
-/*
+/**
  * 現在開いているタブが所属するタブグループを保存する
  */
 export async function saveCurrentTabGroupToStorage(callback?: (tabId: number) => void): Promise<void> {

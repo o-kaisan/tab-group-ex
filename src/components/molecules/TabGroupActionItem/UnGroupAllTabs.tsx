@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function UngroupAllTabs(props: Props): JSX.Element {
-    /*
+    /**
      * タブをグループ化
      */
     const handleClick = (): void => {

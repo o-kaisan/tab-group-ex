@@ -41,7 +41,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
     return (
         <StyledList>
             <StyledListSubheader>Group tabs</StyledListSubheader>
-            {/* 未グループ化タブをグループ化 */}
+            {/** 未グループ化タブをグループ化 */}
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group ungrouped tabs"}
@@ -50,7 +50,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
-            {/* ドメインごとにグループ化 */}
+            {/** ドメインごとにグループ化 */}
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group by domain"}
@@ -59,7 +59,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
-            {/* 指定したドメインごとにグループ化 */}
+            {/** 指定したドメインごとにグループ化 */}
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group by custom domain"}
@@ -68,14 +68,14 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
-            {/* タブグループの保存 */}
+            {/** タブグループの保存 */}
             <StyledListSubheader>Save groups</StyledListSubheader>
             <SaveCurrentTabGroup
                 updateSavedTabGroupList={props.updateSavedTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.save)}
             />
             <StyledListSubheader>Ungroup tabs</StyledListSubheader>
-            {/* 全てのタブグループを解除 */}
+            {/** 全てのタブグループを解除 */}
             <UnGroupAllTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.ungroupAll)}

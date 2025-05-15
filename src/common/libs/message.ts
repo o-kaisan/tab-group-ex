@@ -2,7 +2,7 @@ import { ActionType } from '../../common/const/action'
 import { type Message } from '../types/message'
 import { getCurrentTabs } from './tab'
 
-/*
+/**
  * 下記のパターンでメッセージを送信する
  *   - context_script -> popup
  *   - context_script -> background
@@ -13,7 +13,7 @@ export function sendMessage(msg: Message): void {
     chrome.runtime.sendMessage(msg)
 }
 
-/*
+/**
  * 下記のパターンでメッセージを送信する
  *   - popup -> context_script
  *   - background -> context_script
@@ -22,7 +22,7 @@ export function sendMessageToTab(tabId: number, msg: Message): void {
     chrome.tabs.sendMessage(tabId, msg)
 }
 
-/*
+/**
  * 現在のタブに保存処理実行メッセージを送信する
  */
 export async function sendSaveMessageToTab(): Promise<void> {
@@ -32,7 +32,7 @@ export async function sendSaveMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.save })
 }
 
-/*
+/**
  * 現在のタブにグループ化処理実行メッセージを送信する
  */
 export async function sendGroupMessageToTab(actionType: string): Promise<void> {
@@ -54,7 +54,7 @@ export async function sendGroupMessageToTab(actionType: string): Promise<void> {
     }
 }
 
-/*
+/**
  * 現在のタブにグループ化解除処理実行メッセージを送信する
  */
 export async function sendUngroupMessageToTab(): Promise<void> {
@@ -64,7 +64,7 @@ export async function sendUngroupMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.ungroupAll })
 }
 
-/*
+/**
  * 現在のタブにグループ化タブを閉じる処理実行メッセージを送信する
  */
 export async function sendCloseGroupMessageToTab(): Promise<void> {
@@ -74,7 +74,7 @@ export async function sendCloseGroupMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.closeGroup })
 }
 
-/*
+/**
  * 現在のタブにグループ化タブを閉じる処理実行メッセージを送信する
  */
 export async function sendCloseTabMessageToTab(): Promise<void> {
@@ -84,7 +84,7 @@ export async function sendCloseTabMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.closeTab })
 }
 
-/*
+/**
  * 現在のタブにタブグループ復元処理実行メッセージを送信する
  */
 export async function sendRestoreGroupMessageToTab(): Promise<void> {
@@ -94,7 +94,7 @@ export async function sendRestoreGroupMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.restoreGroup })
 }
 
-/*
+/**
  * 現在のタブにタブ復元処理実行メッセージを送信する
  */
 export async function sendRestoreTabMessageToTab(): Promise<void> {
@@ -105,7 +105,7 @@ export async function sendRestoreTabMessageToTab(): Promise<void> {
 }
 
 
-/*
+/**
  * 現在のタブにタブグループの中のタブ削除処理実行メッセージを送信する
  */
 export async function sendDeleteSavedGroupMessageToTab(): Promise<void> {
@@ -115,7 +115,7 @@ export async function sendDeleteSavedGroupMessageToTab(): Promise<void> {
     sendMessageToTab(currentTab.id, { actionType: ActionType.deleteGroup })
 }
 
-/*
+/**
  * 現在のタブにタブグループ削除処理実行メッセージを送信する
  */
 export async function sendDeleteSavedTabMessageToTab(): Promise<void> {

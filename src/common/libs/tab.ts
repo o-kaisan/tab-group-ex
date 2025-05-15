@@ -1,6 +1,6 @@
 import { closeTabGroup, getUrlsFromTabGroup } from "./tabGroup"
 
-/*
+/**
  * 指定した条件でタブを取得する
  * ※タブが取得できなかった場合は空の配列を返す。
  */
@@ -9,7 +9,7 @@ export async function getTabs(targetTabConditions: chrome.tabs.QueryInfo): Promi
     return tabs
 }
 
-/*
+/**
  * 現在開いているタブを取得する
  */
 export async function getCurrentTabs(): Promise<chrome.tabs.Tab> {
@@ -22,7 +22,7 @@ export async function getCurrentTabs(): Promise<chrome.tabs.Tab> {
 }
 
 
-/*
+/**
  * グループ化されたタブを含む全てのタブを取得する
  */
 export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
@@ -35,7 +35,7 @@ export async function getAllTabs(): Promise<chrome.tabs.Tab[]> {
     return tabs
 }
 
-/*
+/**
  * 指定したタブグループのタブ一覧を取得する
  */
 export async function getTabsByGroupId(tabGroupId: number): Promise<chrome.tabs.Tab[]> {
@@ -49,7 +49,7 @@ export async function getTabsByGroupId(tabGroupId: number): Promise<chrome.tabs.
     return tabs
 }
 
-/*
+/**
  * グループ化されていないタブを取得する
  */
 export async function getTabsWithoutGrouped(): Promise<chrome.tabs.Tab[]> {
@@ -63,7 +63,7 @@ export async function getTabsWithoutGrouped(): Promise<chrome.tabs.Tab[]> {
     return tabs
 }
 
-/*
+/**
  * タブ配列をタブIDのリストを返却
  * ※タブが取得できなかった場合は空の配列を返す。
  */
@@ -78,7 +78,7 @@ export function getTabIdList(targetTabList: chrome.tabs.Tab[]): number[] {
 }
 
 
-/*
+/**
  * タブを選択状態に更新する
  */
 export async function moveToTargetTab(tabId: number): Promise<chrome.tabs.Tab> {
@@ -88,7 +88,7 @@ export async function moveToTargetTab(tabId: number): Promise<chrome.tabs.Tab> {
     return await chrome.tabs.update(tabId, targetTabConditions)
 }
 
-/*
+/**
  * タブを削除する
  */
 export async function removeTab(tabId: number, groupId: number): Promise<void> {
@@ -103,7 +103,7 @@ export async function removeTab(tabId: number, groupId: number): Promise<void> {
     await chrome.tabs.remove(tabId)
 }
 
-/*
+/**
  * 指定したurlでタブを新規に開く
  */
 export async function createTab(url: string): Promise<void> {

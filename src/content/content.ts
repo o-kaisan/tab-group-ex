@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener(function (msg: Message) {
     }
 });
 
-/*
+/**
  * スナックバーを左下から表示する
  *
  * 補足

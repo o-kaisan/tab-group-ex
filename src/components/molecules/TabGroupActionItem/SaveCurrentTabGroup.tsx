@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function SaveCurrentTabGroup(props: Props): JSX.Element {
-    /*
+    /**
      * タブをグループ化
      */
     const handleClick = (): void => {

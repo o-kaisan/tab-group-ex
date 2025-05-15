@@ -11,7 +11,7 @@
     "updatesnap": "jest --updateSnapshot",
     "lint": "eslint . --ext ts,tsx",
     "fix": "eslint . --ext ts,tsx --fix",
-    "fmt": "npm run fix && prettier --write \"src/**/*.{ts,tsx}\""
+    "fmt": "npm run fix && prettier --write \"src/*/*.{ts,tsx}\""
   },
   "author": "",
   "license": "MIT",

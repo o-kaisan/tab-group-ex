@@ -21,7 +21,7 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
     }
 
     const handleMenuUngroupItemClick = (tabGroupId: number): void => {
-        /*
+        /**
          * アクティブなウィンドウのタブグループを全て解除
          */
         props.setAnchorEl(null)
@@ -57,7 +57,7 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
                 open={props.open}
                 onClose={handleStyledMenuClose}
             >
-                {/* <MenuEditItem onClick={handleMenuEditItemClick} /> */}
+                {/** <MenuEditItem onClick={handleMenuEditItemClick} /> */}
                 <MenuCloseItem
                     onClick={() => {
                         handleMenuCloseItemClick(props.tabGroupId)
