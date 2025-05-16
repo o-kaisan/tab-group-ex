@@ -1,19 +1,20 @@
 // manifest.jsonのショートカットと文字列を対応させているので変更には注意
 export const ActionType = {
     // 表示中のタブグループ/タブに関連するアクション
-    save: 'SaveCurrentTabGroup',
-    groupAll: 'GroupAllUnGroupedTabs',
-    groupByDomain: 'GroupTabsByDomain',
-    groupByCustomDomain: 'GroupTabsByCustomDomain',
-    ungroupAll: 'UngroupAllGroups',
-    ungroup: 'Ungroup',
-    closeGroup: 'CloseGroup',
-    closeTab: 'CloseTab',
-    closeSavedGroup: 'CloseSavedGroup',
-    closeSavedTab: 'CloseSavedTab',
+    SAVE_GROUP: 'SaveCurrentTabGroup',
+    GROUP_ALL: 'GroupAllUnGroupedTabs',
+    GROUP_BY_DOMAIN: 'GroupTabsByDomain',
+    GROUP_BY_CUSTOM_DOMAIN: 'GroupTabsByCustomDomain',
+    UNGROUP_ALL_GROUP: 'UngroupAllGroups',
+    UNGROUP_ONE_GROUP: 'Ungroup',
+    CLOSE_GROUP: 'CloseGroup',
+    CLOSE_TAB: 'CloseTab',
     // 保存済みのタブグループ/タブに関連するアクション
-    restoreGroup: 'RestoreGroup',
-    restoreTab: 'RestoreTab',
-    deleteGroup: 'DeleteTab',
-    deleteTab: 'DeleteTab'
+    RESTORE_GROUP: 'RestoreGroup',
+    RESTORE_TAB: 'RestoreTab',
+    DELETE_GROUP: 'DeleteTab',
+    DELETE_TAB: 'DeleteTab'
 }
+
+
+export type Action = (typeof ActionType)[keyof typeof ActionType];

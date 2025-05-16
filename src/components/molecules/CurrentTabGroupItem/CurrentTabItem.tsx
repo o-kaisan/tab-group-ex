@@ -33,7 +33,7 @@ export default function CurrentTabItem(props: Props): JSX.Element {
                 // 表示を更新
                 props.updateCurrentTabGroupList()
 
-                // context_scriptにメッセージを渡す
+                // content/content.tsにメッセージを渡す
                 sendCloseTabMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((e) => {

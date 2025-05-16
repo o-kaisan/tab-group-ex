@@ -23,7 +23,7 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
                 // グループを更新する
                 props.updateCurrentTabGroupList()
 
-                // context_scriptにメッセージを渡す
+                // content/content.tsにメッセージを渡す
                 sendUngroupMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {

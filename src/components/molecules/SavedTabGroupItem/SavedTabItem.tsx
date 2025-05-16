@@ -2,7 +2,7 @@ import React from 'react'
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText'
 import type { Url } from '../../../common/types/savedTabGroupInfo'
-import { deleteUrl } from '../../../common/libs/savedTabGroup'
+import { deletePage } from '../../../common/libs/savedTabGroup'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
 import { createTab } from '../../../common/libs/tab'
 import PublicIcon from '@mui/icons-material/Public'
@@ -27,11 +27,11 @@ export default function SavedTabItem(props: Props): JSX.Element {
     }
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number, index: number): void => {
-        void deleteUrl(tabGroupTitle, tabGroupId, index).then(() => {
+        void deletePage(tabGroupTitle, tabGroupId, index).then(() => {
             // 表示の更新
             props.updateSavedTabGroupList()
 
-            // context_scriptにメッセージを渡す
+            // content/content.tsにメッセージを渡す
             sendDeleteSavedTabMessageToTab().catch((e) => { console.log(e) })
         })
     }

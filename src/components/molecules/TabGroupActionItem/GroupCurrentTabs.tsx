@@ -6,10 +6,11 @@ import ShortcutKeyItem from './ShortcutKeyItem'
 import { groupTabs } from '../../../common/libs/tabGroup'
 import StyledListItemIcon from './StyledListItemIcon'
 import { sendGroupMessageToTab } from '../../../common/libs/message'
+import { Action } from '../../../common/const/action'
 
 interface Props {
     title: string
-    actionType: string
+    actionType: Action
     shortcutKey: string
     updateCurrentTabGroupList: () => void
     children: ReactNode

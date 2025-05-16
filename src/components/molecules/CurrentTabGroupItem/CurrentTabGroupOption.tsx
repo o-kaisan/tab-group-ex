@@ -22,14 +22,14 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
 
     const handleMenuUngroupItemClick = (tabGroupId: number): void => {
         /**
-         * アクティブなウィンドウのタブグループを全て解除
+         * 開いているウィンドウのタブグループを全て解除
          */
         props.setAnchorEl(null)
         void ungroupTabs(tabGroupId).then(() => {
             // 表示を更新
             props.updateCurrentTabGroupList()
 
-            // context_scriptにメッセージを渡す
+            // content/content.tsにメッセージを渡す
             sendUngroupMessageToTab().catch((e) => { console.log(e) })
         })
     }
@@ -40,7 +40,7 @@ export default function CurrentTabGroupOption(props: Props): JSX.Element {
             // 表示を更新
             props.updateCurrentTabGroupList()
 
-            // context_scriptにメッセージを渡す
+            // content/content.tsにメッセージを渡す
             sendCloseGroupMessageToTab().catch((e) => { console.log(e) })
         })
     }

@@ -3,7 +3,7 @@ import { ListSubheader } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import LayersIcon from '@mui/icons-material/Layers'
 import StyledList from './StyledList'
-import { ActionType } from '../../common/const/action'
+import { Action, ActionType } from '../../common/const/action'
 import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
 import SaveCurrentTabGroup from '../molecules/TabGroupActionItem/SaveCurrentTabGroup'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
@@ -25,7 +25,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
         }).catch((e) => { console.log(e) })
     }, [])
 
-    const resolveShortcutKey = (actionType: string): string => {
+    const resolveShortcutKey = (actionType: Action): string => {
         if (Object.keys(shortcuts).length === 0) {
             return ""
         }
@@ -46,8 +46,8 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group ungrouped tabs"}
-                actionType={ActionType.groupAll}
-                shortcutKey={resolveShortcutKey(ActionType.groupAll)}
+                actionType={ActionType.GROUP_ALL}
+                shortcutKey={resolveShortcutKey(ActionType.GROUP_ALL)}
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
@@ -55,8 +55,8 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group by domain"}
-                actionType={ActionType.groupByDomain}
-                shortcutKey={resolveShortcutKey(ActionType.groupByDomain)}
+                actionType={ActionType.GROUP_BY_DOMAIN}
+                shortcutKey={resolveShortcutKey(ActionType.GROUP_BY_DOMAIN)}
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
@@ -64,8 +64,8 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             <GroupCurrentTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 title={"Group by custom domain"}
-                actionType={ActionType.groupByCustomDomain}
-                shortcutKey={resolveShortcutKey(ActionType.groupByCustomDomain)}
+                actionType={ActionType.GROUP_BY_CUSTOM_DOMAIN}
+                shortcutKey={resolveShortcutKey(ActionType.GROUP_BY_CUSTOM_DOMAIN)}
             >
                 <LayersIcon fontSize="small" />
             </GroupCurrentTabs>
@@ -73,20 +73,20 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             <StyledListSubheader>Save groups</StyledListSubheader>
             <SaveCurrentTabGroup
                 updateSavedTabGroupList={props.updateSavedTabGroupList}
-                shortcutKey={resolveShortcutKey(ActionType.save)}
+                shortcutKey={resolveShortcutKey(ActionType.SAVE_GROUP)}
             />
             <StyledListSubheader>Resotre group</StyledListSubheader>
             {/* お気に入りのタブグループを復元する */}
             <ResotreFavoriteSavedTabGroup
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-                shortcutKey={resolveShortcutKey(ActionType.ungroupAll)}
+                shortcutKey={resolveShortcutKey(ActionType.UNGROUP_ALL_GROUP)}
             />
 
             <StyledListSubheader>Ungroup tabs</StyledListSubheader>
             {/** 全てのタブグループを解除 */}
             <UnGroupAllTabs
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-                shortcutKey={resolveShortcutKey(ActionType.ungroupAll)}
+                shortcutKey={resolveShortcutKey(ActionType.UNGROUP_ALL_GROUP)}
             />
         </StyledList >
     )

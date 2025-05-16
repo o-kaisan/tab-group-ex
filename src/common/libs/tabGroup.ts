@@ -3,7 +3,7 @@
  */
 import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
-import { ActionType } from '../const/action'
+import { Action, ActionType } from '../const/action'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
 import { getGroupRules } from './groupRule'
 import type { Url } from '../types/savedTabGroupInfo'
@@ -13,16 +13,16 @@ type DomainMap = Record<string, number[]>
 /**
  * タブをグループ化
  */
-export async function groupTabs(actionType: string): Promise<void> {
+export async function groupTabs(actionType: Action): Promise<void> {
     switch (actionType) {
-        case ActionType.groupByDomain: {
+        case ActionType.GROUP_BY_DOMAIN: {
             const tabs = await getAllTabs()
             const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
             await groupTabsByDomain(domainMap)
             return
         }
 
-        case ActionType.groupByCustomDomain: {
+        case ActionType.GROUP_BY_CUSTOM_DOMAIN: {
             const tabs = await getAllTabs()
             const groupRules = await getGroupRules()
             if (groupRules === undefined || groupRules.length <= 0) {
@@ -37,7 +37,7 @@ export async function groupTabs(actionType: string): Promise<void> {
             return
         }
 
-        case ActionType.groupAll: {
+        case ActionType.GROUP_ALL: {
             const tabs = await getTabsWithoutGrouped()
             await groupAllCurrentTabs(tabs)
             return

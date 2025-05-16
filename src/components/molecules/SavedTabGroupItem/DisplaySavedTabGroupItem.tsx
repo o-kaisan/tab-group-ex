@@ -55,7 +55,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
                 // 表示更新
                 updateCurrentTabGroupList()
 
-                // context_scriptにメッセージを渡す
+                // content/content.tsにメッセージを渡す
                 sendRestoreGroupMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {
@@ -80,7 +80,7 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
             // 表示の更新
             props.updateSavedTabGroupList()
 
-            // context_scriptにメッセージを渡す
+            // content/content.tsにメッセージを渡す
             sendDeleteSavedGroupMessageToTab().catch((e) => { console.log(e) })
 
         })

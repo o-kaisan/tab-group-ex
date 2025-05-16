@@ -22,7 +22,7 @@ export default function SaveCurrentTabGroup(props: Props): JSX.Element {
     const handleClick = (): void => {
         saveCurrentTabGroupToStorage((tabId) => {
             // content_scriptにメッセージを送信
-            sendMessageToTab(tabId, { actionType: ActionType.save })
+            sendMessageToTab(tabId, { actionType: ActionType.SAVE_GROUP })
         }).then(() => {
             //表示を更新
             props.updateSavedTabGroupList()

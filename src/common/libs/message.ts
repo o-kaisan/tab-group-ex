@@ -1,9 +1,9 @@
-import { ActionType } from '../../common/const/action'
+import { Action, ActionType } from '../../common/const/action'
 import { type Message } from '../types/message'
 import { getCurrentTab } from './tab'
 
 /**
- * 下記のパターンでメッセージを送信する
+ * 下記のパターンでメッセージを送信するメソッド
  *   - context_script -> popup
  *   - context_script -> background
  *   - popup -> background
@@ -14,7 +14,7 @@ export function sendMessage(msg: Message): void {
 }
 
 /**
- * 下記のパターンでメッセージを送信する
+ * 下記のパターンでメッセージを送信するメソッド
  *   - popup -> context_script
  *   - background -> context_script
  */
@@ -29,25 +29,25 @@ export async function sendSaveMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.save })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.SAVE_GROUP })
 }
 
 /**
  * 現在のタブにグループ化処理実行メッセージを送信する
  */
-export async function sendGroupMessageToTab(actionType: string): Promise<void> {
+export async function sendGroupMessageToTab(actionType: Action): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
     switch (actionType) {
-        case ActionType.groupAll:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupAll })
+        case ActionType.GROUP_ALL:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.GROUP_ALL })
             break;
-        case ActionType.groupByDomain:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByDomain })
+        case ActionType.GROUP_BY_DOMAIN:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.GROUP_BY_DOMAIN })
             break;
-        case ActionType.groupByCustomDomain:
-            sendMessageToTab(currentTab.id, { actionType: ActionType.groupByCustomDomain })
+        case ActionType.GROUP_BY_CUSTOM_DOMAIN:
+            sendMessageToTab(currentTab.id, { actionType: ActionType.GROUP_BY_CUSTOM_DOMAIN })
             break;
         default:
             throw Error("never reach here")
@@ -61,7 +61,7 @@ export async function sendUngroupMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.ungroupAll })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.UNGROUP_ALL_GROUP })
 }
 
 /**
@@ -71,7 +71,7 @@ export async function sendCloseGroupMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.closeGroup })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.CLOSE_GROUP })
 }
 
 /**
@@ -81,7 +81,7 @@ export async function sendCloseTabMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.closeTab })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.CLOSE_TAB })
 }
 
 /**
@@ -91,7 +91,7 @@ export async function sendRestoreGroupMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.restoreGroup })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.RESTORE_GROUP })
 }
 
 /**
@@ -101,7 +101,7 @@ export async function sendRestoreTabMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.restoreTab })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.RESTORE_TAB })
 }
 
 
@@ -112,7 +112,7 @@ export async function sendDeleteSavedGroupMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.deleteGroup })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.DELETE_GROUP })
 }
 
 /**
@@ -122,5 +122,5 @@ export async function sendDeleteSavedTabMessageToTab(): Promise<void> {
     // スナックバー表示用にメッセージを送信
     const currentTab = await getCurrentTab()
     if (currentTab.id === undefined) return
-    sendMessageToTab(currentTab.id, { actionType: ActionType.deleteTab })
+    sendMessageToTab(currentTab.id, { actionType: ActionType.DELETE_TAB })
 }

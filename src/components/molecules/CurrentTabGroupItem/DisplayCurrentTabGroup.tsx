@@ -51,7 +51,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                 // 表示を更新
                 updateSavedTabGroupList()
 
-                // context_scriptにメッセージを渡す
+                // content/content.tsにメッセージを渡す
                 sendSaveMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {

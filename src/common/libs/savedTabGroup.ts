@@ -140,7 +140,6 @@ export async function favoriteTabgroup(tabGroupTitle: string, tabGroupId: number
             newSavedTabGroups.push({ ...savedTabGroup, isFavorited: isFavorited })
             return
         }
-        // 対象をお気に入り登録
         newSavedTabGroups.push(savedTabGroup)
     })
 
@@ -177,7 +176,7 @@ export async function deleteTabGroup(tabGroupTitle: string, tabGroupId: number):
 /**
  * タブグループのアイテム(Url)を削除する
  */
-export async function deleteUrl(tabGroupTitle: string, tabGroupId: number, index: number): Promise<void> {
+export async function deletePage(tabGroupTitle: string, tabGroupId: number, index: number): Promise<void> {
     const savedTabGroups = await getAllSavedTabGroup()
     const targetTabGroupId: string = resolveStorageKeyforTabGroup(tabGroupTitle, tabGroupId)
 
