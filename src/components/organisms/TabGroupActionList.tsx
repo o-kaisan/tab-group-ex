@@ -8,7 +8,8 @@ import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
 import SaveCurrentTabGroup from '../molecules/TabGroupActionItem/SaveCurrentTabGroup'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/TabGroupActionItem/UnGroupAllTabs'
-import RestoreFavoriteSavedTabGroup from '../../components/molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
+import RestoreFavoriteSavedTabGroup from '../molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
+import ActionNotificationSetting from '../molecules/TabGroupActionItem/ActionNotificationSetting';
 
 
 interface Props {
@@ -41,6 +42,8 @@ export default function TabGroupActionList(props: Props): JSX.Element {
 
     return (
         <StyledList>
+            <StyledListSubheader>Action Notification</StyledListSubheader>
+            <ActionNotificationSetting />
             <StyledListSubheader>Group tabs</StyledListSubheader>
             {/** 未グループ化タブをグループ化 */}
             <GroupCurrentTabs
@@ -75,7 +78,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
                 updateSavedTabGroupList={props.updateSavedTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.SAVE_GROUP)}
             />
-            <StyledListSubheader>Resotre group</StyledListSubheader>
+            <StyledListSubheader>Restore group</StyledListSubheader>
             {/* お気に入りのタブグループを復元する */}
             <RestoreFavoriteSavedTabGroup
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
