@@ -1,4 +1,4 @@
-import { Action, ActionType } from '../../common/const/action'
+import { type Action, ActionType } from '../../common/const/action'
 import { type Message } from '../types/message'
 import { getCurrentTab } from './tab'
 

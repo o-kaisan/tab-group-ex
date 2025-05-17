@@ -13,7 +13,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import CurrentTabItem from './CurrentTabItem'
 import { getTabsByGroupId } from '../../../common/libs/tab'
 import { sendSaveMessageToTab } from '../../../common/libs/message'
-import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
+import TextTruncate from '../../atoms/TextTruncate/TextTruncate'
 import { toggleTabGroupCollapsed } from '../../../common/libs/tabGroup'
 
 interface Props {
@@ -103,7 +103,7 @@ export default function DisplayCurrentTabGroup(props: Props): JSX.Element {
                     style={{ padding: '3px' }}
                 >
                     <ListItemText>
-                        <TextTruncator text={_title} maxLength={33} />
+                        <TextTruncate text={_title} maxLength={33} />
                     </ListItemText>
                     {openUrl ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>

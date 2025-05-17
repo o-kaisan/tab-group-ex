@@ -3,12 +3,13 @@ import { ListSubheader } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import LayersIcon from '@mui/icons-material/Layers'
 import StyledList from './StyledList'
-import { Action, ActionType } from '../../common/const/action'
+import { type Action, ActionType } from '../../common/const/action'
 import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
 import SaveCurrentTabGroup from '../molecules/TabGroupActionItem/SaveCurrentTabGroup'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/TabGroupActionItem/UnGroupAllTabs'
-import ResotreFavoriteSavedTabGroup from '../../components/molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
+import RestoreFavoriteSavedTabGroup from '../molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
+import ActionNotificationSetting from '../molecules/TabGroupActionItem/ActionNotificationSetting';
 
 
 interface Props {
@@ -41,6 +42,8 @@ export default function TabGroupActionList(props: Props): JSX.Element {
 
     return (
         <StyledList>
+            <StyledListSubheader>Action Notification</StyledListSubheader>
+            <ActionNotificationSetting />
             <StyledListSubheader>Group tabs</StyledListSubheader>
             {/** 未グループ化タブをグループ化 */}
             <GroupCurrentTabs
@@ -75,9 +78,9 @@ export default function TabGroupActionList(props: Props): JSX.Element {
                 updateSavedTabGroupList={props.updateSavedTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.SAVE_GROUP)}
             />
-            <StyledListSubheader>Resotre group</StyledListSubheader>
+            <StyledListSubheader>Restore group</StyledListSubheader>
             {/* お気に入りのタブグループを復元する */}
-            <ResotreFavoriteSavedTabGroup
+            <RestoreFavoriteSavedTabGroup
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.UNGROUP_ALL_GROUP)}
             />

@@ -1,3 +1,4 @@
+import { getActionNotificationSetting } from "../common/libs/actionNotification";
 import { ActionType } from "../common/const/action";
 import type { Message } from "../common/types/message";
 
@@ -72,44 +73,49 @@ chrome.runtime.onMessage.addListener(function (msg: Message) {
 function injectSnackbar(text: string): void {
     const SNACKBAR_ELEMENT_ID = "tab-group-ex-bgs-snackbar";
 
-    // すでに要素があるか確認
-    const existing = document.getElementById(SNACKBAR_ELEMENT_ID);
-    if (existing != null) {
-        console.log("Existing snackbar found. Removing...");
-        existing.remove(); // 既存要素があれば削除
-    }
+    getActionNotificationSetting().then((isActionNotificationEnabled) => {
+        // 通知設定がoffの場合は何もしない
+        if (!isActionNotificationEnabled) return
 
-    // 新しい要素を作成して注入
-    const snackbar = document.createElement("div");
-    snackbar.id = SNACKBAR_ELEMENT_ID;
-    snackbar.textContent = text;
-    Object.assign(snackbar.style, {
-        position: "fixed",
-        bottom: "24px",
-        left: "24px", // 左下に表示
-        backgroundColor: "#333",
-        color: "#fff",
-        padding: "12px 24px",
-        borderRadius: "8px",
-        opacity: "0",
-        transition: "opacity 0.3s ease, transform 0.3s ease",
-        zIndex: "9999",
-        transform: "translateY(20px)", // 初期位置（少し下に）
-    });
+        // すでに要素があるか確認
+        const existing = document.getElementById(SNACKBAR_ELEMENT_ID);
+        if (existing != null) {
+            console.log("Existing snackbar found. Removing...");
+            existing.remove(); // 既存要素があれば削除
+        }
 
-    document.body.appendChild(snackbar);
+        // 新しい要素を作成して注入
+        const snackbar = document.createElement("div");
+        snackbar.id = SNACKBAR_ELEMENT_ID;
+        snackbar.textContent = text;
+        Object.assign(snackbar.style, {
+            position: "fixed",
+            bottom: "24px",
+            left: "24px", // 左下に表示
+            backgroundColor: "#333",
+            color: "#fff",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            opacity: "0",
+            transition: "opacity 0.3s ease, transform 0.3s ease",
+            zIndex: "9999",
+            transform: "translateY(20px)", // 初期位置（少し下に）
+        });
 
-    // 表示アニメーション
-    setTimeout(() => {
-        snackbar.style.opacity = "1";
-        snackbar.style.bottom = "50px";
-    }, 10);
+        document.body.appendChild(snackbar);
 
-    // 非表示にして削除
-    setTimeout(() => {
-        snackbar.style.opacity = "0";
-        snackbar.style.bottom = "30px";
-        setTimeout(() => { snackbar.remove(); }, 300); // アニメーション後に削除
-    }, 3000);
+        // 表示アニメーション
+        setTimeout(() => {
+            snackbar.style.opacity = "1";
+            snackbar.style.bottom = "50px";
+        }, 10);
+
+        // 非表示にして削除
+        setTimeout(() => {
+            snackbar.style.opacity = "0";
+            snackbar.style.bottom = "30px";
+            setTimeout(() => { snackbar.remove(); }, 300); // アニメーション後に削除
+        }, 3000);
+    }).catch((e) => { console.log(e) })
 }
 

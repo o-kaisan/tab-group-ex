@@ -6,7 +6,7 @@ import ShortcutKeyItem from './ShortcutKeyItem'
 import { groupTabs } from '../../../common/libs/tabGroup'
 import StyledListItemIcon from './StyledListItemIcon'
 import { sendGroupMessageToTab } from '../../../common/libs/message'
-import { Action } from '../../../common/const/action'
+import { type Action } from '../../../common/const/action'
 
 interface Props {
     title: string

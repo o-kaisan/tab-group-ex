@@ -10,7 +10,7 @@ export interface SavedTabGroupInfo {
     // カラー
     color: string
     // お気に入り設定
-    isFavorited: boolean
+    isFavorite: boolean
 }
 
 export interface Url {

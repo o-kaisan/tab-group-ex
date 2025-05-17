@@ -2,7 +2,7 @@ import { groupTabs, ungroupAllTabs } from '../common/libs/tabGroup'
 import { saveCurrentTabGroupToStorage } from '../common/libs/savedTabGroup'
 import { sendMessageToTab, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/message'
 import { ActionType } from '../common/const/action'
-import { Command, CommandType } from '../common/const/command'
+import { type Command, CommandType } from '../common/const/command'
 
 // キーボードショートカットを処理する
 chrome.commands.onCommand.addListener((command: Command) => {
@@ -37,7 +37,7 @@ chrome.commands.onCommand.addListener((command: Command) => {
 })
 
 const saveCurrentTabGroup = async (): Promise<void> => {
-    saveCurrentTabGroupToStorage((tabId) => {
+    void saveCurrentTabGroupToStorage((tabId) => {
         // content_scriptにメッセージを送信
         sendMessageToTab(tabId, { actionType: ActionType.SAVE_GROUP })
     })

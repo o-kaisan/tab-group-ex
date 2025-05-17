@@ -1,3 +1,4 @@
+/* eslint-disable n/no-callback-literal */
 import type { SavedTabGroupInfo, Url } from '../types/savedTabGroupInfo'
 import { getCurrentTab } from './tab'
 import { getUrlsFromTabGroup, createTabGroups, getTabGroupByTabGroupId } from './tabGroup'
@@ -39,7 +40,7 @@ export async function saveTabGroup(tabGroupTitle: string, tabGroupId: number, co
             title: tabGroupTitle,
             urls,
             color,
-            isFavorited: false,
+            isFavorite: false,
         }
         newSavedTabGroups.push(newTabGroup)
     }
@@ -102,25 +103,25 @@ export async function restoreTabGroup(tabGroupTitle: string, urls: Url[]): Promi
  * お気に入りした保存済みのタブグループを復元すsる
  */
 export async function restoreFavoriteTabGroup(callback: (result: boolean) => void): Promise<void> {
-    const tabgGroups = await getAllSavedTabGroup()
+    const tabGroups = await getAllSavedTabGroup()
 
     // 既に同じタブグループ名が存在する場合はurlを更新する
-    let favoriteTabgroups: SavedTabGroupInfo[] = []
+    const favoriteTabGroups: SavedTabGroupInfo[] = []
 
-    tabgGroups.forEach((tabGroup) => {
-        if (tabGroup.isFavorited === true) {
-            favoriteTabgroups.push(tabGroup)
+    tabGroups.forEach((tabGroup) => {
+        if (tabGroup.isFavorite) {
+            favoriteTabGroups.push(tabGroup)
         }
     })
 
     // お気に入りのタブグループが見つからなかった場合
-    if (favoriteTabgroups.length === 0) {
+    if (favoriteTabGroups.length === 0) {
         callback(false)
         return
     }
 
-    favoriteTabgroups.forEach((favoriteTabgroup) => {
-        restoreTabGroup(favoriteTabgroup.title, favoriteTabgroup.urls)
+    favoriteTabGroups.forEach((favoriteTabGroup) => {
+        void restoreTabGroup(favoriteTabGroup.title, favoriteTabGroup.urls)
     })
     callback(true)
 
@@ -129,7 +130,7 @@ export async function restoreFavoriteTabGroup(callback: (result: boolean) => voi
 /**
  * 保存済みのタブをお気に入り登録する
  */
-export async function favoriteTabgroup(tabGroupTitle: string, tabGroupId: number, isFavorited: boolean) {
+export async function favoriteTabGroup(tabGroupTitle: string, isFavorite: boolean): Promise<void> {
     const savedTabGroups = await getAllSavedTabGroup()
 
     let isTabGroupExist = false
@@ -137,7 +138,7 @@ export async function favoriteTabgroup(tabGroupTitle: string, tabGroupId: number
     savedTabGroups.forEach((savedTabGroup: SavedTabGroupInfo) => {
         if (tabGroupTitle === savedTabGroup.title) {
             isTabGroupExist = true
-            newSavedTabGroups.push({ ...savedTabGroup, isFavorited: isFavorited })
+            newSavedTabGroups.push({ ...savedTabGroup, isFavorite })
             return
         }
         newSavedTabGroups.push(savedTabGroup)
@@ -239,7 +240,7 @@ export async function saveCurrentTabGroupToStorage(callback?: (tabId: number) =>
     }
     await saveTabGroup(tabGroupTitle, tabGroup.id, tabGroup.color)
 
-    if (callback) {
+    if (callback != null) {
         callback(tab.id)
     }
 }
