@@ -1,13 +1,13 @@
 import React from 'react'
 import DeleteIcon from '../../atoms/Icons/DeleteIcon'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
-import TextTruncator from '../../atoms/TextTruncator/TextTruncator'
+import TextTruncate from '../../atoms/TextTruncate/TextTruncate'
 import StyledListItem from './StyledListItem'
 import SavedTabItem from './SavedTabItem'
 import DragIndicatorSharpIcon from '@mui/icons-material/DragIndicatorSharp'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { restoreTabGroup, deleteTabGroup, favoriteTabgroup } from '../../../common/libs/savedTabGroup'
+import { restoreTabGroup, deleteTabGroup, favoriteTabGroup } from '../../../common/libs/savedTabGroup'
 import { Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { getAllTabGroupList } from '../../../common/libs/tabGroup'
 import { currentTabGroupState } from '../../../common/recoil/atoms/currentTabGroupAtom'
@@ -15,8 +15,8 @@ import { useSetRecoilState } from 'recoil'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import type { SavedTabGroupInfo, Url } from '../../../common/types/savedTabGroupInfo'
 import { sendDeleteSavedGroupMessageToTab, sendRestoreGroupMessageToTab } from '../../../common/libs/message'
-import FavoritedIcon from '../../atoms/Icons/FavoritedIcon'
-import NotFavoritedIcon from '../../atoms/Icons/notFavoritedIcon'
+import FavoriteIcon from '../../atoms/Icons/FavoriteIcon'
+import NotFavoriteIcon from '../../atoms/Icons/notFavoriteIcon'
 
 interface Props {
     savedTabGroup: SavedTabGroupInfo
@@ -86,8 +86,8 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
         })
     }
 
-    const handleFavoriteIconClick = (tabGroupTitle: string, tabGroupId: number, isFavorited: boolean): void => {
-        void favoriteTabgroup(tabGroupTitle, tabGroupId, !isFavorited).then(() => {
+    const handleFavoriteIconClick = (tabGroupTitle: string, isFavorite: boolean): void => {
+        void favoriteTabGroup(tabGroupTitle, !isFavorite).then(() => {
             props.updateSavedTabGroupList()
         }).catch((e) => { console.log(e) })
     }
@@ -137,18 +137,18 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
                     }}
                 >
                     <ListItemText>
-                        <TextTruncator text={props.savedTabGroup.title} maxLength={33} />
+                        <TextTruncate text={props.savedTabGroup.title} maxLength={33} />
                     </ListItemText>
                     {props.isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-                {/* TODO  お気に入りアイコン*/}
-                {props.savedTabGroup.isFavorited === true ? <FavoritedIcon
+                {/* TODO  お気に入りアイコン */}
+                {props.savedTabGroup.isFavorite ? <FavoriteIcon
                     onClick={() => {
-                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.tabGroupId, props.savedTabGroup.isFavorited)
+                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.isFavorite)
                     }}
-                /> : <NotFavoritedIcon
+                /> : <NotFavoriteIcon
                     onClick={() => {
-                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.tabGroupId, props.savedTabGroup.isFavorited)
+                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.isFavorite)
                     }}
                 />}
                 <RestoreIconX

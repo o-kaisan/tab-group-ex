@@ -7,7 +7,7 @@ interface Props {
     onClick: Function
 }
 
-export default function FavoritedIcon(props: Props): JSX.Element {
+export default function FavoriteIcon(props: Props): JSX.Element {
     const handleClick = (): void => {
         props.onClick()
     }

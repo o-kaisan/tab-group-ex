@@ -3,12 +3,12 @@ import { ListSubheader } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import LayersIcon from '@mui/icons-material/Layers'
 import StyledList from './StyledList'
-import { Action, ActionType } from '../../common/const/action'
+import { type Action, ActionType } from '../../common/const/action'
 import { type ShortcutMap, getShortcutMap } from '../../common/libs/shortcut'
 import SaveCurrentTabGroup from '../molecules/TabGroupActionItem/SaveCurrentTabGroup'
 import GroupCurrentTabs from '../molecules/TabGroupActionItem/GroupCurrentTabs'
 import UnGroupAllTabs from '../molecules/TabGroupActionItem/UnGroupAllTabs'
-import ResotreFavoriteSavedTabGroup from '../../components/molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
+import RestoreFavoriteSavedTabGroup from '../../components/molecules/TabGroupActionItem/RestoreFavoriteTabGroup';
 
 
 interface Props {
@@ -77,7 +77,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             />
             <StyledListSubheader>Resotre group</StyledListSubheader>
             {/* お気に入りのタブグループを復元する */}
-            <ResotreFavoriteSavedTabGroup
+            <RestoreFavoriteSavedTabGroup
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
                 shortcutKey={resolveShortcutKey(ActionType.UNGROUP_ALL_GROUP)}
             />
