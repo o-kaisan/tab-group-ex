@@ -1,3 +1,5 @@
-export const MessageType = {
-    saveTabGroup: 'savedTabGroup'
+import { Action } from "../const/action";
+
+export interface Message {
+    actionType: Action
 }

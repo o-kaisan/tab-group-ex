@@ -1,23 +1,30 @@
 import React from 'react'
 import ListItemText from '@mui/material/ListItemText'
-import ListItemIcon from '@mui/material/ListItemIcon'
+import StyledListItemIcon from './StyledListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
 import LayersClearIcon from '@mui/icons-material/LayersClear'
 import { ungroupAllTabs } from '../../../common/libs/tabGroup'
+import ShortcutKeyItem from './ShortcutKeyItem'
+import { sendUngroupMessageToTab } from '../../../common/libs/message'
 
 interface Props {
     updateCurrentTabGroupList: Function
+    shortcutKey: string
 }
 
 export default function UngroupAllTabs(props: Props): JSX.Element {
-    /*
+    /**
      * タブをグループ化
      */
     const handleClick = (): void => {
         ungroupAllTabs()
             .then(() => {
+                // グループを更新する
                 props.updateCurrentTabGroupList()
+
+                // content/content.tsにメッセージを渡す
+                sendUngroupMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {
                 console.log(error)
@@ -26,10 +33,11 @@ export default function UngroupAllTabs(props: Props): JSX.Element {
     return (
         <StyledListItem>
             <StyledListItemButton onClick={handleClick}>
-                <ListItemIcon>
+                <StyledListItemIcon>
                     <LayersClearIcon fontSize="small" />
-                </ListItemIcon>
+                </StyledListItemIcon>
                 <ListItemText>Ungroup all</ListItemText>
+                <ShortcutKeyItem shortcutKey={props.shortcutKey} />
             </StyledListItemButton>
         </StyledListItem>
     )

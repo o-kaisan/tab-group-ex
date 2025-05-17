@@ -1,9 +1,9 @@
-/*
+/**
  * url関連のユーティリティ
  */
 import { parseDomain, ParseResultType } from 'parse-domain'
 
-/*
+/**
  * URLからホスト名を取得する
  */
 function getHostName(url: string): string {
@@ -11,7 +11,7 @@ function getHostName(url: string): string {
     return targetUrl.host
 }
 
-/*
+/**
  * サブドメインを除くドメイン名を取得する
  */
 export function getDomainNameIgnoreSubDomain(url: string): string | undefined {

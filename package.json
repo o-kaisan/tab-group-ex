@@ -1,6 +1,6 @@
 {
   "name": "tab-group-ex",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "tab-group-ex",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "updatesnap": "jest --updateSnapshot",
     "lint": "eslint . --ext ts,tsx",
     "fix": "eslint . --ext ts,tsx --fix",
-    "fmt": "npm run fix && prettier --write \"src/**/*.{ts,tsx}\""
+    "fmt": "npm run fix && prettier --write \"src/*/*.{ts,tsx}\""
   },
   "author": "",
   "license": "MIT",

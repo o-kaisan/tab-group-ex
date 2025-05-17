@@ -1,34 +1,34 @@
-import { groupTabs, ungroupAllTabs, getTabGroupByTabGroupId } from '../common/libs/tabGroup'
-import { saveTabGroup } from '../common/libs/savedTabGroup'
-import { getCurrentTabs } from '../common/libs/tab'
-import { GROUP_MODE } from '../common/types/groupMode'
-import { CommandType as commandType } from '../common/types/command'
-import { MessageType } from '../common/types/message'
+import { groupTabs, ungroupAllTabs } from '../common/libs/tabGroup'
+import { saveCurrentTabGroupToStorage } from '../common/libs/savedTabGroup'
+import { sendMessageToTab, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/message'
+import { ActionType } from '../common/const/action'
+import { Command, CommandType } from '../common/const/command'
 
-chrome.commands.onCommand.addListener((command) => {
+// キーボードショートカットを処理する
+chrome.commands.onCommand.addListener((command: Command) => {
     console.log('Command: %s', command)
     switch (command) {
-        case commandType.saveCurrentTabGroup:
+        case CommandType.SAVE_GROUP:
             saveCurrentTabGroup().catch((e) => {
                 console.log(e)
             })
             break
-        case commandType.groupAllUnGroupedTabs:
-            groupAllUngroupedTabs().catch((e) => {
+        case CommandType.GROUP_ALL_UNGROUPED_TABS:
+            groupUngroupedTabs().catch((e) => {
                 console.log(e)
             })
             break
-        case commandType.groupTabsByDomain:
+        case CommandType.GROUP_TABS_BY_DOMAIN:
             groupByDomain().catch((e) => {
                 console.log(e)
             })
             break
-        case commandType.groupTabsByCustomDomain:
+        case CommandType.GROUP_TABS_BY_CUSTOM_DOMAIN:
             groupByCustomDomain().catch((e) => {
                 console.log(e)
             })
             break
-        case commandType.ungroupAllGroups:
+        case CommandType.UNGROUP_ALL_GROUPS:
             ungroupAllGroups().catch((e) => {
                 console.log(e)
             })
@@ -37,36 +37,30 @@ chrome.commands.onCommand.addListener((command) => {
 })
 
 const saveCurrentTabGroup = async (): Promise<void> => {
-    const tab = await getCurrentTabs()
-    if (tab === undefined) return
-    if (tab.id === undefined) return
-
-    const tabGroup = await getTabGroupByTabGroupId(tab.groupId)
-    if (tabGroup === undefined) return
-
-    let tabGroupTitle = String(tabGroup.id)
-    if (tabGroup.title !== undefined) {
-        tabGroupTitle = tabGroup.title
-    }
-    await saveTabGroup(tabGroupTitle, tabGroup.id, tabGroup.color)
-
-    const msg = {
-        MessageType: MessageType.saveTabGroup,
-        tabGroupTitle,
-    }
-    chrome.tabs.sendMessage(tab.id, msg);
+    saveCurrentTabGroupToStorage((tabId) => {
+        // content_scriptにメッセージを送信
+        sendMessageToTab(tabId, { actionType: ActionType.SAVE_GROUP })
+    })
 }
 
-const groupAllUngroupedTabs = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.all)
+const groupUngroupedTabs = async (): Promise<void> => {
+    await groupTabs(ActionType.GROUP_ALL)
+    // content_scriptにメッセージを送信
+    await sendGroupMessageToTab(ActionType.GROUP_ALL)
 }
 const groupByDomain = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.domain)
+    await groupTabs(ActionType.GROUP_BY_DOMAIN)
+    // content_scriptにメッセージを送信
+    await sendGroupMessageToTab(ActionType.GROUP_BY_DOMAIN)
 }
 const groupByCustomDomain = async (): Promise<void> => {
-    await groupTabs(GROUP_MODE.customDomain)
+    await groupTabs(ActionType.GROUP_BY_CUSTOM_DOMAIN)
+    // content_scriptにメッセージを送信
+    await sendGroupMessageToTab(ActionType.GROUP_BY_CUSTOM_DOMAIN)
 }
 
 const ungroupAllGroups = async (): Promise<void> => {
     await ungroupAllTabs()
+    // content_scriptにメッセージを送信
+    await sendUngroupMessageToTab()
 }

@@ -2,11 +2,12 @@ import React from 'react'
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText'
 import type { Url } from '../../../common/types/savedTabGroupInfo'
-import { deleteUrl } from '../../../common/libs/savedTabGroup'
+import { deletePage } from '../../../common/libs/savedTabGroup'
 import RestoreIconX from '../../atoms/Icons/RestoreIcon'
 import { createTab } from '../../../common/libs/tab'
 import PublicIcon from '@mui/icons-material/Public'
 import SimpleDeleteIcon from '../../../components/atoms/Icons/SimpleDeleteIcon'
+import { sendDeleteSavedTabMessageToTab, sendRestoreTabMessageToTab } from '../../../common/libs/message'
 
 interface Props {
     index: number
@@ -18,13 +19,21 @@ interface Props {
 
 export default function SavedTabItem(props: Props): JSX.Element {
     const handleRestoreIconClick = (url: Url): void => {
-        createTab(url.url).catch((e) => {
+        createTab(url.url).then(() => {
+            sendRestoreTabMessageToTab().catch((e) => { console.log(e) })
+        }).catch((e) => {
             console.log(e)
         })
     }
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number, index: number): void => {
-        void deleteUrl(tabGroupTitle, tabGroupId, index).then(() => props.updateSavedTabGroupList())
+        void deletePage(tabGroupTitle, tabGroupId, index).then(() => {
+            // 表示の更新
+            props.updateSavedTabGroupList()
+
+            // content/content.tsにメッセージを渡す
+            sendDeleteSavedTabMessageToTab().catch((e) => { console.log(e) })
+        })
     }
 
     return (

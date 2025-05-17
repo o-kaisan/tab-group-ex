@@ -1,28 +1,28 @@
-/*
+/**
  * タブのグループ化関連のユーティリティ
  */
 import type { GroupRule } from '../types/groupRule'
 import * as url from '../utils/url'
-import { GROUP_MODE } from '../types/groupMode'
+import { Action, ActionType } from '../const/action'
 import { getTabs, getTabsWithoutGrouped, getTabIdList, getAllTabs } from './tab'
 import { getGroupRules } from './groupRule'
 import type { Url } from '../types/savedTabGroupInfo'
 
 type DomainMap = Record<string, number[]>
 
-/*
+/**
  * タブをグループ化
  */
-export async function groupTabs(groupMode: string): Promise<void> {
-    switch (groupMode) {
-        case GROUP_MODE.domain: {
+export async function groupTabs(actionType: Action): Promise<void> {
+    switch (actionType) {
+        case ActionType.GROUP_BY_DOMAIN: {
             const tabs = await getAllTabs()
             const domainMap = getTabIdsFromCurrentTabsByDomain(tabs)
             await groupTabsByDomain(domainMap)
             return
         }
 
-        case GROUP_MODE.customDomain: {
+        case ActionType.GROUP_BY_CUSTOM_DOMAIN: {
             const tabs = await getAllTabs()
             const groupRules = await getGroupRules()
             if (groupRules === undefined || groupRules.length <= 0) {
@@ -37,19 +37,19 @@ export async function groupTabs(groupMode: string): Promise<void> {
             return
         }
 
-        case GROUP_MODE.all: {
+        case ActionType.GROUP_ALL: {
             const tabs = await getTabsWithoutGrouped()
             await groupAllCurrentTabs(tabs)
             return
         }
 
         default:
-            console.error('Failed to group tabs (invalid group mode) groupMode=%s', groupMode)
+            console.error('Failed to group tabs (invalid action type) actionType=%s', actionType)
             break
     }
 }
 
-/*
+/**
  * 現在のタブからドメイン名とタブIDのマッピングしたオブジェクトを返す。
  * groupRuleが指定されていると、groupRuleのドメイン名とマッチしたオブジェクトのみを返す
  */
@@ -103,7 +103,7 @@ async function groupTabsByDomain(domainMap: DomainMap): Promise<void> {
     )
 }
 
-/*
+/**
  * タブを全てグループ化
  */
 async function groupAllCurrentTabs(tabs: chrome.tabs.Tab[]): Promise<void> {
@@ -111,7 +111,7 @@ async function groupAllCurrentTabs(tabs: chrome.tabs.Tab[]): Promise<void> {
     await createTabGroups(tabIdList)
 }
 
-/*
+/**
  * 新しくタブをグループ化する
  */
 export async function createTabGroups(tabIdList: number[], title: string = ''): Promise<number> {
@@ -133,7 +133,7 @@ export async function createTabGroups(tabIdList: number[], title: string = ''): 
     return groupId
 }
 
-/*
+/**
  * タブグループを更新する
  */
 async function updateOrCreateTabGroups(tabIdList: number[], title: string): Promise<void> {
@@ -151,7 +151,7 @@ async function updateOrCreateTabGroups(tabIdList: number[], title: string): Prom
     await chrome.tabs.group({ groupId, tabIds: tabIdList })
 }
 
-/*
+/**
  * 指定したタブグループのグループ化を解除する
  */
 export async function ungroupTabs(tabGroupId: number): Promise<void> {
@@ -167,7 +167,7 @@ export async function ungroupTabs(tabGroupId: number): Promise<void> {
     await chrome.tabs.ungroup(tabIdList)
 }
 
-/*
+/**
  *  全てのタブグループを解除する
  */
 export async function ungroupAllTabs(): Promise<void> {
@@ -178,7 +178,7 @@ export async function ungroupAllTabs(): Promise<void> {
     await chrome.tabs.ungroup(tabIdList)
 }
 
-/*
+/**
  * タブグループ一覧を取得
  * タググループが存在しない場合は空のリストを返す
  */
@@ -189,7 +189,7 @@ async function getTabGroupList(
     return tabGroupList
 }
 
-/*
+/**
  * アクティブなウィドウのタブグループ一覧を取得する
  */
 export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]> {
@@ -200,7 +200,7 @@ export async function getAllTabGroupList(): Promise<chrome.tabGroups.TabGroup[]>
     return ret
 }
 
-/*
+/**
  * 指定したタブグループIDのタブグループを取得する
  */
 export async function getTabGroupByTabGroupId(tabGroupId: number): Promise<chrome.tabGroups.TabGroup | undefined> {
@@ -214,7 +214,7 @@ export async function getTabGroupByTabGroupId(tabGroupId: number): Promise<chrom
     return ret
 }
 
-/*
+/**
  * タブグループ名にヒットしたタブグループのIDを返す
  * ※同じタブグループ名の場合は最初にヒットしたものとなる
  */
@@ -229,7 +229,7 @@ async function getTabGroupIdByTitle(title: string): Promise<number | undefined> 
     return tabGroupId
 }
 
-/*
+/**
  * タブグループを開/閉を切り替える
  */
 export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boolean): Promise<void> {
@@ -239,7 +239,7 @@ export async function toggleTabGroupCollapsed(tabGroupId: number, collapsed: boo
     await chrome.tabGroups.update(tabGroupId, updateProperties)
 }
 
-/*
+/**
  * タブグループからタブのURL一覧を取得する
  */
 export async function getUrlsFromTabGroup(tabGroupId: number): Promise<Url[]> {
@@ -257,7 +257,7 @@ export async function getUrlsFromTabGroup(tabGroupId: number): Promise<Url[]> {
     return urls
 }
 
-/*
+/**
  * タブグループを閉じる
  */
 export async function closeTabGroup(tabGroupId: number): Promise<void> {
@@ -269,7 +269,7 @@ export async function closeTabGroup(tabGroupId: number): Promise<void> {
     await chrome.tabs.remove(tabsIds)
 }
 
-/*
+/**
  * タブグループの名前を更新する
  */
 export async function updateTabGroupName(tabGroupId: number, tabGroupTitle: string): Promise<void> {

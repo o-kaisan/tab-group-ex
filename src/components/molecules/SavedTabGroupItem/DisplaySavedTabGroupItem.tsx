@@ -7,13 +7,16 @@ import SavedTabItem from './SavedTabItem'
 import DragIndicatorSharpIcon from '@mui/icons-material/DragIndicatorSharp'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { restoreTabGroup, deleteTabGroup } from '../../../common/libs/savedTabGroup'
+import { restoreTabGroup, deleteTabGroup, favoriteTabgroup } from '../../../common/libs/savedTabGroup'
 import { Collapse, List, ListItemButton, ListItemText } from '@mui/material'
 import { getAllTabGroupList } from '../../../common/libs/tabGroup'
 import { currentTabGroupState } from '../../../common/recoil/atoms/currentTabGroupAtom'
 import { useSetRecoilState } from 'recoil'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import type { SavedTabGroupInfo, Url } from '../../../common/types/savedTabGroupInfo'
+import { sendDeleteSavedGroupMessageToTab, sendRestoreGroupMessageToTab } from '../../../common/libs/message'
+import FavoritedIcon from '../../atoms/Icons/FavoritedIcon'
+import NotFavoritedIcon from '../../atoms/Icons/notFavoritedIcon'
 
 interface Props {
     savedTabGroup: SavedTabGroupInfo
@@ -49,7 +52,11 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     const handleTabGroupItemClick = (tabGroupTitle: string, urls: Url[]): void => {
         void restoreTabGroup(tabGroupTitle, urls)
             .then(() => {
+                // 表示更新
                 updateCurrentTabGroupList()
+
+                // content/content.tsにメッセージを渡す
+                sendRestoreGroupMessageToTab().catch((e) => { console.log(e) })
             })
             .catch((error) => {
                 console.log(error)
@@ -69,7 +76,20 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
     }
 
     const handleDeleteIconClick = (tabGroupTitle: string, tabGroupId: number): void => {
-        void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => props.updateSavedTabGroupList())
+        void deleteTabGroup(tabGroupTitle, tabGroupId).then(() => {
+            // 表示の更新
+            props.updateSavedTabGroupList()
+
+            // content/content.tsにメッセージを渡す
+            sendDeleteSavedGroupMessageToTab().catch((e) => { console.log(e) })
+
+        })
+    }
+
+    const handleFavoriteIconClick = (tabGroupTitle: string, tabGroupId: number, isFavorited: boolean): void => {
+        void favoriteTabgroup(tabGroupTitle, tabGroupId, !isFavorited).then(() => {
+            props.updateSavedTabGroupList()
+        }).catch((e) => { console.log(e) })
     }
 
     // 現在のウィンドウにあるタブグループを取得し、表示を最新化する
@@ -121,6 +141,16 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
                     </ListItemText>
                     {props.isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
+                {/* TODO  お気に入りアイコン*/}
+                {props.savedTabGroup.isFavorited === true ? <FavoritedIcon
+                    onClick={() => {
+                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.tabGroupId, props.savedTabGroup.isFavorited)
+                    }}
+                /> : <NotFavoritedIcon
+                    onClick={() => {
+                        handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.tabGroupId, props.savedTabGroup.isFavorited)
+                    }}
+                />}
                 <RestoreIconX
                     onClick={() => {
                         handleTabGroupItemClick(props.savedTabGroup.title, props.savedTabGroup.urls)
