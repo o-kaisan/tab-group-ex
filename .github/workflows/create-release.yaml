@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm build
+        run: npm run build
 
       - name: Archive Release
         uses: thedoctor0/zip-release@main
