@@ -3,7 +3,6 @@ import ListItemText from '@mui/material/ListItemText'
 import StyledListItemIcon from './StyledListItemIcon'
 import StyledListItem from './StyledListItem'
 import StyledListItemButton from './StyledListItemButton'
-import LayersClearIcon from '@mui/icons-material/LayersClear'
 import ShortcutKeyItem from './ShortcutKeyItem'
 import { sendMessageToTab } from '../../../common/libs/message'
 import { saveCurrentTabGroupToStorage } from '../../../common/libs/savedTabGroup'
@@ -24,7 +23,7 @@ export default function SaveCurrentTabGroup(props: Props): JSX.Element {
             // content_scriptにメッセージを送信
             sendMessageToTab(tabId, { actionType: ActionType.SAVE_GROUP })
         }).then(() => {
-            //表示を更新
+            // 表示を更新
             props.updateSavedTabGroupList()
         }).catch((e) => { console.log(e) })
     }

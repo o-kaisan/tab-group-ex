@@ -71,7 +71,7 @@ export default function GroupRulesList(): JSX.Element {
                 This configuration is for custom domains. Add the domains to be grouped together. Subdomains will be
                 ignored.
             </Typography>
-            <ExamplesDiscription />
+            <ExamplesDescription />
             {groupRule.map((rule: GroupRule, index: number) => (
                 <ListItem key={rule.id}>
                     <TextField
@@ -105,7 +105,7 @@ export default function GroupRulesList(): JSX.Element {
     )
 }
 
-function ExamplesDiscription(): JSX.Element {
+function ExamplesDescription(): JSX.Element {
     return (
         <ThemeProvider theme={theme}>
             <Paper
@@ -115,6 +115,7 @@ function ExamplesDiscription(): JSX.Element {
                     maxWidth: 500,
                     mx: 'auto',
                     mt: 2,
+                    ml: '16px',
                     backgroundColor: 'ghostwhite'
                 }}
             >

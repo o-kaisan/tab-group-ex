@@ -21,24 +21,27 @@
   "commands": {
     "SaveCurrentTabGroup": {
       "suggested_key": {
-        "default": "Ctrl+Shift+9"
+        "default": "Ctrl+Shift+S"
       },
       "description": "Save the tab group that the Current tab belongs to."
     },
     "GroupAllUnGroupedTabs": {
       "suggested_key": {
-        "default": "Ctrl+Shift+1"
+        "default": "Ctrl+Shift+A"
       },
       "description": "Group all ungrouped tabs into a new group."
     },
     "GroupTabsByDomain": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+2"
-      },
       "description": "Group tabs by domain."
     },
     "GroupTabsByCustomDomain": {
       "description": "Group tabs by custom domain."
+    },
+    "RestoreFavoriteGroup": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+R"
+      },
+      "description": "Restore favorite groups."
     },
     "UngroupAllGroups": {
       "description": "Ungroup all Groups"

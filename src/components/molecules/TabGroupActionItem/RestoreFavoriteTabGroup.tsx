@@ -13,7 +13,7 @@ interface Props {
     shortcutKey: string
 }
 
-export default function ResotreFavoriteSavedTabGroup(props: Props): JSX.Element {
+export default function RestoreFavoriteSavedTabGroup(props: Props): JSX.Element {
     /**
      * タブをグループ化
      */
@@ -21,11 +21,10 @@ export default function ResotreFavoriteSavedTabGroup(props: Props): JSX.Element 
         restoreFavoriteTabGroup((result) => {
             // content_scriptにメッセージを送信
             if (result) {
-                sendRestoreGroupMessageToTab()
-                return
+                void sendRestoreGroupMessageToTab()
             }
         }).then(() => {
-            //表示を更新
+            // 表示を更新
             props.updateCurrentTabGroupList()
         }).catch((e) => { console.log(e) })
     }

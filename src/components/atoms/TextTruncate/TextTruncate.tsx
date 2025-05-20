@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
-import { Typography, IconButton, Tooltip, Box } from '@mui/material'
+import React from 'react'
+import { Typography, Tooltip, Box } from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import RemoveIcon from '@mui/icons-material/Remove'
 
-interface TextTruncatorProps {
+interface TextTruncateProps {
     text: string
     maxLength?: number
     className?: string
@@ -18,15 +17,15 @@ const truncateText = (text: string, maxLength: number): string => {
     let length = 0
     let result = ''
     for (const char of text) {
-        // 半角1文字、全角2文字としてカウントする関数
-        length += char.charCodeAt(0) > 255 ? 3 : 2
+        // 半角1.5文字、全角3文字としてカウントする関数
+        length += char.charCodeAt(0) > 255 ? 3 : 1.5
         if (length > maxLength) break
         result += char
     }
     return result
 }
 
-export default function TextTruncator({ text, maxLength = 20, className = '' }: TextTruncatorProps): JSX.Element {
+export default function TextTruncate({ text, maxLength = 20, className = '' }: TextTruncateProps): JSX.Element {
     // 調整後の文字数で判定
     const adjustedLength = getAdjustedLength(text)
     const shouldTruncate = adjustedLength > maxLength

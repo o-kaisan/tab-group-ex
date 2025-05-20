@@ -1,8 +1,8 @@
 import { groupTabs, ungroupAllTabs } from '../common/libs/tabGroup'
-import { saveCurrentTabGroupToStorage } from '../common/libs/savedTabGroup'
-import { sendMessageToTab, sendGroupMessageToTab, sendUngroupMessageToTab } from '../common/libs/message'
+import { saveCurrentTabGroupToStorage, restoreFavoriteTabGroup } from '../common/libs/savedTabGroup'
+import { sendMessageToTab, sendGroupMessageToTab, sendUngroupMessageToTab, sendRestoreGroupMessageToTab } from '../common/libs/message'
 import { ActionType } from '../common/const/action'
-import { Command, CommandType } from '../common/const/command'
+import { type Command, CommandType } from '../common/const/command'
 
 // キーボードショートカットを処理する
 chrome.commands.onCommand.addListener((command: Command) => {
@@ -28,6 +28,11 @@ chrome.commands.onCommand.addListener((command: Command) => {
                 console.log(e)
             })
             break
+        case CommandType.RESTORE_FAVORITE_GROUP:
+            restoreFavoriteGroup().catch((e) => {
+                console.log(e)
+            })
+            break
         case CommandType.UNGROUP_ALL_GROUPS:
             ungroupAllGroups().catch((e) => {
                 console.log(e)
@@ -37,12 +42,11 @@ chrome.commands.onCommand.addListener((command: Command) => {
 })
 
 const saveCurrentTabGroup = async (): Promise<void> => {
-    saveCurrentTabGroupToStorage((tabId) => {
+    void saveCurrentTabGroupToStorage((tabId) => {
         // content_scriptにメッセージを送信
         sendMessageToTab(tabId, { actionType: ActionType.SAVE_GROUP })
     })
 }
-
 const groupUngroupedTabs = async (): Promise<void> => {
     await groupTabs(ActionType.GROUP_ALL)
     // content_scriptにメッセージを送信
@@ -58,7 +62,13 @@ const groupByCustomDomain = async (): Promise<void> => {
     // content_scriptにメッセージを送信
     await sendGroupMessageToTab(ActionType.GROUP_BY_CUSTOM_DOMAIN)
 }
-
+const restoreFavoriteGroup = async (): Promise<void> => {
+    await restoreFavoriteTabGroup((result) => {
+        if (result) {
+             // content_scriptにメッセージを送信
+            void sendRestoreGroupMessageToTab()
+        }})
+}
 const ungroupAllGroups = async (): Promise<void> => {
     await ungroupAllTabs()
     // content_scriptにメッセージを送信

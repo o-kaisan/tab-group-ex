@@ -10,6 +10,7 @@ export const ActionType = {
     CLOSE_GROUP: 'CloseGroup',
     CLOSE_TAB: 'CloseTab',
     // 保存済みのタブグループ/タブに関連するアクション
+    RESTORE_FAVORITE_GROUP: 'RestoreFavoriteGroup',
     RESTORE_GROUP: 'RestoreGroup',
     RESTORE_TAB: 'RestoreTab',
     DELETE_GROUP: 'DeleteTab',
