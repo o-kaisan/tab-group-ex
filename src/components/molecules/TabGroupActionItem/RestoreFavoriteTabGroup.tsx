@@ -22,7 +22,6 @@ export default function RestoreFavoriteSavedTabGroup(props: Props): JSX.Element 
             // content_scriptにメッセージを送信
             if (result) {
                 void sendRestoreGroupMessageToTab()
-
             }
         }).then(() => {
             // 表示を更新

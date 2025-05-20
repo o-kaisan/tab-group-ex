@@ -141,7 +141,6 @@ export default function DisplaySavedTabGroupItem(props: Props): JSX.Element {
                     </ListItemText>
                     {props.isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
-                {/* TODO  お気に入りアイコン */}
                 {props.savedTabGroup.isFavorite ? <FavoriteIcon
                     onClick={() => {
                         handleFavoriteIconClick(props.savedTabGroup.title, props.savedTabGroup.isFavorite)

@@ -115,6 +115,7 @@ function ExamplesDescription(): JSX.Element {
                     maxWidth: 500,
                     mx: 'auto',
                     mt: 2,
+                    ml: '16px',
                     backgroundColor: 'ghostwhite'
                 }}
             >
