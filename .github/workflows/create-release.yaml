@@ -23,15 +23,11 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - name: Install dependencies
-        run: pnpm ci
+        run: npm ci
 
       - name: Build
-        run: pnpm build
+        run: npm build
 
       - name: Archive Release
         uses: thedoctor0/zip-release@main
