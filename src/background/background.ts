@@ -65,12 +65,13 @@ const groupByCustomDomain = async (): Promise<void> => {
 const restoreFavoriteGroup = async (): Promise<void> => {
     await restoreFavoriteTabGroup((result) => {
         if (result) {
-             // content_scriptにメッセージを送信
+            // content_scriptにメッセージを送信
             void sendRestoreGroupMessageToTab()
-        }})
+        }
+    })
 }
 const ungroupAllGroups = async (): Promise<void> => {
     await ungroupAllTabs()
     // content_scriptにメッセージを送信
     await sendUngroupMessageToTab()
-}
+} 

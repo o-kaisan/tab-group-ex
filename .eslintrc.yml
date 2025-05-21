@@ -18,4 +18,9 @@ rules: {
   "react-hooks/exhaustive-deps": "warn",
   "@typescript-eslint/ban-types": "off"
 }
+settings: {
+    react: {
+        version: 'detect',
+    },
+}
 
