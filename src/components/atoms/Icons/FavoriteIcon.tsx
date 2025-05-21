@@ -14,7 +14,7 @@ export default function FavoriteIcon(props: Props): JSX.Element {
 
     return (
         <IconButton onClick={handleClick}>
-            <GradeIcon fontSize="small" />
+            <GradeIcon style={{ color: "darkorange" }} fontSize="small" />
         </IconButton>
     )
 }
