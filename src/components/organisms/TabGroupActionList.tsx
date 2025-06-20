@@ -82,7 +82,7 @@ export default function TabGroupActionList(props: Props): JSX.Element {
             {/* お気に入りのタブグループを復元する */}
             <RestoreFavoriteSavedTabGroup
                 updateCurrentTabGroupList={props.updateCurrentTabGroupList}
-                shortcutKey={resolveShortcutKey(ActionType.UNGROUP_ALL_GROUP)}
+                shortcutKey={resolveShortcutKey(ActionType.RESTORE_FAVORITE_GROUP)}
             />
 
             <StyledListSubheader>Ungroup tabs</StyledListSubheader>
